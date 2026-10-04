@@ -20,7 +20,12 @@ Device ──Modbus TCP:502──▶ poller.py ──▶ plant.db ──▶ app.
 
 ## 1. Install (once)
 
-Python 3.10 or newer.
+Python 3.10 or newer (from python.org, not the Microsoft Store).
+
+> **Windows:** keep the folder at a short path with no spaces or `&`, for
+> example `C:\tracker\modbus-web`. Long paths (over 260 characters inside the
+> venv) and `&` make `python -m venv` fail with
+> `ensurepip ... returned non-zero exit status 1`.
 
 ```bash
 cd modbus-web
