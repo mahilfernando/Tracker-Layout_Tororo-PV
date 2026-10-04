@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tororo PV · Plant layout</title>
+<style>
+  :root { --bg:#F3F4F1; --ink:#15191E; --muted:#4A5159; --line:#D3D7D0; --soft:#ECEEEA;
+          --map:#2B4846; --road:#B9BDBB; --good:#0ca30c; --warn:#fab219; --crit:#d03b3b; --stale:#9a9a93; --none:#526664; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size:15px; }
+  header { background:var(--ink); color:#F3F4F1; }
+  .wrap { max-width:1500px; margin:0 auto; padding:14px 24px; }
+  header .wrap { display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center; }
+  header nav { display:flex; gap:16px; flex-wrap:wrap; }
+  header a { color:#F0A060; }
+  header a[aria-current] { color:#fff; font-weight:600; text-decoration:none; }
+  #conn { font-size:14px; color:#C9CEC6; display:flex; gap:8px; align-items:center; }
+  #dot { width:10px; height:10px; border-radius:50%; background:#888; }
+  .toolbar { display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin:16px 0 12px; }
+  .seg { display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .seg button { font:inherit; font-size:14px; min-height:40px; padding:0 14px; border:0; background:#fff; color:var(--ink); cursor:pointer; }
+  .seg button[aria-pressed="true"] { background:var(--ink); color:#fff; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; font-size:14px; }
+  .legend span { display:inline-flex; align-items:center; gap:6px; }
+  .sw { width:12px; height:12px; border-radius:3px; display:inline-block; }
+  .legend b { font-variant-numeric:tabular-nums; }
+  label.chk { font-size:14px; display:inline-flex; gap:6px; align-items:center; min-height:40px; }
+  .main { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; }
+  .mapbox { flex:999 1 720px; min-width:0; background:var(--map); border-radius:12px; overflow:hidden; position:relative; }
+  #map { width:100%; height:auto; display:block; }
+  #map .t { cursor:pointer; }
+  #map .t.sel { stroke:#fff; stroke-width:2.5; }
+  .side { flex:1 1 400px; min-width:0; background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .side h2 { font-size:17px; margin:0 0 10px; }
+  .kv { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 16px; }
+  .k { font-size:13px; color:var(--muted); }
+  .v { font-size:20px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .pill { display:inline-block; border-radius:999px; padding:2px 8px; font-size:12px; font-weight:600; margin:2px 4px 2px 0; }
+  .p-bad { background:#FDECEA; color:#B42318; } .p-ok { background:#E3F1E8; color:#1E6B44; } .p-warn { background:#FFF4D6; color:#8A5A00; }
+  .empty { padding:24px; text-align:center; color:var(--muted); }
+  .muted { color:var(--muted); font-size:13px; }
+  #tip { position:absolute; pointer-events:none; background:#fff; color:var(--ink); border-radius:8px; padding:8px 10px; font-size:13px;
+         box-shadow:0 4px 16px rgba(0,0,0,.25); display:none; max-width:280px; line-height:1.4; z-index:2; }
+  #tip b { font-size:14px; }
+  svg.hist { width:100%; height:160px; display:block; }
+  table.blk { width:100%; border-collapse:collapse; font-size:13px; margin-top:12px; }
+  table.blk td, table.blk th { white-space:nowrap; }
+  table.blk th, table.blk td { text-align:right; padding:6px 5px; border-bottom:1px solid var(--soft); font-variant-numeric:tabular-nums; }
+  table.blk th:first-child, table.blk td:first-child { text-align:left; }
+  table.blk th { color:var(--muted); font-weight:600; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <b>Tororo PV · Plant layout</b>
+    <nav><a href="/">Dashboard</a><a href="/layout.html" aria-current="page">Layout</a><a href="/raw.html">Raw test</a></nav>
+    <span id="conn"><span id="dot"></span><span id="status">connecting…</span></span>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="toolbar">
+    <span class="muted">Colour by</span>
+    <div class="seg" role="group" aria-label="Colour trackers by">
+      <button type="button" data-mode="status" aria-pressed="true">Status</button>
+      <button type="button" data-mode="block" aria-pressed="false">Block</button>
+    </div>
+    <div class="legend" id="legend"></div>
+    <label class="chk"><input type="checkbox" id="showInv" checked> Inverter stations</label>
+  </div>
+
+  <div class="main">
+    <div class="mapbox" id="mapbox">
+      <svg id="map" viewBox="330 0 900 725" role="img" aria-label="Plant layout with 442 trackers coloured by status"></svg>
+      <div id="tip"></div>
+    </div>
+    <aside class="side" id="side">
+      <h2>Plant summary</h2>
+      <div id="summary"><div class="empty">Loading…</div></div>
+    </aside>
+  </div>
+  <p class="muted">Tracker positions follow the layout drawing. DBox numbering inside each block is assumed (west → east, top row then bottom row of each strip) until confirmed by PVH. Click a tracker for details.</p>
+</main>
+
+<script>
+const NS = "http://www.w3.org/2000/svg";
+const STATUS = [
+  { key:"ok",    label:"Tracking OK",  color:"#0ca30c" },
+  { key:"manual",label:"Not in auto",  color:"#fab219" },
+  { key:"alarm", label:"Alarm / fault",color:"#d03b3b" },
+  { key:"stale", label:"Outdated",     color:"#9a9a93" },
+  { key:"none",  label:"No data",      color:"#526664" },
+];
+const BLOCK_COLORS = { 1:"#5CC59A", 2:"#E9C63E", 3:"#22B4BF", 4:"#E2616C" };
+const S = { layout:null, data:new Map(), mode:"status", sel:null, rects:[], poll:10 };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = (v, d=1) => v === null || v === undefined ? "–" : (Math.abs(v) < 0.5 / 10 ** d ? 0 : Number(v)).toFixed(d);
+const key = (b, d) => b + "/" + d;
+
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs || {})) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function toImg(px, py) {
+  const t = S.layout.transform;
+  return [t.ox + t.sx * px, t.oy + t.sy * py - t.sk * px];
+}
+function statusOf(r) {
+  if (!r) return "none";
+  if (r.outdated) return "stale";
+  if (r.alarms || r.defect) return "alarm";
+  if (r.operation_mode !== 1) return "manual";
+  return "ok";
+}
+
+function drawMap() {
+  const L = S.layout, svg = document.getElementById("map"), t = L.transform;
+  // plant fence and the Tororo - Busia road (drawing coordinates)
+  el("polygon", { points:"352,140 1172,4 948,626 362,718", fill:"none", stroke:"#8FA3A1", "stroke-width":2 }, svg);
+  el("polygon", { points:"1188,0 1222,0 952,725 918,725", fill:"#B9BDBB" }, svg);
+  const lbl = (x, y, txt, rot) => { const e = el("text", { x, y, fill:"#2B4846", "font-size":12, "font-weight":600,
+    transform:`rotate(${rot} ${x} ${y})`, "text-anchor":"middle" }, svg); e.textContent = txt; };
+  lbl(1200, 40, "Tororo →", -69); lbl(935, 690, "← Busia", -69);
+
+  // plan group: everything in plan units, skewed like the drawing
+  const g = el("g", { transform:`matrix(${t.sx},${-t.sk},0,${t.sy},${t.ox},${t.oy})` }, svg);
+  for (const r of L.roads) el("rect", { x:-6, y:r.y + 4, width:1012, height:r.h - 8, fill:"#B9BDBB" }, g);
+  // faint block background behind each tracker row
+  const rows = new Map();
+  for (const tr of L.trackers) {
+    const k = tr.block + ":" + tr.y;
+    const row = rows.get(k) || { block:tr.block, y:tr.y, h:tr.h, segs:[] };
+    const last = row.segs.at(-1);
+    if (last && tr.x - (last.x1) < 12) last.x1 = tr.x + tr.w; else row.segs.push({ x0:tr.x, x1:tr.x + tr.w });
+    rows.set(k, row);
+  }
+  S.bg = [];
+  for (const row of rows.values()) for (const s of row.segs)
+    S.bg.push(el("rect", { x:s.x0 - 3, y:row.y - 3, width:s.x1 - s.x0 + 6, height:row.h + 6, rx:2,
+      fill:BLOCK_COLORS[row.block], "fill-opacity":0.22, "data-b":row.block }, g));
+  // trackers
+  S.rects = L.trackers.map((tr, i) => el("rect", { class:"t", x:tr.x, y:tr.y, width:tr.w, height:tr.h, rx:1.5,
+    "data-i":i, "vector-effect":"non-scaling-stroke" }, g));
+
+  // block labels at the centre of each block's trackers
+  for (const b of Object.keys(L.blocks)) {
+    const [x, y] = toImg(L.block_labels[b].x, L.block_labels[b].y);
+    const e = el("text", { x, y, "text-anchor":"middle", "font-size":20, "font-weight":700, fill:"#fff",
+      stroke:"#1d3331", "stroke-width":4, "paint-order":"stroke", "pointer-events":"none" }, svg);
+    e.textContent = "BLOCK " + b;
+  }
+  // inverter stations
+  const inv = el("g", { id:"inv", "pointer-events":"none" }, svg);
+  for (const s of L.inverters) {
+    const [x, y] = toImg(s.x, s.y);
+    el("rect", { x:x - 11, y:y - 4, width:22, height:8, rx:1.5, fill:"#3CC03C", stroke:"#1d3331", "stroke-width":1 }, inv);
+    const e = el("text", { x, y:y - 7, "text-anchor":"middle", "font-size":9.5, "font-weight":600, fill:"#fff",
+      stroke:"#1d3331", "stroke-width":3, "paint-order":"stroke" }, inv);
+    e.textContent = s.name;
+  }
+  // SCADA building
+  const [sx, sy] = toImg(L.scada.x, L.scada.y);
+  el("rect", { x:sx - 14, y:sy - 10, width:28, height:20, rx:3, fill:"#C99A2E", stroke:"#fff", "stroke-width":1.5 }, svg);
+  const st = el("text", { x:sx, y:sy - 16, "font-size":11, fill:"#fff", "text-anchor":"middle", stroke:"#1d3331", "stroke-width":3, "paint-order":"stroke" }, svg);
+  st.textContent = "SCADA building";
+  // north arrow
+  el("path", { d:"M1150 300 L1150 225 M1142 238 L1150 222 L1158 238", stroke:"#fff", "stroke-width":2, fill:"none" }, svg);
+  const n = el("text", { x:1150, y:320, "text-anchor":"middle", "font-size":16, fill:"#fff", "font-weight":600 }, svg);
+  n.textContent = "N";
+}
+
+function colorFor(i) {
+  const tr = S.layout.trackers[i];
+  if (S.mode === "block") return BLOCK_COLORS[tr.block];
+  return STATUS.find(s => s.key === statusOf(S.data.get(key(tr.block, tr.dbox)))).color;
+}
+
+function paint() {
+  S.rects.forEach((r, i) => {
+    r.setAttribute("fill", colorFor(i));
+    const tr = S.layout.trackers[i];
+    r.classList.toggle("sel", S.sel === key(tr.block, tr.dbox));
+  });
+  S.bg.forEach(b => b.setAttribute("fill-opacity", S.mode === "block" ? 0 : 0.22));
+  // legend with counts (label + count, never colour alone)
+  const lg = document.getElementById("legend");
+  if (S.mode === "status") {
+    const counts = Object.fromEntries(STATUS.map(s => [s.key, 0]));
+    for (const tr of S.layout.trackers) counts[statusOf(S.data.get(key(tr.block, tr.dbox)))]++;
+    lg.innerHTML = STATUS.map(s => `<span><i class="sw" style="background:${s.color}"></i>${s.label} <b>${counts[s.key]}</b></span>`).join("");
+  } else {
+    lg.innerHTML = Object.entries(S.layout.blocks).map(([b, n]) =>
+      `<span><i class="sw" style="background:${BLOCK_COLORS[b]}"></i>Block ${b} <b>${n}</b></span>`).join("");
+  }
+}
+
+function summary() {
+  const rows = Object.keys(S.layout.blocks).map(b => {
+    const c = { ok:0, manual:0, alarm:0, stale:0, none:0 };
+    S.layout.trackers.filter(tr => tr.block == b).forEach(tr => c[statusOf(S.data.get(key(tr.block, tr.dbox)))]++);
+    return `<tr><td><a href="/#${b}">Block ${b}</a></td><td>${S.layout.blocks[b]}</td><td>${c.ok}</td><td>${c.manual}</td><td>${c.alarm}</td><td>${c.stale + c.none}</td></tr>`;
+  }).join("");
+  document.getElementById("summary").innerHTML = `
+    <div class="muted">Click a tracker on the map to see its details.</div>
+    <table class="blk"><thead><tr><th>Block</th><th>Total</th><th>OK</th><th>Manual</th><th>Alarm</th><th>No data</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+function tipHtml(tr) {
+  const r = S.data.get(key(tr.block, tr.dbox));
+  if (!r) return `<b>Block ${tr.block} · DBox ${tr.dbox}</b><br>No data yet`;
+  const al = r.alarm_list.length ? `<br><span style="color:#B42318">${esc(r.alarm_list.join(", "))}</span>` : "";
+  return `<b>Block ${tr.block} · DBox ${tr.dbox}</b><br>Position ${fmt(r.position,2)}° · setpoint ${fmt(r.setpoint,2)}°<br>${esc(r.mode_text)} · ${esc(r.position_text)}${al}${r.outdated ? "<br>Outdated data" : ""}`;
+}
+
+function histSvg(h) {
+  if (h.length < 2) return `<div class="empty">History builds up every few minutes.</div>`;
+  const vals = h.flatMap(p => [p.position, p.setpoint]);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi - lo < 2) { hi += 1; lo -= 1; }
+  const t0 = new Date(h[0].ts), span = (new Date(h.at(-1).ts) - t0) || 1;
+  const pts = k => h.map(p => `${((new Date(p.ts) - t0) / span * 1000).toFixed(1)},${(150 - (p[k] - lo) / (hi - lo) * 140).toFixed(1)}`).join(" ");
+  return `<svg class="hist" viewBox="0 0 1000 160" preserveAspectRatio="none" role="img" aria-label="Position and setpoint, last 24 hours">
+    <polyline fill="none" stroke="#8A929A" stroke-width="2" stroke-dasharray="6 5" vector-effect="non-scaling-stroke" points="${pts("setpoint")}"/>
+    <polyline fill="none" stroke="#B4530A" stroke-width="2" vector-effect="non-scaling-stroke" points="${pts("position")}"/></svg>
+    <div class="muted"><span style="color:#B4530A">━</span> Position &nbsp; <span style="color:#8A929A">┅</span> Setpoint &nbsp; ${fmt(lo)}° to ${fmt(hi)}°</div>`;
+}
+
+async function showDetail() {
+  const side = document.getElementById("side");
+  if (!S.sel) { side.innerHTML = `<h2>Plant summary</h2><div id="summary"></div>`; summary(); return; }
+  const [b, d] = S.sel.split("/");
+  let res;
+  try { res = await (await fetch(`/api/tracker/${b}/${d}?hours=24`)).json(); } catch (e) { res = null; }
+  const r = res && res.latest;
+  const back = `<button type="button" id="back" style="font:inherit;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer">← Plant summary</button>`;
+  if (!r) { side.innerHTML = `${back}<h2 style="margin-top:12px">Block ${b} · DBox ${d}</h2><div class="empty">No data for this tracker yet.</div>`; }
+  else {
+    const alarms = r.alarm_list.length ? r.alarm_list.map(a => `<span class="pill p-bad">${esc(a)}</span>`).join("") : `<span class="pill p-ok">No alarms</span>`;
+    side.innerHTML = `${back}
+      <h2 style="margin-top:12px">Block ${b} · DBox ${d}</h2>
+      <div class="kv">
+        <div><div class="k">Position</div><div class="v">${fmt(r.position,2)}°</div></div>
+        <div><div class="k">Setpoint</div><div class="v">${fmt(r.setpoint,2)}°</div></div>
+        <div><div class="k">Mode</div><div>${esc(r.mode_text)}</div></div>
+        <div><div class="k">Position code</div><div>${esc(r.position_text)}</div></div>
+        <div><div class="k">Battery</div><div>${fmt(r.battery,1)} %</div></div>
+        <div><div class="k">Max motor current</div><div>${r.motor_ma} mA</div></div>
+      </div>
+      <div style="margin:12px 0">${alarms}${r.outdated ? '<span class="pill p-warn">Outdated data</span>' : ""}</div>
+      <div class="k" style="margin-bottom:4px">Last 24 h</div>${histSvg(res.history)}
+      <p><a href="/#${b}/${d}">Open in dashboard →</a></p>`;
+  }
+  document.getElementById("back").onclick = () => { S.sel = null; history.replaceState(null, "", "#"); paint(); showDetail(); };
+}
+
+function wireEvents() {
+  const svg = document.getElementById("map"), tip = document.getElementById("tip"), box = document.getElementById("mapbox");
+  svg.addEventListener("mousemove", e => {
+    const i = e.target.dataset && e.target.dataset.i;
+    if (i === undefined) { tip.style.display = "none"; return; }
+    tip.innerHTML = tipHtml(S.layout.trackers[i]);
+    tip.style.display = "block";
+    const bx = box.getBoundingClientRect();
+    let x = e.clientX - bx.left + 14, y = e.clientY - bx.top + 14;
+    if (x + 290 > bx.width) x -= 300;
+    if (y + 120 > bx.height) y -= 130;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  });
+  svg.addEventListener("mouseleave", () => tip.style.display = "none");
+  svg.addEventListener("click", e => {
+    const i = e.target.dataset && e.target.dataset.i;
+    if (i === undefined) return;
+    const tr = S.layout.trackers[i];
+    S.sel = key(tr.block, tr.dbox);
+    history.replaceState(null, "", "#" + S.sel);
+    paint(); showDetail();
+  });
+  document.querySelectorAll(".seg button").forEach(b => b.onclick = () => {
+    S.mode = b.dataset.mode;
+    document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    paint();
+  });
+  document.getElementById("showInv").onchange = e => document.getElementById("inv").style.display = e.target.checked ? "" : "none";
+}
+
+function setStatus(ok, text) {
+  document.getElementById("dot").style.background = ok ? "#5CC08A" : "#E5484D";
+  document.getElementById("status").textContent = text;
+}
+
+async function refresh() {
+  try {
+    const rows = await (await fetch("/api/trackers/all")).json();
+    S.data = new Map(rows.map(r => [key(r.block, r.dbox), r]));
+    paint();
+    if (!S.sel) summary(); else showDetail();
+    if (!rows.length) return setStatus(false, "no tracker data yet – is poller.py running?");
+    const ts = rows.reduce((a, r) => r.ts > a ? r.ts : a, "");
+    const stale = (Date.now() - new Date(ts)) / 1000 > 3 * S.poll;
+    setStatus(!stale, (stale ? "STALE – last data " : "last update ") + new Date(ts).toLocaleTimeString());
+  } catch (e) { setStatus(false, "web server offline"); }
+}
+
+(async () => {
+  S.layout = await (await fetch("/layout.json")).json();
+  try { S.poll = (await (await fetch("/api/meta")).json()).poll_seconds; } catch (e) {}
+  const h = location.hash.match(/^#(\d+)\/(\d+)$/);
+  if (h) S.sel = key(+h[1], +h[2]);
+  drawMap(); wireEvents();
+  await refresh();
+  setInterval(refresh, S.poll * 1000);
+})();
+</script>
+</body>
+</html>

@@ -91,6 +91,12 @@ def trackers(block: int):
     return [decorate(r) for r in rows]
 
 
+@app.get("/api/trackers/all")
+def trackers_all():
+    """Latest state of every tracker in the plant (for the layout map)."""
+    return [decorate(r) for r in query("SELECT * FROM trackers_latest ORDER BY block, dbox")]
+
+
 @app.get("/api/tracker/{block}/{dbox}")
 def tracker(block: int, dbox: int, hours: float = 24):
     latest = query("SELECT * FROM trackers_latest WHERE block = ? AND dbox = ?", (block, dbox))

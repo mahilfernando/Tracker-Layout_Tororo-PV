@@ -30,6 +30,7 @@ in requests of 80 registers, as the manual recommends.
 | `poller.py` | Step 2: read every 10 s, save to `plant.db`, log mode and alarm changes as events |
 | `app.py` | Step 3: web API (`/api/plant`, `/api/summary`, `/api/trackers?block=1`, `/api/tracker/1/7`, `/api/events`, `/docs`) |
 | `static/index.html` | Step 4: dashboard (plant cards, block overview, tracker table with filters, tracker history, event log) |
+| `static/layout.html`, `make_layout.py` | Plant layout map: 442 trackers in 4 blocks coloured live by status (http://localhost:8000/layout.html) |
 | `simulator.py` | Fake TBox for testing without the plant |
 | `setup.bat` | Windows: double-click once to create `venv` and install libraries |
 | `demo.bat` | Windows: starts simulator + poller + web server and opens the dashboard |
@@ -96,6 +97,20 @@ Modbus devices and flags the one that answers on ID 255 with a date and time.
 
 Other PCs open `http://<this PC's IP>:8000`. Allow inbound TCP port 8000 in
 Windows Firewall.
+
+## Plant layout map
+
+http://localhost:8000/layout.html shows the plant as in the layout drawing: 4 blocks,
+442 trackers, roads, inverter stations B1-1…B4-11 and the SCADA building. Each
+tracker is coloured by status: tracking OK, not in auto, alarm/fault, outdated
+or no data. You can also colour by block. Hover a tracker for its values, click
+it for details and history.
+
+The trackers per block (B1 103, B2 102, B3 111, B4 126) are an estimate from the
+drawing's areas. When the real numbers are known, edit `BLOCK_TRACKERS` in
+`make_layout.py` and `BLOCKS` in `config.py`, then run `python make_layout.py`.
+The DBox numbering inside each block is also assumed (west → east, top row then
+bottom row of each strip) and must be confirmed against the TBox.
 
 ## Load on the TBox
 

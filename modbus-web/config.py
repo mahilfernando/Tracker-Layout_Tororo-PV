@@ -16,9 +16,14 @@ TIMEOUT_S = 3
 # {Modbus ID (= block number): number of DBoxes (trackers) in that block}
 # Ask the commissioning team for the real list, e.g. {1: 412, 2: 398, 3: 405}.
 # If the TBox renumbers blocks above 254 (manual section 4), use the Modbus ID.
+# Tororo PV: 4 blocks, 442 trackers. The split per block is an estimate from
+# the layout drawing - replace with the real counts (and update
+# BLOCK_TRACKERS in make_layout.py to match).
 BLOCKS = {
-    1: 20,    # [FILL IN]
-    2: 20,    # [FILL IN]
+    1: 103,
+    2: 102,
+    3: 111,
+    4: 126,
 }
 
 # TBox system version: "3.2" or "3.1" (changes the meaning of alarm bit 15)
