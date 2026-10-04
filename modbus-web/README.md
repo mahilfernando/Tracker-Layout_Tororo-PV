@@ -34,6 +34,7 @@ in requests of 80 registers, as the manual recommends.
 | `setup.bat` | Windows: double-click once to create `venv` and install libraries |
 | `demo.bat` | Windows: starts simulator + poller + web server and opens the dashboard |
 | `raw_poller.py`, `raw.bat`, `static/raw.html` | Test mode: read any N registers from any device and show them |
+| `find_tbox.py`, `find_tbox.bat` | Scan the network for Modbus devices and spot the TBox |
 | `run.bat` | Windows: starts poller + web server for the real TBox in `config.py` |
 
 ## 1. Install (once)
@@ -79,6 +80,9 @@ venv\Scripts\python raw_poller.py --ip 192.168.1.21 --unit 1 --start 45000 --cou
 function 04), or a plain offset like 5000.
 
 ## 3. Connect to the real TBox
+
+Don't know the TBox IP? Double-click `find_tbox.bat`. It scans 192.168.1.x for
+Modbus devices and flags the one that answers on ID 255 with a date and time.
 
 1. Put this PC on the TBox network and check `ping <TBox IP>`.
 2. In `config.py` set:
