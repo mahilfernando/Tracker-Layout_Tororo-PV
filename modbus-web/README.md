@@ -76,8 +76,10 @@ venv\Scripts\python raw_poller.py --ip 192.168.1.21 --unit 1 --start 45000 --cou
 venv\Scripts\python raw_poller.py --ip 192.168.1.21 --unit 1 --start 45000 --count 20 --once
 ```
 
-`--start` takes 45000 / 405000 (holding, sent as 5000), 35000 (input,
-function 04), or a plain offset like 5000.
+`--start` takes 45000 / 405000 (holding), 35000 (input, function 04), or a
+plain offset like 5000. By default 45000 is sent as wire address 5000, like the
+PVH manual (40000 = register 0). Add `--one-based` to match Modbus Poll and
+similar tools, where 45000 is wire address 4999. `raw.bat` uses `--one-based`.
 
 ## 3. Connect to the real TBox
 

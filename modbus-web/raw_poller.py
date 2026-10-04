@@ -22,18 +22,23 @@ from pymodbus.exceptions import ModbusException
 import config
 
 
-def parse_start(text, force_input):
-    """Return (kind, wire_address) from 45000, 405000, 35000, 5000..."""
+def parse_start(text, force_input, one_based=False):
+    """Return (kind, wire_address, label) from 45000, 405000, 35000, 5000...
+
+    one_based=False (PVH manual): 40000 is register 0, so 45000 -> wire 5000.
+    one_based=True (Modbus Poll / most tools): 40001 is register 0, so
+    45000 -> wire 4999.
+    """
     n = int(text)
-    if 400001 <= n <= 465536:
-        return "holding", n - 400000
-    if 300001 <= n <= 365536:
-        return "input", n - 300000
-    if 40000 <= n <= 49999:
-        return "holding", n - 40000
-    if 30000 <= n <= 39999:
-        return "input", n - 30000
-    return ("input" if force_input else "holding"), n
+    shift = 1 if one_based else 0
+    for lo, hi, base, kind in ((400000, 465536, 400000, "holding"), (300000, 365536, 300000, "input"),
+                               (40000, 49999, 40000, "holding"), (30000, 39999, 30000, "input")):
+        if lo <= n <= hi:
+            if n - base - shift < 0:
+                raise SystemExit(f"With --one-based the first register is {base + 1}, not {n}.")
+            return kind, n - base - shift, n
+    kind = "input" if force_input else "holding"
+    return kind, n, n + (30000 if kind == "input" else 40000) + shift
 
 
 def to_signed(v):
@@ -69,15 +74,16 @@ def main():
     ap.add_argument("--input", action="store_true", help="read input registers (function 04) for a plain offset")
     ap.add_argument("--every", type=float, default=5, help="seconds between reads")
     ap.add_argument("--once", action="store_true", help="read once and exit (no database)")
+    ap.add_argument("--one-based", action="store_true",
+                    help="45000 means wire address 4999 (Modbus Poll style) instead of 5000 (PVH manual style)")
     args = ap.parse_args()
 
-    kind, wire = parse_start(args.start, args.input)
+    kind, wire, label = parse_start(args.start, args.input, args.one_based)
     count = max(1, min(args.count, 125))
-    base = 40000 if kind == "holding" else 30000
     fc = 3 if kind == "holding" else 4
     source = f"{args.ip}:{args.port} unit {args.unit} FC{fc:02d}"
     print(f"Reading {count} {kind} registers from {source}, "
-          f"{base + wire}..{base + wire + count - 1} (wire address {wire}..{wire + count - 1})")
+          f"{label}..{label + count - 1} (wire address {wire}..{wire + count - 1})")
 
     client = ModbusTcpClient(args.ip, port=args.port, timeout=3)
     db = None if args.once else open_db()
@@ -96,13 +102,13 @@ def main():
 
             print(f"\n{ts}   {'address':>8} {'uint16':>7} {'int16':>7}  hex")
             for i, v in enumerate(rr.registers):
-                print(f"{'':25} {base + wire + i:>8} {v:>7} {to_signed(v):>7}  0x{v:04X}")
+                print(f"{'':25} {label + i:>8} {v:>7} {to_signed(v):>7}  0x{v:04X}")
 
             if db is not None:
                 if db_clear:   # new test run: forget addresses from an older run
                     db.execute("DELETE FROM raw_latest")
                     db_clear = False
-                rows = [(base + wire + i, ts, source, v) for i, v in enumerate(rr.registers)]
+                rows = [(label + i, ts, source, v) for i, v in enumerate(rr.registers)]
                 db.executemany("INSERT OR REPLACE INTO raw_latest (address, ts, source, value) VALUES (?, ?, ?, ?)", rows)
                 db.executemany("INSERT INTO raw_history (ts, address, value) VALUES (?, ?, ?)",
                                [(ts, a, v) for a, _t, _s, v in rows])
