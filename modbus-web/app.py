@@ -122,5 +122,18 @@ def events(limit: int = 100, block: int | None = None):
     return query("SELECT * FROM events WHERE block = ? ORDER BY id DESC LIMIT ?", (block, limit))
 
 
+@app.get("/api/raw/latest")
+def raw_latest():
+    """Registers written by raw_poller.py (test mode)."""
+    return query("SELECT address, ts, source, value FROM raw_latest ORDER BY address")
+
+
+@app.get("/api/raw/history/{address}")
+def raw_history(address: int, limit: int = 360):
+    limit = max(1, min(limit, 20000))
+    rows = query("SELECT ts, value FROM raw_history WHERE address = ? ORDER BY ts DESC LIMIT ?", (address, limit))
+    return rows[::-1]
+
+
 # Must come last: serves static/index.html at "/"
 app.mount("/", StaticFiles(directory=HERE / "static", html=True), name="static")

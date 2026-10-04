@@ -33,6 +33,7 @@ in requests of 80 registers, as the manual recommends.
 | `simulator.py` | Fake TBox for testing without the plant |
 | `setup.bat` | Windows: double-click once to create `venv` and install libraries |
 | `demo.bat` | Windows: starts simulator + poller + web server and opens the dashboard |
+| `raw_poller.py`, `raw.bat`, `static/raw.html` | Test mode: read any N registers from any device and show them |
 | `run.bat` | Windows: starts poller + web server for the real TBox in `config.py` |
 
 ## 1. Install (once)
@@ -60,6 +61,22 @@ Double-click `demo.bat`. It opens three windows (simulator, poller, web
 server) and the dashboard at http://localhost:8000. The simulator serves the
 blocks in `config.py`, a 10-minute "day", and a few faulty trackers (block 1
 DBox 3 and 7, and the last DBox of the last block).
+
+## Quick test on any Modbus device (raw mode)
+
+Reads a block of registers from any device and shows them at
+http://localhost:8000/raw.html (uint16, int16, hex, ÷10, ÷100, and a chart per register).
+
+Edit the four lines at the top of `raw.bat` (IP, UNIT, START, COUNT) and
+double-click it. Or run it by hand:
+
+```bat
+venv\Scripts\python raw_poller.py --ip 192.168.1.21 --unit 1 --start 45000 --count 20
+venv\Scripts\python raw_poller.py --ip 192.168.1.21 --unit 1 --start 45000 --count 20 --once
+```
+
+`--start` takes 45000 / 405000 (holding, sent as 5000), 35000 (input,
+function 04), or a plain offset like 5000.
 
 ## 3. Connect to the real TBox
 
