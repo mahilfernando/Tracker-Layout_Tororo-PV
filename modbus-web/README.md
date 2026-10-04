@@ -17,6 +17,9 @@ Device ──Modbus TCP:502──▶ poller.py ──▶ plant.db ──▶ app.
 | `app.py` | Step 3: web API (`/api/latest`, `/api/history/{tag}`, `/api/tags`, `/docs`) |
 | `static/index.html` | Step 4: dashboard (live tiles + history chart, no internet needed) |
 | `simulator.py` | Fake tracker for testing without hardware |
+| `setup.bat` | Windows: double-click once to create `venv` and install libraries |
+| `demo.bat` | Windows: starts simulator + poller + web server and opens the dashboard |
+| `run.bat` | Windows: starts poller + web server for the real device in `config.py` |
 
 ## 1. Install (once)
 
