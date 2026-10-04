@@ -1,8 +1,9 @@
-"""Read the tags in config.TAGS from a Modbus TCP device."""
+"""Read the PVH TBox over Modbus TCP. Read-only: nothing here writes registers."""
 
 from pymodbus.client import ModbusTcpClient
 
 import config
+import tbox_map as m
 
 
 def to_signed(raw):
@@ -10,38 +11,55 @@ def to_signed(raw):
     return raw - 65536 if raw > 32767 else raw
 
 
-def _read_block(client, kind, start, count):
-    if kind == "input":
-        rr = client.read_input_registers(start, count=count, device_id=config.UNIT_ID)
-    else:
-        rr = client.read_holding_registers(start, count=count, device_id=config.UNIT_ID)
-    if rr.isError():
-        raise IOError(f"device returned an error for {kind} {start}..{start + count - 1}: {rr}")
-    return rr.registers
-
-
-def read_tags(client):
-    """Return {tag name: value in real units} for every tag in config.TAGS.
-
-    Registers of the same kind are read in one request (from the lowest to the
-    highest address), which is faster and kinder to the device than one request
-    per tag. Keep each kind's addresses within 125 registers of each other.
-    """
-    values = {}
-    for kind in ("holding", "input"):
-        tags = [t for t in config.TAGS if t["kind"] == kind]
-        if not tags:
-            continue
-        start = min(t["address"] for t in tags)
-        count = max(t["address"] for t in tags) - start + 1
-        regs = _read_block(client, kind, start, count)
-        for t in tags:
-            raw = regs[t["address"] - start]
-            if t["signed"]:
-                raw = to_signed(raw)
-            values[t["name"]] = round(raw * t["scale"], 6)
-    return values
-
-
 def make_client():
-    return ModbusTcpClient(config.DEVICE_IP, port=config.DEVICE_PORT, timeout=3)
+    return ModbusTcpClient(config.TBOX_IP, port=config.TBOX_PORT, timeout=config.TIMEOUT_S)
+
+
+def read_range(client, unit_id, start, count):
+    """Read `count` holding registers in chunks of config.REQUEST_SIZE."""
+    regs = []
+    for addr in range(start, start + count, config.REQUEST_SIZE):
+        n = min(config.REQUEST_SIZE, start + count - addr)
+        rr = client.read_holding_registers(addr, count=n, device_id=unit_id)
+        if rr.isError():
+            raise IOError(f"ID {unit_id}: error reading {addr}..{addr + n - 1}: {rr}")
+        regs.extend(rr.registers)
+    return regs
+
+
+def _decode_tags(regs, start, tags):
+    out = {}
+    for name, offset, signed, scale, _unit in tags:
+        raw = regs[offset - start]
+        if signed:
+            raw = to_signed(raw)
+        out[name] = raw / scale if scale != 1 else raw
+    return out
+
+
+def read_global(client):
+    regs = read_range(client, m.GLOBAL_UNIT_ID, m.GLOBAL_START, m.GLOBAL_COUNT)
+    return _decode_tags(regs, m.GLOBAL_START, m.GLOBAL_TAGS)
+
+
+def read_meteo0(client, block):
+    regs = read_range(client, block, m.METEO0_START, m.METEO0_COUNT)
+    return _decode_tags(regs, m.METEO0_START, m.METEO0_TAGS)
+
+
+def read_block(client, block, dbox_count):
+    """Return a list of dicts, one per DBox 1..dbox_count."""
+    start = m.dbox_address(1)
+    count = m.DBOX_STRIDE * (dbox_count - 1) + m.DBOX_USED
+    regs = read_range(client, block, start, count)
+    rows = []
+    for n in range(1, dbox_count + 1):
+        base = m.dbox_address(n) - start
+        row = {"block": block, "dbox": n}
+        for field, offset, signed, scale in m.DBOX_FIELDS:
+            raw = regs[base + offset]
+            if signed:
+                raw = to_signed(raw)
+            row[field] = raw / scale if scale != 1 else raw
+        rows.append(row)
+    return rows

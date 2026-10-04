@@ -3,140 +3,278 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tracker monitor</title>
+<title>Tororo PV · Tracker monitor</title>
 <style>
-  :root { --bg:#F3F4F1; --ink:#15191E; --muted:#4A5159; --line:#D3D7D0; --card:#fff; --accent:#B4530A; --ok:#1E6B44; --bad:#B42318; }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  :root { --bg:#F3F4F1; --ink:#15191E; --muted:#4A5159; --line:#D3D7D0; --soft:#ECEEEA; --card:#fff;
+          --accent:#B4530A; --ok:#1E6B44; --okbg:#E3F1E8; --bad:#B42318; --badbg:#FDECEA; --warn:#8A5A00; --warnbg:#FFF4D6; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size:15px; }
   header { background:var(--ink); color:#F3F4F1; }
-  .wrap { max-width:1200px; margin:0 auto; padding:16px 24px; }
+  .wrap { max-width:1400px; margin:0 auto; padding:16px 24px; }
   header .wrap { display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center; }
   header b { font-size:18px; }
   #conn { font-size:14px; color:#C9CEC6; display:flex; gap:8px; align-items:center; }
   #dot { width:10px; height:10px; border-radius:50%; background:#888; }
-  .tiles { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin:24px 0; }
-  .tile, section { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; }
-  .tile .label { font-size:14px; color:var(--muted); }
-  .tile .value { font-size:36px; font-weight:600; font-family: ui-monospace, Consolas, monospace; margin:6px 0; }
-  .tile .tag { font-size:13px; color:var(--muted); font-family: ui-monospace, Consolas, monospace; }
-  section { margin-bottom:24px; }
-  section h2 { margin:0 0 12px; font-size:18px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; align-items:center; }
-  select { font:inherit; font-size:14px; min-height:44px; padding:0 12px; border:1px solid var(--line); border-radius:8px; background:#fff; }
-  svg { width:100%; height:240px; display:block; }
-  .note { font-size:13px; color:var(--muted); }
+  h2 { font-size:16px; margin:0 0 12px; }
+  .grid { display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(170px, 1fr)); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .k { font-size:13px; color:var(--muted); }
+  .v { font-size:24px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .v small { font-size:14px; font-weight:400; color:var(--muted); }
+  .card.bad { border-color:var(--bad); background:var(--badbg); }
+  .card.bad .v { color:var(--bad); }
+  .card.good .v { color:var(--ok); }
+  section { margin-top:24px; }
+  .blocks { display:flex; flex-wrap:wrap; gap:12px; }
+  .blk { font:inherit; text-align:left; cursor:pointer; min-width:220px; min-height:44px; color:var(--ink); }
+  .blk[aria-pressed="true"] { border:2px solid var(--accent); padding:13px 15px; }
+  .blk .row { display:flex; gap:12px; flex-wrap:wrap; font-size:13px; margin-top:6px; }
+  .pill { display:inline-block; border-radius:999px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .p-ok { background:var(--okbg); color:var(--ok); }
+  .p-bad { background:var(--badbg); color:var(--bad); }
+  .p-warn { background:var(--warnbg); color:var(--warn); }
+  .p-mute { background:var(--soft); color:var(--muted); }
+  .main { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; }
+  .tablebox { flex:999 1 640px; min-width:0; }
+  .detail { flex:1 1 380px; min-width:0; position:sticky; top:12px; }
+  .toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+  .toolbar button, select, input { font:inherit; font-size:14px; min-height:40px; padding:0 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink); }
+  .toolbar button[aria-pressed="true"] { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .scroll { overflow:auto; max-height:640px; background:#fff; border:1px solid var(--line); border-radius:12px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { position:sticky; top:0; background:#fff; text-align:left; font-weight:600; color:var(--muted); padding:10px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--soft); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  td.num, th.num { text-align:right; }
+  tbody tr { cursor:pointer; }
+  tbody tr:hover { background:#F7F8F5; }
+  tbody tr.sel { background:#FBEBDD; }
+  tbody tr.alarm td:first-child { box-shadow: inset 4px 0 0 var(--bad); }
+  svg { width:100%; height:200px; display:block; }
+  .legend { display:flex; gap:16px; font-size:13px; color:var(--muted); margin-top:6px; flex-wrap:wrap; }
+  .sw { display:inline-block; width:16px; height:3px; vertical-align:middle; margin-right:6px; }
+  ul.ev { list-style:none; margin:0; padding:0; font-size:14px; }
+  ul.ev li { padding:8px 0; border-bottom:1px solid var(--soft); display:flex; gap:10px; flex-wrap:wrap; }
+  ul.ev time { color:var(--muted); font-variant-numeric:tabular-nums; min-width:80px; }
+  .muted { color:var(--muted); }
+  .empty { padding:24px; text-align:center; color:var(--muted); }
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
-    <b>Tracker monitor</b>
+    <b>Tororo PV · Tracker monitor</b>
     <span id="conn"><span id="dot"></span><span id="status">connecting…</span></span>
   </div>
 </header>
+
 <main class="wrap">
-  <div class="tiles" id="tiles"></div>
+  <section style="margin-top:8px">
+    <h2>Plant (TBox, Modbus ID 255)</h2>
+    <div class="grid" id="plant"></div>
+  </section>
 
   <section>
-    <h2>
-      <span>History</span>
-      <span>
-        <label for="tagSel" class="note">Tag</label>
-        <select id="tagSel"></select>
-        <label for="rangeSel" class="note">Range</label>
-        <select id="rangeSel">
-          <option value="120">10 min</option>
-          <option value="720" selected>1 hour</option>
-          <option value="8640">12 hours</option>
-        </select>
-      </span>
-    </h2>
-    <svg id="chart" viewBox="0 0 1000 240" preserveAspectRatio="none" role="img" aria-label="History chart"></svg>
-    <div class="note" id="chartNote"></div>
+    <h2>Power blocks</h2>
+    <div class="blocks" id="blocks"></div>
   </section>
+
+  <section class="main">
+    <div class="tablebox">
+      <div class="toolbar">
+        <h2 id="tblTitle" style="margin:0 8px 0 0">Trackers</h2>
+        <button type="button" data-f="all" aria-pressed="true">All</button>
+        <button type="button" data-f="alarm">Alarms</button>
+        <button type="button" data-f="notauto">Not in auto</button>
+        <button type="button" data-f="outdated">Outdated</button>
+        <label for="search" class="muted">DBox</label>
+        <input id="search" type="number" min="1" placeholder="#" style="width:90px">
+      </div>
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>DBox</th><th class="num">Position</th><th class="num">Setpoint</th><th class="num">Δ</th>
+            <th>Mode</th><th>Position code</th><th class="num">Battery</th><th class="num">Motor</th><th>Alarms</th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="detail card" id="detail">
+      <div class="empty">Select a tracker to see its history and alarms.</div>
+    </aside>
+  </section>
+
+  <section>
+    <h2>Event log</h2>
+    <div class="card"><ul class="ev" id="events"></ul></div>
+  </section>
+  <p class="muted" style="font-size:13px">Times are shown in this PC's local time. Data is read-only: this page never sends commands to the trackers.</p>
 </main>
 
 <script>
-const POLL_MS = 5000;
-let TAGS = [];
-
-const fmt = (v, tag) => {
-  if (v === null || v === undefined) return "–";
-  const decimals = tag.scale >= 1 ? 0 : Math.min(3, Math.round(-Math.log10(tag.scale)));
-  return v.toFixed(decimals) + (tag.unit ? " " + tag.unit : "");
-};
-
-function buildTiles() {
-  const box = document.getElementById("tiles");
-  const sel = document.getElementById("tagSel");
-  for (const t of TAGS) {
-    const div = document.createElement("div");
-    div.className = "tile";
-    div.innerHTML = `<div class="label"></div><div class="value" id="v_${t.name}">–</div><div class="tag"></div>`;
-    div.querySelector(".label").textContent = t.name.replace(/_/g, " ");
-    div.querySelector(".tag").textContent = t.name;
-    box.appendChild(div);
-    sel.add(new Option(t.name, t.name));
-  }
-}
+const S = { meta:null, block:null, filter:"all", sel:null, rows:[] };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = (v, d=1) => (v === null || v === undefined || Number.isNaN(v)) ? "–" : (Math.abs(v) < 0.5 / 10 ** d ? 0 : Number(v)).toFixed(d);
+const tloc = iso => iso ? new Date(iso).toLocaleTimeString() : "–";
+const get = async url => { const r = await fetch(url); if (!r.ok) throw new Error(r.status); return r.json(); };
 
 function setStatus(ok, text) {
   document.getElementById("dot").style.background = ok ? "#5CC08A" : "#E5484D";
   document.getElementById("status").textContent = text;
 }
 
-async function refreshLatest() {
+function card(label, value, unit, state) {
+  return `<div class="card ${state||""}"><div class="k">${esc(label)}</div><div class="v">${value} <small>${esc(unit||"")}</small></div></div>`;
+}
+
+async function loadPlant() {
+  const d = await get("/api/plant");
+  const p = d.plant, el = document.getElementById("plant");
+  if (!d.ts) { el.innerHTML = `<div class="empty">No plant data yet – is poller.py running?</div>`; return null; }
+  const yes = v => v ? "Yes" : "No";
+  const ew = {1:"East", 2:"West"}[p.GlobalWindDirectionEW] || "–";
+  const hail = {0:"OK", 1:"Alarmed", 2:"Counting down"}[p.HailState] ?? p.HailState;
+  el.innerHTML =
+    card("Wind speed", fmt(p.WindSpeed), "m/s", p.WindAlarm ? "bad" : "") +
+    card("Wind alarm", p.WindAlarm ? "ALARM" : "OK", "", p.WindAlarm ? "bad" : "good") +
+    card("Wind direction", fmt(p.WindDirection, 0), "° · stow " + ew) +
+    card("Sun angle", fmt(p.SunAngle), "°") +
+    card("Auto target", fmt(p.GlobalAutoElevationTarget), "°") +
+    card("Backtracking", yes(p.BacktrackingStatus), "") +
+    card("Night mode", yes(p.NightMode), "") +
+    card("UPS", p.UpsAlarm ? "ALARM" : (p.UpsBattery ? "On battery" : "OK"), "", p.UpsAlarm || p.UpsBattery ? "bad" : "good") +
+    card("Hail", hail, "", p.HailState ? "bad" : "") +
+    card("TBox time (UTC)", `${String(p.HourUTC).padStart(2,"0")}:${String(p.MinuteUTC).padStart(2,"0")}`, "");
+  return d.ts;
+}
+
+async function loadBlocks() {
+  const list = await get("/api/summary");
+  if (S.block === null && list.length) S.block = list[0].block;
+  document.getElementById("blocks").innerHTML = list.map(b => {
+    const pill = (n, cls, txt) => n ? `<span class="pill ${cls}">${n} ${txt}</span>` : "";
+    return `<button type="button" class="card blk" data-b="${b.block}" aria-pressed="${b.block === S.block}">
+      <div><b>Block ${b.block}</b> <span class="muted">· ${b.read}/${b.expected} trackers</span></div>
+      <div class="row"><span class="pill p-ok">${b.auto} auto</span>${pill(b.alarm,"p-bad","alarm")}${pill(b.defect,"p-bad","defect")}${pill(b.outdated,"p-warn","outdated")}</div>
+    </button>`;
+  }).join("");
+  document.querySelectorAll(".blk").forEach(btn => btn.onclick = () => { S.block = +btn.dataset.b; S.sel = null; history.replaceState(null, "", `#${S.block}`); refresh(); });
+}
+
+function rowPasses(r) {
+  const q = document.getElementById("search").value;
+  if (q && r.dbox !== +q) return false;
+  if (S.filter === "alarm") return r.alarms > 0 || r.defect;
+  if (S.filter === "notauto") return r.operation_mode !== 1;
+  if (S.filter === "outdated") return r.outdated;
+  return true;
+}
+
+function renderRows() {
+  document.getElementById("tblTitle").textContent = `Trackers · block ${S.block ?? "–"}`;
+  const rows = S.rows.filter(rowPasses);
+  const body = document.getElementById("rows");
+  if (!rows.length) { body.innerHTML = `<tr><td colspan="9" class="empty">No trackers match.</td></tr>`; return; }
+  body.innerHTML = rows.map(r => {
+    const modeCls = r.defect ? "p-bad" : (r.operation_mode === 1 ? "p-ok" : "p-warn");
+    const alarms = r.alarm_list.length ? `<span class="pill p-bad">${esc(r.alarm_list.join(", "))}</span>` : `<span class="muted">–</span>`;
+    const out = r.outdated ? ` <span class="pill p-warn">outdated</span>` : "";
+    const dev = Math.abs(r.deviation) >= 2 ? `<b style="color:var(--bad)">${fmt(r.deviation)}</b>` : fmt(r.deviation);
+    return `<tr data-d="${r.dbox}" class="${r.dbox === S.sel ? "sel" : ""} ${r.alarms || r.defect ? "alarm" : ""}">
+      <td><b>${r.dbox}</b>${out}</td><td class="num">${fmt(r.position, 2)}°</td><td class="num">${fmt(r.setpoint, 2)}°</td><td class="num">${dev}</td>
+      <td><span class="pill ${modeCls}">${esc(r.mode_text)}</span></td><td>${esc(r.position_text)}</td>
+      <td class="num">${fmt(r.battery, 0)}%</td><td class="num">${r.motor_ma} mA</td><td>${alarms}</td></tr>`;
+  }).join("");
+  body.querySelectorAll("tr[data-d]").forEach(tr => tr.onclick = () => { S.sel = +tr.dataset.d; history.replaceState(null, "", `#${S.block}/${S.sel}`); renderRows(); loadDetail(); });
+}
+
+async function loadTrackers() {
+  if (S.block === null) return;
+  S.rows = await get(`/api/trackers?block=${S.block}`);
+  renderRows();
+}
+
+function chart(history) {
+  if (history.length < 2) return `<div class="empty">History builds up every few minutes – not enough points yet.</div>`;
+  const vals = history.flatMap(h => [h.position, h.setpoint]);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi - lo < 2) { hi += 1; lo -= 1; }
+  const t0 = new Date(history[0].ts), t1 = new Date(history.at(-1).ts), span = (t1 - t0) || 1;
+  const x = h => ((new Date(h.ts) - t0) / span * 1000).toFixed(1);
+  const y = v => (190 - (v - lo) / (hi - lo) * 180).toFixed(1);
+  const line = (key, color, dash) => `<polyline fill="none" stroke="${color}" stroke-width="2" ${dash ? 'stroke-dasharray="6 5"' : ""} vector-effect="non-scaling-stroke" points="${history.map(h => x(h) + "," + y(h[key])).join(" ")}"/>`;
+  return `<svg viewBox="0 0 1000 200" preserveAspectRatio="none" role="img" aria-label="Position and setpoint history">
+      <line x1="0" x2="1000" y1="10" y2="10" stroke="#ECEEEA"/><line x1="0" x2="1000" y1="190" y2="190" stroke="#ECEEEA"/>
+      ${line("setpoint", "#8A929A", true)}${line("position", "#B4530A", false)}</svg>
+    <div class="legend"><span><span class="sw" style="background:#B4530A"></span>Position</span>
+      <span><span class="sw" style="background:#8A929A"></span>Setpoint</span>
+      <span>${t0.toLocaleTimeString()} → ${t1.toLocaleTimeString()} · ${fmt(lo)}° to ${fmt(hi)}°</span></div>`;
+}
+
+async function loadDetail() {
+  const el = document.getElementById("detail");
+  if (S.sel === null) { el.innerHTML = `<div class="empty">Select a tracker to see its history and alarms.</div>`; return; }
+  let d;
+  try { d = await get(`/api/tracker/${S.block}/${S.sel}?hours=24`); } catch (e) { el.innerHTML = `<div class="empty">No data for this tracker.</div>`; return; }
+  const r = d.latest;
+  const alarms = r.alarm_list.length ? r.alarm_list.map(a => `<span class="pill p-bad">${esc(a)}</span>`).join(" ") : `<span class="pill p-ok">No alarms</span>`;
+  el.innerHTML = `
+    <h2>Block ${r.block} · DBox ${r.dbox}</h2>
+    <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+      <div><div class="k">Position</div><div class="v">${fmt(r.position,2)}°</div></div>
+      <div><div class="k">Setpoint</div><div class="v">${fmt(r.setpoint,2)}°</div></div>
+      <div><div class="k">Mode</div><div>${esc(r.mode_text)}</div></div>
+      <div><div class="k">Position code</div><div>${esc(r.position_text)}</div></div>
+      <div><div class="k">Battery</div><div>${fmt(r.battery,1)} %</div></div>
+      <div><div class="k">Max motor current</div><div>${r.motor_ma} mA</div></div>
+    </div>
+    <div style="margin:12px 0">${alarms}${r.outdated ? ' <span class="pill p-warn">Outdated data</span>' : ""}</div>
+    <div class="k" style="margin-bottom:4px">Last 24 h</div>${chart(d.history)}
+    <div class="k" style="margin:12px 0 4px">Recent events</div>
+    <ul class="ev">${d.events.map(e => `<li><time>${tloc(e.ts)}</time><span>${esc(e.text)}</span></li>`).join("") || '<li class="muted">None</li>'}</ul>
+    <div class="muted" style="font-size:12px;margin-top:8px">Updated ${tloc(r.ts)}</div>`;
+}
+
+async function loadEvents() {
+  const ev = await get("/api/events?limit=50");
+  const cls = { alarm:"p-bad", clear:"p-ok", info:"p-mute" };
+  document.getElementById("events").innerHTML = ev.map(e => {
+    const where = e.block === 255 ? "Plant" : `Block ${e.block} · DBox ${e.dbox}`;
+    return `<li><time>${tloc(e.ts)}</time><span class="pill ${cls[e.severity] || "p-mute"}">${esc(e.severity)}</span><b>${esc(where)}</b><span>${esc(e.text)}</span></li>`;
+  }).join("") || `<li class="muted">No events yet.</li>`;
+}
+
+async function refresh() {
   try {
-    const rows = await (await fetch("/api/latest")).json();
-    if (!rows.length) return setStatus(false, "no data yet – is poller.py running?");
-    let newest = "";
-    for (const r of rows) {
-      const tag = TAGS.find(t => t.name === r.tag);
-      const el = document.getElementById("v_" + r.tag);
-      if (tag && el) el.textContent = fmt(r.value, tag);
-      if (r.ts > newest) newest = r.ts;
-    }
-    const ageS = (Date.now() - new Date(newest)) / 1000;
-    const stale = ageS > 3 * POLL_MS / 1000;
-    setStatus(!stale, (stale ? "STALE – last data " : "last update ") + new Date(newest).toLocaleTimeString());
+    const ts = await loadPlant();
+    await loadBlocks();
+    await loadTrackers();
+    await loadEvents();
+    if (S.sel !== null) await loadDetail();
+    if (!ts) return setStatus(false, "no data yet – is poller.py running?");
+    const age = (Date.now() - new Date(ts)) / 1000;
+    const stale = age > 3 * S.meta.poll_seconds;
+    setStatus(!stale, (stale ? "STALE – last data " : "last update ") + tloc(ts));
   } catch (e) {
     setStatus(false, "web server offline");
   }
 }
 
-async function refreshChart() {
-  const name = document.getElementById("tagSel").value;
-  const limit = document.getElementById("rangeSel").value;
-  const tag = TAGS.find(t => t.name === name);
-  let rows = [];
-  try { rows = await (await fetch(`/api/history/${name}?limit=${limit}`)).json(); } catch (e) {}
-  const svg = document.getElementById("chart");
-  const note = document.getElementById("chartNote");
-  if (rows.length < 2) { svg.innerHTML = ""; note.textContent = "Not enough data yet."; return; }
-  const vals = rows.map(r => r.value);
-  let lo = Math.min(...vals), hi = Math.max(...vals);
-  if (hi === lo) { hi += 1; lo -= 1; }
-  const x = i => (i / (rows.length - 1)) * 1000;
-  const y = v => 225 - ((v - lo) / (hi - lo)) * 210;
-  const pts = rows.map((r, i) => x(i).toFixed(1) + "," + y(r.value).toFixed(1)).join(" ");
-  svg.innerHTML =
-    `<line x1="0" x2="1000" y1="15" y2="15" stroke="#ECEEEA"/>` +
-    `<line x1="0" x2="1000" y1="225" y2="225" stroke="#ECEEEA"/>` +
-    `<polyline fill="none" stroke="#B4530A" stroke-width="2" vector-effect="non-scaling-stroke" points="${pts}"/>`;
-  const t0 = new Date(rows[0].ts).toLocaleTimeString(), t1 = new Date(rows.at(-1).ts).toLocaleTimeString();
-  note.textContent = `${t0} → ${t1} · min ${fmt(lo, tag)} · max ${fmt(hi, tag)} · ${rows.length} points`;
-}
+document.querySelectorAll(".toolbar button").forEach(b => b.onclick = () => {
+  S.filter = b.dataset.f;
+  document.querySelectorAll(".toolbar button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  renderRows();
+});
+document.getElementById("search").oninput = renderRows;
 
-async function start() {
-  try { TAGS = await (await fetch("/api/tags")).json(); }
-  catch (e) { return setStatus(false, "web server offline"); }
-  buildTiles();
-  document.getElementById("tagSel").onchange = refreshChart;
-  document.getElementById("rangeSel").onchange = refreshChart;
-  const tick = () => { refreshLatest(); refreshChart(); };
-  tick();
-  setInterval(tick, POLL_MS);
-}
-start();
+(async () => {
+  try { S.meta = await get("/api/meta"); } catch (e) { return setStatus(false, "web server offline"); }
+  const h = location.hash.match(/^#(\d+)(?:\/(\d+))?$/);   // #block or #block/dbox
+  if (h) { S.block = +h[1]; S.sel = h[2] ? +h[2] : null; }
+  await refresh();
+  setInterval(refresh, S.meta.poll_seconds * 1000);
+})();
 </script>
 </body>
 </html>

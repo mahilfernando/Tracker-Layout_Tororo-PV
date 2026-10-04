@@ -1,31 +1,35 @@
-"""Settings shared by read_test.py, poller.py and app.py.
+"""Settings shared by read_test.py, poller.py, app.py and simulator.py.
 
-Edit this file to match your device. Everything else reads from here.
+Edit this file to match your plant. Everything else reads from here.
 """
 
 import os
 from pathlib import Path
 
-# --- Modbus TCP device -------------------------------------------------------
-# MODBUS_IP / MODBUS_PORT environment variables override these (handy for the simulator).
-DEVICE_IP = os.environ.get("MODBUS_IP", "192.168.1.50")        # [YOUR DEVICE IP]
-DEVICE_PORT = int(os.environ.get("MODBUS_PORT", "502"))         # standard Modbus TCP port
-UNIT_ID = 1                  # unit / slave id from the device manual
-POLL_SECONDS = 5             # how often poller.py reads the device
+# --- TBox connection (Modbus TCP) --------------------------------------------
+# MODBUS_IP / MODBUS_PORT environment variables override these (used by demo.bat).
+TBOX_IP = os.environ.get("MODBUS_IP", "192.168.1.50")    # [YOUR TBOX IP]
+TBOX_PORT = int(os.environ.get("MODBUS_PORT", "502"))     # TBox server port 502
+TIMEOUT_S = 3
 
-# --- Register map ------------------------------------------------------------
-# One entry per value you want to log. Fill these in from the device manual.
-#   address : register number used in code (manual "40001" -> 0, "40011" -> 10)
-#   kind    : "holding" (function 03) or "input" (function 04)
-#   signed  : True for int16 values that can be negative (angles, power flow)
-#   scale   : multiply the raw integer by this to get real units
-TAGS = [
-    {"name": "tracker_angle_deg", "address": 0, "kind": "holding", "signed": True,  "scale": 0.1,  "unit": "°"},
-    {"name": "target_angle_deg",  "address": 1, "kind": "holding", "signed": True,  "scale": 0.1,  "unit": "°"},
-    {"name": "motor_current_a",   "address": 2, "kind": "holding", "signed": False, "scale": 0.01, "unit": "A"},
-    {"name": "status_code",       "address": 3, "kind": "holding", "signed": False, "scale": 1,    "unit": ""},
-]
+# --- Power blocks to read ----------------------------------------------------
+# {Modbus ID (= block number): number of DBoxes (trackers) in that block}
+# Ask the commissioning team for the real list, e.g. {1: 412, 2: 398, 3: 405}.
+# If the TBox renumbers blocks above 254 (manual section 4), use the Modbus ID.
+BLOCKS = {
+    1: 20,    # [FILL IN]
+    2: 20,    # [FILL IN]
+}
+
+# TBox system version: "3.2" or "3.1" (changes the meaning of alarm bit 15)
+TBOX_SYSTEM_VERSION = "3.2"
+
+# --- Polling -----------------------------------------------------------------
+POLL_SECONDS = 10       # one full read of the plant every 10 s
+REQUEST_SIZE = 80       # registers per request, as the manual recommends
+READ_METEO0 = True      # also read Meteo 0 (wind) of each block
 
 # --- Local database ----------------------------------------------------------
 DB_PATH = Path(__file__).parent / "plant.db"   # SQLite file, created automatically
-KEEP_DAYS = 90               # older rows are deleted once a day
+HISTORY_MINUTES = 5     # tracker positions are saved to history every 5 min
+KEEP_DAYS = 30          # older history / events are deleted once a day
