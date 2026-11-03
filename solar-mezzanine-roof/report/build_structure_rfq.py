@@ -132,34 +132,22 @@ ol,ul {{ margin:0 0 4px; padding-left:18px; }} li {{ margin-bottom:2px; }}
 <div class="fig">{svg}</div>
 <div class="cap">Typical section through two 2P tables</div>
 
-<h2>3. Wind load and structural design</h2>
+<h2>3. Wind load</h2>
 <table class="kv">
 <tr><td>Basic wind speed</td><td><b>{vb:.0f} m/s</b> (10-min mean at 10 m; preliminary, supplier to confirm for the site)</td></tr>
 <tr><td>Peak wind pressure</td><td><b>q<sub>p</sub> ≈ {qp:.2f} kN/m²</b> (EN 1991-1-4, terrain cat. III, roof height ≈7–10 m)</td></tr>
 <tr><td>Site exposure</td><td>Two hotel towers stand next to the roof: allow for wind acceleration and edge/corner zones at the parapet</td></tr>
-<tr><td>Design codes</td><td>EN 1991-1-4, EN 1999 (aluminium) or ASCE 7 equivalent; design life 25 years</td></tr>
-<tr><td>Materials</td><td>Aluminium 6005-T6 / 6063-T6; stainless-steel fasteners A2-70; corrosion category C3</td></tr>
-<tr><td>Module clamping</td><td>To the module installation manual (rated test loads 5,400 Pa down / 2,400 Pa up)</td></tr>
 </table>
 
 <div class="pb"></div>
-<h2>4. Roof and fixing</h2>
-<table class="kv">
-<tr><td>Roof</td><td>Flat reinforced-concrete slab, single level, waterproofed, with parapet. Usable area ≈29.4 × 39 m.</td></tr>
-<tr><td>Fixing (please quote both)</td><td><b>A – Anchored (preferred):</b> chemical anchors or concrete plinths, with waterproofing detail<br>
-<b>B – Ballasted:</b> concrete ballast with wind deflectors; state ballast weight per table</td></tr>
-<tr><td>Roof protection</td><td>EPDM pads under every foot; keep drainage paths clear</td></tr>
-<tr><td>Roof load</td><td>State the uniform load (kg/m²) and the point load per foot (kN), for approval by the building's structural engineer</td></tr>
-</table>
-
-<h2>5. Layout</h2>
+<h2>4. Layout</h2>
 <div class="fig"><img src="{b64('layout.png','image/png')}" style="max-height:120mm"></div>
 <div class="cap">PV layout on the mezzanine roof (DWG/DXF attached)</div>
 
-<h2>6. Quotation to include</h2>
+<h2>5. Quotation to include</h2>
 <ol>
 <li>Price (USD per Wp and total), delivery terms and lead time</li>
-<li>Structural calculation: wind loads, loads per foot, anchor or ballast design</li>
+<li>Structural calculation: wind loads and loads per foot</li>
 <li>General arrangement drawings and bill of materials</li>
 <li>Warranty (structure 10 years minimum) and installation manual</li>
 </ol>
