@@ -1,4 +1,4 @@
-"""Build the mounting-structure RFQ / structural design brief PDF for the supplier.
+"""Build the short (2-page) mounting-structure RFQ PDF for the supplier.
 
 Run:  python3 build_structure_rfq.py && node to_pdf_rfq.js
 """
@@ -76,26 +76,23 @@ svg = f'''<svg viewBox="-10 50 {X(right)+70:.0f} 200" class="sec">
 html = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <title>PV Mounting Structure – RFQ</title>
 <style>
-@page {{ size:A4; margin:20mm 18mm 18mm 18mm; }}
+@page {{ size:A4; margin:16mm 16mm 16mm 16mm; }}
 :root {{ --ink:#1b2430; --muted:#5b6673; --rule:#c9d0d8; --navy:#14365d; --band:#eef2f6; }}
-html,body {{ margin:0; background:#fff; color:var(--ink); font-family:Inter,"DejaVu Sans",Arial,sans-serif; font-size:9.4pt; line-height:1.45; }}
-h1 {{ font-size:18pt; color:var(--navy); margin:0 0 2px; }}
-h2 {{ font-size:12pt; color:var(--navy); border-bottom:1.4px solid var(--navy); padding-bottom:3px; margin:16px 0 8px; break-after:avoid; }}
-p {{ margin:0 0 7px; }}
-table {{ width:100%; border-collapse:collapse; margin:3px 0 8px; }}
-th,td {{ border:0.6pt solid var(--rule); padding:3.5px 6px; vertical-align:top; }}
-th {{ background:var(--band); color:var(--navy); text-align:left; font-weight:600; }}
+html,body {{ margin:0; background:#fff; color:var(--ink); font-family:Inter,"DejaVu Sans",Arial,sans-serif; font-size:9.6pt; line-height:1.42; }}
+h1 {{ font-size:17pt; color:var(--navy); margin:0 0 2px; }}
+h2 {{ font-size:11.5pt; color:var(--navy); border-bottom:1.4px solid var(--navy); padding-bottom:3px; margin:12px 0 6px; break-after:avoid; }}
+p {{ margin:0 0 6px; }}
+table {{ width:100%; border-collapse:collapse; margin:2px 0 6px; }}
+th,td {{ border:0.6pt solid var(--rule); padding:3.5px 7px; vertical-align:top; }}
 tr {{ break-inside:avoid; }}
-td.r {{ text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }}
-.kv td:first-child {{ width:40%; color:var(--muted); }}
-.head {{ border-bottom:3px solid var(--navy); padding-bottom:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:flex-end; }}
-.head .sub {{ font-size:10.5pt; }}
+.kv td:first-child {{ width:36%; color:var(--muted); background:var(--band); }}
+.head {{ border-bottom:3px solid var(--navy); padding-bottom:7px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:flex-end; }}
 .meta {{ font-size:8.4pt; color:var(--muted); text-align:right; line-height:1.5; }}
 .note {{ font-size:8.3pt; color:var(--muted); }}
 .fig {{ text-align:center; break-inside:avoid; margin:4px 0; }}
 .fig img {{ max-width:100%; border:0.6pt solid var(--rule); }}
-.cap {{ font-size:8.2pt; color:var(--muted); text-align:center; margin:2px 0 8px; }}
-ol,ul {{ margin:0 0 6px; padding-left:18px; }} li {{ margin-bottom:2px; }}
+.cap {{ font-size:8.2pt; color:var(--muted); text-align:center; margin:2px 0 6px; }}
+ol,ul {{ margin:0 0 4px; padding-left:18px; }} li {{ margin-bottom:2px; }}
 .sec {{ width:100%; height:auto; }}
 .sec .slab {{ stroke:#1b2430; stroke-width:3; }}
 .sec .mod {{ stroke:#14365d; stroke-width:5; }}
@@ -106,92 +103,67 @@ ol,ul {{ margin:0 0 6px; padding-left:18px; }} li {{ margin-bottom:2px; }}
 .sec .dt {{ font-size:15px; fill:#5b6673; }}
 .sec .lab {{ font-size:16px; fill:#1b2430; }}
 .pb {{ break-before:page; }}
-.two {{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }}
 </style></head><body>
 
 <div class="head">
-  <div><h1>PV Mounting Structure</h1><div class="sub">Request for Quotation &amp; Structural Design Brief<br>185.4 kWp rooftop PV – Marriott Hotel, mezzanine roof</div></div>
-  <div class="meta">Doc. {DOC} Rev {REV}<br>{DATE}<br>Ref. drawing D18102-DD-A-104</div>
+  <div><h1>PV Mounting Structure – Request for Quotation</h1><div>185.4 kWp rooftop PV · Marriott Hotel, mezzanine roof · Uganda</div></div>
+  <div class="meta">Doc. {DOC} Rev {REV}<br>{DATE}</div>
 </div>
+<p>Please quote for the design and supply of the PV mounting structure below, including the structural calculation.</p>
 
-<p>We invite your quotation for the design, supply and delivery of the PV mounting structure described below. The design must be
-carried out by a qualified structural engineer, and the calculations submitted for approval by the building's structural engineer.</p>
-
-<h2>1. Project summary</h2>
+<h2>1. System and module</h2>
 <table class="kv">
-<tr><td>Location</td><td>Uganda (equatorial, ≈0–1° N). Site address to be given at award.</td></tr>
-<tr><td>Roof</td><td>Flat reinforced-concrete slab with perimeter parapet, single level; waterproofed. Usable area ≈29.4 × 39 m.</td></tr>
-<tr><td>Roof height</td><td>About 7 m above ground (mezzanine podium). <b>Two hotel towers stand next to the roof</b>; consider wind acceleration and downwash.</td></tr>
-<tr><td>PV system</td><td>299 modules × 620 Wp = 185.4 kWp</td></tr>
-<tr><td>Module</td><td>Bifacial TOPCon, {L} × {W} × {T} mm, ≈{M:.0f} kg (dual glass); datasheet to follow</td></tr>
-<tr><td>Design life</td><td>25 years minimum</td></tr>
+<tr><td>Solar capacity</td><td><b>185.4 kWp</b></td></tr>
+<tr><td>Number of modules</td><td><b>299 modules × 620 Wp</b></td></tr>
+<tr><td>Module size / weight</td><td><b>{L} × {W} × {T} mm</b>, ≈{M:.0f} kg each (bifacial, dual glass)</td></tr>
+<tr><td>Total module weight</td><td>≈{total_mod_kg/1000:.1f} t (≈{dl_mod:.1f} kg/m² of module area)</td></tr>
 </table>
 
-<h2>2. Array configuration</h2>
-<table>
-<tr><th>Item</th><th>Value</th></tr>
-<tr><td>Tilt / orientation</td><td>{TILT}° fixed; modules portrait, rows running along the 29.4 m roof width</td></tr>
-<tr><td>Table type</td><td>2P = 2 modules high in portrait × 23 wide; 1P = 1 module high × 23 wide</td></tr>
-<tr><td>Quantities</td><td><b>6 tables of 2P × 23 (46 modules each) + 1 table of 1P × 23 (23 modules) = 299 modules</b></td></tr>
-<tr><td>Table length</td><td>{ROW:,} mm (23 modules + 20 mm gaps)</td></tr>
-<tr><td>Table depth on plan</td><td>{D2:,.0f} mm (2P); {D1:,.0f} mm (1P)</td></tr>
-<tr><td>Front edge height (min.)</td><td>{FRONT} mm above slab (cleaning access, water flow, bifacial gain)</td></tr>
-<tr><td>Rear edge height</td><td>≈{REAR2:,.0f} mm (2P); ≈{REAR1:,.0f} mm (1P)</td></tr>
-<tr><td>Gaps</td><td>20 mm between modules; {AISLE} mm aisle between tables; ≥1,000 mm from parapet</td></tr>
+<h2>2. Structure configuration</h2>
+<table class="kv">
+<tr><td>Tilt</td><td><b>{TILT}°</b> fixed</td></tr>
+<tr><td>Module orientation</td><td>Portrait, 2 modules high per table (2P)</td></tr>
+<tr><td>Number of tables</td><td><b>6 tables of 2P × 23 modules (46 each) + 1 table of 1P × 23 modules</b></td></tr>
+<tr><td>Table length</td><td>{ROW:,} mm</td></tr>
+<tr><td>Table depth on plan</td><td>{D2:,.0f} mm (2P) / {D1:,.0f} mm (1P)</td></tr>
+<tr><td>Front / rear edge height</td><td>{FRONT} mm / ≈{REAR2:,.0f} mm above roof (2P)</td></tr>
+<tr><td>Spacing</td><td>20 mm between modules · {AISLE} mm aisle between tables · 1,000 mm from parapet</td></tr>
 </table>
 <div class="fig">{svg}</div>
-<div class="cap">Figure 1 – Typical section through two 2P tables</div>
+<div class="cap">Typical section through two 2P tables</div>
 
-<div class="pb"></div>
-<h2>3. Layout</h2>
-<div class="fig"><img src="{b64('layout.png','image/png')}" style="max-height:118mm"></div>
-<div class="cap">Figure 2 – PV layout on the mezzanine roof (CAD file DWG/DXF supplied with this RFQ)</div>
-
-<h2>4. Structural design basis</h2>
-<table>
-<tr><th style="width:34%">Item</th><th>Requirement / preliminary value</th></tr>
-<tr><td>Design codes</td><td>EN 1990, EN 1991-1-4 (wind), EN 1999 (aluminium), EN 1993 (steel), or ASCE 7 equivalent. Seismic per Uganda code US 319.</td></tr>
-<tr><td>Basic wind speed</td><td>v<sub>b</sub> = {vb:.0f} m/s (10-min mean, 10 m, preliminary). <b>Supplier to confirm for the site.</b></td></tr>
-<tr><td>Peak velocity pressure</td><td>q<sub>p</sub> ≈ {qp:.2f} kN/m² (terrain cat. III, z = {z:.0f} m, c<sub>e</sub> ≈ {ce:.2f}); check tower effects</td></tr>
-<tr><td>Wind pressure coefficients</td><td>From supplier's wind-tunnel data for {TILT}° arrays, with edge and corner zones next to the parapet</td></tr>
-<tr><td>Module dead load</td><td>≈{dl_mod:.1f} kg/m² of module area ({M:.0f} kg per module)</td></tr>
-<tr><td>Structure dead load (allowance)</td><td>≈{STRUCT} kg/m² of module area; supplier to state actual</td></tr>
-<tr><td>Snow load</td><td>None</td></tr>
-<tr><td>Maintenance load</td><td>Structure not walkable; aisles carry roof live load (by others)</td></tr>
-<tr><td>Temperature range</td><td>10 °C to 70 °C (structure); expansion breaks in rails at ≤ 12 m</td></tr>
-<tr><td>Deflection limit</td><td>Rails L/200; must meet the module manufacturer's limits</td></tr>
-<tr><td>Corrosion</td><td>Category C3. Aluminium 6005-T6 / 6063-T6 (anodised or mill finish); fasteners stainless A2-70 / A4-70; no galvanic contact with steel</td></tr>
-<tr><td>Module clamping</td><td>Long-side clamping within the zones of the module installation manual (dual-glass bifacial); clamp loads to rated test loads (5400 Pa down / 2400 Pa up)</td></tr>
+<h2>3. Wind load and structural design</h2>
+<table class="kv">
+<tr><td>Basic wind speed</td><td><b>{vb:.0f} m/s</b> (10-min mean at 10 m; preliminary, supplier to confirm for the site)</td></tr>
+<tr><td>Peak wind pressure</td><td><b>q<sub>p</sub> ≈ {qp:.2f} kN/m²</b> (EN 1991-1-4, terrain cat. III, roof height ≈7–10 m)</td></tr>
+<tr><td>Site exposure</td><td>Two hotel towers stand next to the roof: allow for wind acceleration and edge/corner zones at the parapet</td></tr>
+<tr><td>Design codes</td><td>EN 1991-1-4, EN 1999 (aluminium) or ASCE 7 equivalent; design life 25 years</td></tr>
+<tr><td>Materials</td><td>Aluminium 6005-T6 / 6063-T6; stainless-steel fasteners A2-70; corrosion category C3</td></tr>
+<tr><td>Module clamping</td><td>To the module installation manual (rated test loads 5,400 Pa down / 2,400 Pa up)</td></tr>
 </table>
 
-<h2>5. Roof interface</h2>
-<ul>
-<li><b>Option A – Anchored (preferred):</b> feet fixed to concrete plinths or chemical anchors into the slab, with full waterproofing detail. Suits the wind exposure near the towers.</li>
-<li><b>Option B – Ballasted:</b> no penetrations; concrete ballast blocks with wind deflectors. Must state ballast per table and the resulting load in kg/m².</li>
-<li>EPDM or rubber protection pads under every foot; do not block roof drainage paths or outlets.</li>
-<li><b>Allowable roof load to be confirmed by the building's structural engineer.</b> The supplier must give the uniform load (kg/m²) and maximum point load (kN) at each foot.</li>
-</ul>
-<p class="note">Indicative weights: modules {total_mod_kg/1000:.1f} t + structure ≈{total_str_kg/1000:.1f} t (excluding ballast) over ≈{6*foot_2p+ROW/1000*D1/1000:,.0f} m² of table footprint, i.e. ≈{(total_mod_kg+total_str_kg)/(6*foot_2p+ROW/1000*D1/1000):.0f} kg/m² before ballast.</p>
+<div class="pb"></div>
+<h2>4. Roof and fixing</h2>
+<table class="kv">
+<tr><td>Roof</td><td>Flat reinforced-concrete slab, single level, waterproofed, with parapet. Usable area ≈29.4 × 39 m.</td></tr>
+<tr><td>Fixing (please quote both)</td><td><b>A – Anchored (preferred):</b> chemical anchors or concrete plinths, with waterproofing detail<br>
+<b>B – Ballasted:</b> concrete ballast with wind deflectors; state ballast weight per table</td></tr>
+<tr><td>Roof protection</td><td>EPDM pads under every foot; keep drainage paths clear</td></tr>
+<tr><td>Roof load</td><td>State the uniform load (kg/m²) and the point load per foot (kN), for approval by the building's structural engineer</td></tr>
+</table>
 
-<h2>6. Scope of supply</h2>
-<div class="two"><ul>
-<li>Rails, rafters, legs, bracing for 7 tables</li>
-<li>End and mid clamps, bonding/earthing clips</li>
-<li>All fasteners (stainless steel)</li>
-<li>Feet, anchors or ballast trays, protection pads</li></ul><ul>
-<li>Optional: roof walkway between tables</li>
-<li>Optional: cable trays fixed to the structure</li>
-<li>Optional: installation supervision</li></ul></div>
+<h2>5. Layout</h2>
+<div class="fig"><img src="{b64('layout.png','image/png')}" style="max-height:120mm"></div>
+<div class="cap">PV layout on the mezzanine roof (DWG/DXF attached)</div>
 
-<h2>7. Information required with the quotation</h2>
+<h2>6. Quotation to include</h2>
 <ol>
-<li>Price per Wp and total price, in USD; state delivered to site or ex-works, and lead time.</li>
-<li>Structural calculation report: wind zones, loads per foot (kN), ballast or anchor details, slab load (kg/m²).</li>
-<li>General arrangement and detail drawings, with a bill of materials.</li>
-<li>Material grades, corrosion protection and certificates.</li>
-<li>Warranty period (structure 10 years minimum; materials 20 years minimum) and installation manual.</li>
+<li>Price (USD per Wp and total), delivery terms and lead time</li>
+<li>Structural calculation: wind loads, loads per foot, anchor or ballast design</li>
+<li>General arrangement drawings and bill of materials</li>
+<li>Warranty (structure 10 years minimum) and installation manual</li>
 </ol>
 <p class="note">Contact: [Name / Company / Phone / Email]</p>
 </body></html>"""
 open(os.path.join(HERE, "Structure_RFQ.html"), "w").write(html)
-print(f"D2 {D2:.0f} rear {REAR2:.0f} qp {qp:.2f} ce {ce:.2f} dl {dl_mod:.1f} mods {total_mod_kg} str {total_str_kg:.0f}")
+print("ok")
