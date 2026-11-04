@@ -93,15 +93,15 @@ T(1262, yo - 50, "4C × 120 mm²", "ts", "middle"); T(1262, yo - 36, "Cu XLPE/SW
 # ---------------- main LV switchboard ----------------
 R(1320, 150, 320, 620, "panel")
 mb = 1560
-L(mb, 180, mb, 720, "bus"); T(mb - 8, 740, "MLVS main busbar 400 V", "ts", "end")
-breaker(1340, yo); T(1352, yo + 24, "250 A PV way", "ts", "middle"); PL([(1364, yo), (mb, yo)], "ac")
+L(mb, 180, mb, 720, "bus"); T(mb - 8, 740, "Main busbar 400 V", "ts", "end"); T(mb - 8, 754, "(≥ 1000 A, confirm)", "ts", "end")
+breaker(1340, yo); T(1372, yo + 24, "250 A PV way", "ts"); T(1372, yo + 38, "MCCB, Icu ≥ 65 kA", "ts"); PL([(1364, yo), (mb, yo)], "ac")
 # utility incomer from top
 T(mb, 128, "UEDCL supply / transformer", "tb", "middle")
 L(mb, 136, mb, 150, "ac")
 L(mb, 150, mb, 180, "ac")
-ct(mb, 230, None); T(mb - 16, 234, "CTs (export control)", "ts", "end")
+ct(mb, 230, None); T(mb - 16, 234, "CTs 1000/5 A cl. 0.5 (export control)", "ts", "end")
 R(mb - 22, 255, 44, 30, "box"); T(mb, 275, "kWh", "ts", "middle"); T(mb - 30, 275, "Utility meter", "ts", "end")
-g.append(f'<path class="w" d="M{mb} 300 q 16 12 0 24"/>'); T(mb - 12, 318, "Main incomer ACB", "ts", "end")
+g.append(f'<path class="w" d="M{mb} 300 q 16 12 0 24"/>'); T(mb - 12, 306, "Main incomer ACB", "ts", "end"); T(mb - 12, 320, "Schneider Masterpact NW10 H1", "ts", "end"); T(mb - 12, 334, "1000 A · Icu = Ics = 65 kA", "ts", "end")
 # existing hotel loads
 for i, yy in enumerate((540, 600, 660)):
     PL([(mb, yy), (1480, yy)], "ac"); breaker(1456, yy); PL([(1456, yy), (1400, yy)], "ac")
