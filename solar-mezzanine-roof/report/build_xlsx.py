@@ -128,5 +128,92 @@ for sh in wb.worksheets:
     sh.page_setup.orientation = "landscape"; sh.page_setup.fitToWidth = 1; sh.page_setup.fitToHeight = 1
     sh.sheet_properties.pageSetUpPr.fitToPage = True
 
+# ---------------- TOU impact ----------------
+import json
+tou = json.load(open(os.path.join(HERE, "tou.json")))
+pv_frac = [v / sum(tou["pv_h"]) for v in tou["pv_h"]]
+load_frac = [v / sum(tou["load_h"]) for v in tou["load_h"]]
+t = wb.create_sheet("TOU Impact")
+t["A1"] = "Solar Impact on Time-of-Use Tariff – Average Day"; t["A1"].font = TITLE
+t["A2"] = ("Bands per Uganda ERA TOU structure; rates indicative (USD/kWh) – replace with the hotel's bill. "
+           "Hourly shares: solar from site sun times (sunrise ≈06:50, sunset ≈18:56); load from an assumed hotel profile."); t["A2"].font = NOTE
+for j, h in enumerate(["Tariff period", "Start hour", "End hour", "Rate (USD/kWh)"]):
+    c = t.cell(row=4, column=j + 1, value=h); c.font = HEAD; c.fill = HFILL
+for i, (n, a, b, r) in enumerate([("Off-peak", 0, 6, 0.07), ("Shoulder", 6, 18, 0.12), ("Peak", 18, 24, 0.15)]):
+    rr = 5 + i
+    t[f"A{rr}"] = n; t[f"B{rr}"] = a; t[f"C{rr}"] = b; t[f"D{rr}"] = r
+    for col in "BCD": t[f"{col}{rr}"].font = BLUE; t[f"{col}{rr}"].fill = YEL
+    t[f"A{rr}"].font = Font(name=F); t[f"D{rr}"].number_format = "0.000"
+    for col in "ABCD": t[f"{col}{rr}"].border = BOX
+# hourly table
+hh = ["Hour", "Period", "Solar share of day", "Load share of day", "Solar (kWh/day)", "Hotel load (kWh/day)", "Grid after solar (kWh/day)", "Rate (USD/kWh)"]
+for j, h in enumerate(hh):
+    c = t.cell(row=10, column=j + 1, value=h); c.font = HEAD; c.fill = HFILL; c.alignment = Alignment(wrap_text=True, horizontal="center")
+t.row_dimensions[10].height = 32
+for h in range(24):
+    r = 11 + h
+    t[f"A{r}"] = f"{h:02d}:00"
+    t[f"B{r}"] = f'=IF({h}<$C$5,$A$5,IF({h}<$C$6,$A$6,$A$7))'
+    t[f"C{r}"] = round(pv_frac[h], 6); t[f"D{r}"] = round(load_frac[h], 6)
+    t[f"E{r}"] = f"=Inputs!$B$8/365*C{r}"
+    t[f"F{r}"] = f"=Inputs!$B$11/365*D{r}"
+    t[f"G{r}"] = f"=F{r}-E{r}"
+    t[f"H{r}"] = f"=INDEX($D$5:$D$7,MATCH(B{r},$A$5:$A$7,0))"
+    for col, f in zip("CDEFGH", ["0.00%", "0.00%", "#,##0.0", "#,##0", "#,##0", "0.000"]): t[f"{col}{r}"].number_format = f
+    for col in "ABCDEFGH": t[f"{col}{r}"].border = BOX; t[f"{col}{r}"].font = Font(name=F)
+t["A35"] = "Day total"; t["C35"] = "=SUM(C11:C34)"; t["D35"] = "=SUM(D11:D34)"
+for col in "EFG": t[f"{col}35"] = f"=SUM({col}11:{col}34)"
+for col in "ABCDEFGH": t[f"{col}35"].font = BOLD; t[f"{col}35"].fill = BAND; t[f"{col}35"].border = BOX
+for col, f in zip("CDEFG", ["0.0%", "0.0%", "#,##0", "#,##0", "#,##0"]): t[f"{col}35"].number_format = f
+# summary by period (annual)
+sh = ["Period", "Hotel use (MWh/yr)", "Solar (MWh/yr)", "Share of solar", "Grid after solar (MWh/yr)", "Reduction", "Cost before (USD/yr)", "Cost after (USD/yr)", "Saving (USD/yr)"]
+for j, h in enumerate(sh):
+    c = t.cell(row=37, column=j + 1, value=h); c.font = HEAD; c.fill = HFILL; c.alignment = Alignment(wrap_text=True, horizontal="center")
+t.row_dimensions[37].height = 32
+for i in range(3):
+    r = 38 + i; src = 5 + i
+    t[f"A{r}"] = f"=A{src}"
+    t[f"B{r}"] = f"=SUMIF($B$11:$B$34,A{r},$F$11:$F$34)*365/1000"
+    t[f"C{r}"] = f"=SUMIF($B$11:$B$34,A{r},$E$11:$E$34)*365/1000"
+    t[f"D{r}"] = f"=IF($C$41=0,0,C{r}/$C$41)"
+    t[f"E{r}"] = f"=B{r}-C{r}"
+    t[f"F{r}"] = f"=IF(B{r}=0,0,C{r}/B{r})"
+    t[f"G{r}"] = f"=B{r}*1000*D{src}"
+    t[f"H{r}"] = f"=E{r}*1000*D{src}"
+    t[f"I{r}"] = f"=G{r}-H{r}"
+t["A41"] = "Total"
+for col in "BCEGHI": t[f"{col}41"] = f"=SUM({col}38:{col}40)"
+t["D41"] = "=SUM(D38:D40)"; t["F41"] = "=IF(B41=0,0,C41/B41)"
+t["A42"] = "Bill reduction"; t["I42"] = "=IF(G41=0,0,I41/G41)"
+t["A43"] = "Value per solar kWh (USD)"; t["I43"] = "=IF(C41=0,0,I41/(C41*1000))"
+for r in range(38, 44):
+    for col, f in zip("BCDEFGHI", ["#,##0", "#,##0.0", "0.0%", "#,##0", "0.00%", "#,##0", "#,##0", "#,##0"]):
+        t[f"{col}{r}"].number_format = f
+    for col in "ABCDEFGHI":
+        t[f"{col}{r}"].border = BOX
+        t[f"{col}{r}"].font = BOLD if r >= 41 else Font(name=F)
+        if r >= 41: t[f"{col}{r}"].fill = BAND
+t["I42"].number_format = "0.00%"; t["I43"].number_format = "0.000"
+for col, w in zip("ABCDEFGHI", [16, 14, 13, 13, 14, 16, 16, 15, 14]): t.column_dimensions[col].width = w
+c1 = BarChart(); c1.type = "col"; c1.title = "Average-Day Solar Generation by Hour (kWh)"
+c1.add_data(Reference(t, min_col=5, min_row=10, max_row=34), titles_from_data=True)
+c1.set_categories(Reference(t, min_col=1, min_row=11, max_row=34))
+c1.legend = None; c1.gapWidth = 40; c1.height = 8; c1.width = 20; c1.y_axis.title = "kWh in each hour"
+c1.y_axis.delete = False; c1.x_axis.delete = False; c1.y_axis.scaling.min = 0
+c1.series[0].graphicalProperties.solidFill = "EDA100"; c1.series[0].graphicalProperties.line.solidFill = "EDA100"
+t.add_chart(c1, "K4")
+c2 = BarChart(); c2.type = "bar"; c2.title = "Reduction of Grid Energy by Tariff Period"
+c2.add_data(Reference(t, min_col=6, min_row=37, max_row=40), titles_from_data=True)
+c2.set_categories(Reference(t, min_col=1, min_row=38, max_row=40))
+c2.legend = None; c2.height = 6; c2.width = 20; c2.x_axis.delete = False; c2.y_axis.delete = False
+c2.y_axis.scaling.min = 0; c2.y_axis.number_format = "0%"
+c2.series[0].graphicalProperties.solidFill = "2A78D6"; c2.series[0].graphicalProperties.line.solidFill = "2A78D6"
+c2.series[0].dLbls = DataLabelList(); c2.series[0].dLbls.showVal = True; c2.series[0].dLbls.numFmt = "0.00%"
+c2.series[0].dLbls.showSerName = c2.series[0].dLbls.showCatName = c2.series[0].dLbls.showLegendKey = False
+c2.x_axis.scaling.orientation = "maxMin"
+t.add_chart(c2, "K22")
+t.page_setup.orientation = "landscape"; t.page_setup.fitToWidth = 1; t.page_setup.fitToHeight = 1
+t.sheet_properties.pageSetUpPr.fitToPage = True
+
 out = os.path.join(HERE, "PV_Generation_Estimate.xlsx")
 wb.save(out); print(out)

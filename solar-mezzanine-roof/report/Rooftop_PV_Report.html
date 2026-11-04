@@ -89,9 +89,9 @@ ul,ol { margin:0 0 8px 0; padding-left:18px; } li { margin-bottom:3px; }
 <table class="toc">
 <tr><td>1. Executive Summary</td></tr><tr><td>2. Site and Design Basis</td></tr>
 <tr><td>3. PV Array Layout</td></tr><tr><td>4. Electrical Design</td></tr>
-<tr><td>5. Estimated PV Solar Generation</td></tr><tr><td>6. Cost Estimate (Bill of Quantities)</td></tr>
-<tr><td>7. Financial Analysis</td></tr><tr><td>8. Expansion Options</td></tr>
-<tr><td>9. Assumptions, Exclusions and Next Steps</td></tr>
+<tr><td>5. Estimated PV Solar Generation</td></tr><tr><td>6. Solar Impact on Time-of-Use Tariff</td></tr><tr><td>7. Cost Estimate (Bill of Quantities)</td></tr>
+<tr><td>8. Financial Analysis</td></tr><tr><td>9. Expansion Options</td></tr>
+<tr><td>10. Assumptions, Exclusions and Next Steps</td></tr>
 </table>
 </div>
 
@@ -120,7 +120,7 @@ At an avoided tariff of USD 0.12/kWh this saves about <b>USD 32,923 in year 1</b
 <li><b>Cost and return.</b> The budget turnkey (EPC) cost is <b>USD 109,278</b> excluding taxes, including 7 % contingency.
 Simple payback is <b>3.4 years</b>, project IRR 30 % and 25-year NPV (10 %) USD 207,408.
 The levelised cost of solar energy is about <b>USD 0.053/kWh</b>, below the grid tariff.</li>
-<li><b>Path to 500 kWp.</b> The architect's solar zone limits this roof to 185.4 kWp. The balance of ≈315 kWp would need other roof areas or car-park canopies (Section 8).</li>
+<li><b>Path to 500 kWp.</b> The architect's solar zone limits this roof to 185.4 kWp. The balance of ≈315 kWp would need other roof areas or car-park canopies (Section 9).</li>
 </ul>
 <h3>Recommendation</h3>
 <p>Proceed with the 185.4 kWp mezzanine roof system as Phase 1, subject to (i) a structural check of both slabs
@@ -226,9 +226,39 @@ so all of this energy is used on site.</p>
 simulation using the site coordinates at detailed design.</p>
 </div>
 
-<!-- ===================== 6 BOQ ===================== -->
+<!-- ===================== 6 TOU ===================== -->
 <div class="section">
-<h2>6. Cost Estimate (Bill of Quantities)</h2>
+<h2>6. Solar Impact on Time-of-Use Tariff</h2>
+<p>The hotel is billed on a time-of-use (TOU) tariff, so each kWh is worth a different amount depending on when it is used.
+This section shows when the solar energy is produced and which part of the bill it reduces.</p>
+<table>
+<tr><th>Tariff period</th><th>Hours</th><th class="r">Indicative rate (USD/kWh)</th></tr>
+<tr><td>Off-peak</td><td>00:00–06:00</td><td class='r'>0.07</td></tr><tr><td>Shoulder</td><td>06:00–18:00</td><td class='r'>0.12</td></tr><tr><td>Peak</td><td>18:00–24:00</td><td class='r'>0.15</td></tr>
+</table>
+<p class="note">Period hours follow the Uganda ERA time-of-use structure; rates are indicative – replace both with the values on the hotel's electricity bill.</p>
+<div class="fig" style="border:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" class="c touA" role="img" aria-label="Average-day solar generation by hour and tariff period"><style>.c .grid{stroke:#e3e7ec;stroke-width:1}.c .base{stroke:#8c96a1;stroke-width:1}.c .ax{font:10px Inter,Arial,sans-serif;fill:#5b6673}.c .val{font:600 10.5px Inter,Arial,sans-serif;fill:#1b2430}.c .bandt{font:600 10.5px Inter,Arial,sans-serif;fill:#3d4752}.c .bandv{font:10px Inter,Arial,sans-serif;fill:#5b6673}.c .pv{fill:#eda100}.c .red{fill:#2a78d6}.c .lab{font:10.5px Inter,Arial,sans-serif;fill:#1b2430}</style><rect x="52.0" y="46" width="163.0" height="214" fill="#eef1f5"/><text x="133.5" y="22" class="bandt" text-anchor="middle">OFF-PEAK 00:00–06:00</text><text x="133.5" y="36" class="bandv" text-anchor="middle">0.0 % of solar energy</text><rect x="215.0" y="46" width="326.0" height="214" fill="#ffffff"/><text x="378.0" y="22" class="bandt" text-anchor="middle">SHOULDER 06:00–18:00</text><text x="378.0" y="36" class="bandv" text-anchor="middle">98.5 % of solar energy</text><rect x="541.0" y="46" width="163.0" height="214" fill="#f6efe4"/><text x="622.5" y="22" class="bandt" text-anchor="middle">PEAK 18:00–24:00</text><text x="622.5" y="36" class="bandv" text-anchor="middle">1.5 % of solar energy</text><line x1="52" x2="704" y1="260.0" y2="260.0" class="base"/><text x="44" y="263.5" class="ax" text-anchor="end">0</text><line x1="52" x2="704" y1="224.3" y2="224.3" class="grid"/><text x="44" y="227.8" class="ax" text-anchor="end">20</text><line x1="52" x2="704" y1="188.7" y2="188.7" class="grid"/><text x="44" y="192.2" class="ax" text-anchor="end">40</text><line x1="52" x2="704" y1="153.0" y2="153.0" class="grid"/><text x="44" y="156.5" class="ax" text-anchor="end">60</text><line x1="52" x2="704" y1="117.3" y2="117.3" class="grid"/><text x="44" y="120.8" class="ax" text-anchor="end">80</text><line x1="52" x2="704" y1="81.7" y2="81.7" class="grid"/><text x="44" y="85.2" class="ax" text-anchor="end">100</text><line x1="52" x2="704" y1="46.0" y2="46.0" class="grid"/><text x="44" y="49.5" class="ax" text-anchor="end">120</text><text x="14" y="153.0" class="ax" text-anchor="middle" transform="rotate(-90 14 153.0)">kWh in each hour</text><text x="52.0" y="276" class="ax" text-anchor="middle">00:00</text><text x="133.5" y="276" class="ax" text-anchor="middle">03:00</text><path class="pv" d="M219.1,260.0 V259.7 Q219.1,259.4 219.4,259.4 H237.8 Q238.1,259.4 238.1,259.7 V260.0 Z"/><text x="215.0" y="276" class="ax" text-anchor="middle">06:00</text><path class="pv" d="M246.2,260.0 V233.2 Q246.2,230.2 249.2,230.2 H262.3 Q265.3,230.2 265.3,233.2 V260.0 Z"/><path class="pv" d="M273.4,260.0 V190.3 Q273.4,187.3 276.4,187.3 H289.4 Q292.4,187.3 292.4,190.3 V260.0 Z"/><path class="pv" d="M300.6,260.0 V152.3 Q300.6,149.3 303.6,149.3 H316.6 Q319.6,149.3 319.6,152.3 V260.0 Z"/><text x="296.5" y="276" class="ax" text-anchor="middle">09:00</text><path class="pv" d="M327.7,260.0 V121.7 Q327.7,118.7 330.7,118.7 H343.8 Q346.8,118.7 346.8,121.7 V260.0 Z"/><path class="pv" d="M354.9,260.0 V100.6 Q354.9,97.6 357.9,97.6 H370.9 Q373.9,97.6 373.9,100.6 V260.0 Z"/><path class="pv" d="M382.1,260.0 V90.3 Q382.1,87.3 385.1,87.3 H398.1 Q401.1,87.3 401.1,90.3 V260.0 Z"/><text x="378.0" y="276" class="ax" text-anchor="middle">12:00</text><path class="pv" d="M409.2,260.0 V91.7 Q409.2,88.7 412.2,88.7 H425.3 Q428.3,88.7 428.3,91.7 V260.0 Z"/><path class="pv" d="M436.4,260.0 V104.5 Q436.4,101.5 439.4,101.5 H452.4 Q455.4,101.5 455.4,104.5 V260.0 Z"/><path class="pv" d="M463.6,260.0 V127.9 Q463.6,124.9 466.6,124.9 H479.6 Q482.6,124.9 482.6,127.9 V260.0 Z"/><text x="459.5" y="276" class="ax" text-anchor="middle">15:00</text><path class="pv" d="M490.7,260.0 V160.4 Q490.7,157.4 493.7,157.4 H506.8 Q509.8,157.4 509.8,160.4 V260.0 Z"/><path class="pv" d="M517.9,260.0 V199.8 Q517.9,196.8 520.9,196.8 H533.9 Q536.9,196.8 536.9,199.8 V260.0 Z"/><path class="pv" d="M545.1,260.0 V243.3 Q545.1,240.3 548.1,240.3 H561.1 Q564.1,240.3 564.1,243.3 V260.0 Z"/><text x="541.0" y="276" class="ax" text-anchor="middle">18:00</text><text x="622.5" y="276" class="ax" text-anchor="middle">21:00</text><text x="704.0" y="276" class="ax" text-anchor="end">24:00</text><text x="391.6" y="81.3" class="val" text-anchor="middle">97</text></svg></div>
+<div class="cap">Figure 3 – Average-day solar generation by hour and tariff period (sunrise ≈ 06:50, sunset ≈ 18:56)</div>
+<table>
+<tr><th>Period</th><th class="r">Hotel use (MWh/yr)</th><th class="r">Solar (MWh/yr)</th><th class="r">Share of solar</th><th class="r">Grid after solar (MWh/yr)</th><th class="r">Reduction</th><th class="r">Saving (USD/yr)</th></tr>
+<tr><td>Off-peak</td><td class='r'>2,090</td><td class='r'>0.0</td><td class='r'>0.0 %</td><td class='r'>2,090</td><td class='r'>0.00 %</td><td class='r'>0</td></tr><tr><td>Shoulder</td><td class='r'>6,954</td><td class='r'>270.3</td><td class='r'>98.5 %</td><td class='r'>6,684</td><td class='r'>3.89 %</td><td class='r'>32,440</td></tr><tr><td>Peak</td><td class='r'>2,956</td><td class='r'>4.0</td><td class='r'>1.5 %</td><td class='r'>2,952</td><td class='r'>0.14 %</td><td class='r'>604</td></tr>
+<tr class="tot"><td>Total</td><td class="r">12,000</td><td class="r">274.4</td><td class="r">100 %</td><td class="r">11,726</td><td class="r">2.29 %</td><td class="r">33,044</td></tr>
+</table>
+<div class="fig" style="border:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 170" class="c touB" role="img" aria-label="Reduction of grid energy by tariff period"><style>.c .grid{stroke:#e3e7ec;stroke-width:1}.c .base{stroke:#8c96a1;stroke-width:1}.c .ax{font:10px Inter,Arial,sans-serif;fill:#5b6673}.c .val{font:600 10.5px Inter,Arial,sans-serif;fill:#1b2430}.c .bandt{font:600 10.5px Inter,Arial,sans-serif;fill:#3d4752}.c .bandv{font:10px Inter,Arial,sans-serif;fill:#5b6673}.c .pv{fill:#eda100}.c .red{fill:#2a78d6}.c .lab{font:10.5px Inter,Arial,sans-serif;fill:#1b2430}</style><line x1="150.0" x2="150.0" y1="14" y2="136" class="base"/><text x="150.0" y="152" class="ax" text-anchor="middle">0 %</text><line x1="246.0" x2="246.0" y1="14" y2="136" class="grid"/><text x="246.0" y="152" class="ax" text-anchor="middle">1 %</text><line x1="342.0" x2="342.0" y1="14" y2="136" class="grid"/><text x="342.0" y="152" class="ax" text-anchor="middle">2 %</text><line x1="438.0" x2="438.0" y1="14" y2="136" class="grid"/><text x="438.0" y="152" class="ax" text-anchor="middle">3 %</text><line x1="534.0" x2="534.0" y1="14" y2="136" class="grid"/><text x="534.0" y="152" class="ax" text-anchor="middle">4 %</text><line x1="630.0" x2="630.0" y1="14" y2="136" class="grid"/><text x="630.0" y="152" class="ax" text-anchor="middle">5 %</text><text x="140" y="37.0" class="lab" text-anchor="end">Off-peak (00:00–06:00)</text><text x="156.0" y="37.0" class="val">0.00 %  (0.0 MWh/yr)</text><text x="140" y="81.0" class="lab" text-anchor="end">Shoulder (06:00–18:00)</text><path class="red" d="M150.0,64 H520.2 Q523.2,64 523.2,67 V87 Q523.2,90 520.2,90 H150.0 Z"/><text x="529.2" y="81.0" class="val">3.89 %  (270.3 MWh/yr)</text><text x="140" y="125.0" class="lab" text-anchor="end">Peak (18:00–24:00)</text><path class="red" d="M150.0,108 H160.1 Q163.1,108 163.1,111 V131 Q163.1,134 160.1,134 H150.0 Z"/><text x="169.1" y="125.0" class="val">0.14 %  (4.0 MWh/yr)</text></svg></div>
+<div class="cap">Figure 4 – Reduction of grid energy in each tariff period</div>
+<h3>What this means</h3>
+<ul>
+<li><b>Shoulder period:</b> 98.5 % of the solar energy is produced between 06:00 and 18:00, cutting shoulder-period grid energy by 3.9 %.</li>
+<li><b>Peak period:</b> only 1.5 % falls in the peak period, in the last hour of daylight (18:00–19:00). Solar does not reduce the evening peak, and it does not lower a maximum-demand (kVA) charge set in the evening.</li>
+<li><b>Off-peak period:</b> no solar generation, so no change.</li>
+<li><b>Bill impact:</b> at these rates the energy bill falls by 2.3 %, about USD 33,044 per year. Each solar kWh is worth ≈ USD 0.120, close to the shoulder rate used in the financial analysis.</li>
+<li>Reducing peak-period energy would need battery storage or moving flexible loads (laundry, water heating, pool pumps) into daylight hours.</li>
+</ul>
+<p class="note">Average-day model: year-1 solar generation spread over the day at the site's sun times; hotel load assumed at 1,000,000 kWh/month with a typical hotel hourly profile. Confirm with interval-meter data.</p>
+</div>
+
+<!-- ===================== 7 BOQ ===================== -->
+<div class="section">
+<h2>7. Cost Estimate (Bill of Quantities)</h2>
 <p>Budget turnkey (EPC) estimate in US dollars, based on 2026 East African market prices for commercial rooftop
 systems. Accuracy class ±15 %.</p>
 <table>
@@ -246,7 +276,7 @@ is estimated at USD 1,311/yr (≈1.2 % of capex), escalating at 3 %/yr.</p>
 
 <!-- ===================== 7 FINANCIAL ===================== -->
 <div class="section">
-<h2>7. Financial Analysis</h2>
+<h2>8. Financial Analysis</h2>
 <table class="kv">
 <tr><td>Investment (EPC, excluding taxes)</td><td>USD 109,278</td></tr>
 <tr><td>Avoided grid tariff (year 1) / escalation</td><td>USD 0.12/kWh / 2 % per year</td></tr>
@@ -267,7 +297,7 @@ is estimated at USD 1,311/yr (≈1.2 % of capex), escalating at 3 %/yr.</p>
 <text x="620.0" y="38.4" class="ann" text-anchor="end">USD 825k at year 25</text>
 <text x="344.0" y="248" class="ax" text-anchor="middle">Year of operation</text>
 </svg></div>
-<div class="cap">Figure 3 – Cumulative net cash flow (USD)</div>
+<div class="cap">Figure 5 – Cumulative net cash flow (USD)</div>
 <h3>Tariff sensitivity</h3>
 <table>
 <tr><th class="c">Avoided tariff (USD/kWh)</th><th class="r">Payback (yrs)</th><th class="r">IRR</th><th class="r">NPV @10 % (USD)</th></tr>
@@ -284,7 +314,7 @@ is estimated at USD 1,311/yr (≈1.2 % of capex), escalating at 3 %/yr.</p>
 </table>
 
 <!-- ===================== 8 EXPANSION ===================== -->
-<h2 style="margin-top:18px">8. Expansion Options</h2>
+<h2 style="margin-top:18px">9. Expansion Options</h2>
 <p>The target of about 500 kWp exceeds what the mezzanine roof can hold. Because the hotel load is around ten times the PV output,
 every additional kWp would also be fully self-consumed. Expansion can be added in stages without a battery.</p>
 <table>
@@ -298,8 +328,8 @@ every additional kWp would also be fully self-consumed. Expansion can be added i
 
 <!-- ===================== 9 ASSUMPTIONS ===================== -->
 <div class="section">
-<h2>9. Assumptions, Exclusions and Next Steps</h2>
-<h3>9.1 Key assumptions</h3>
+<h2>10. Assumptions, Exclusions and Next Steps</h2>
+<h3>10.1 Key assumptions</h3>
 <ul>
 <li>Roof geometry is taken from drawing D18102-DD-A-104; the hatched +4.85 m slab strip is available for PV, as confirmed by the client.</li>
 <li>Both roof slabs can carry the PV dead load and wind loads without strengthening, subject to verification by the structural engineer.</li>
@@ -307,13 +337,13 @@ every additional kWp would also be fully self-consumed. Expansion can be added i
 <li>The avoided tariff is USD 0.12/kWh escalating at 2 %/yr, to be confirmed from the latest utility bills (energy plus demand components).</li>
 <li>Prices are 2026 East African market levels in USD, excluding taxes. The exchange rate is not considered.</li>
 </ul>
-<h3>9.2 Exclusions</h3>
+<h3>10.2 Exclusions</h3>
 <ul>
 <li>Battery storage, diesel-generator synchronisation and export metering.</li>
 <li>Roof waterproofing renewal, structural strengthening, and civil works to the LV room.</li>
 <li>Utility network upgrades, permit fees and financing costs.</li>
 </ul>
-<h3>9.3 Recommended next steps</h3>
+<h3>10.3 Recommended next steps</h3>
 <ol>
 <li>Obtain 12 months of utility bills or interval-meter data and confirm the tariff structure.</li>
 <li>Commission a structural assessment of both slabs (dead load, ballast, wind uplift) and agree the roof fixing method with the architect.</li>

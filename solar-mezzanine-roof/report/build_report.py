@@ -7,6 +7,9 @@ import base64, json, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 d = json.load(open(os.path.join(HERE, "calc.json")))
 mo = json.load(open(os.path.join(HERE, "monthly.json")))
+tou = json.load(open(os.path.join(HERE, "tou.json")))
+touA = open(os.path.join(HERE, "tou_chartA.svg")).read()
+touB = open(os.path.join(HERE, "tou_chartB.svg")).read()
 genchart = open(os.path.join(HERE, "gen_chart.svg")).read()
 
 def b64(name, mime):
@@ -153,9 +156,9 @@ ul,ol {{ margin:0 0 8px 0; padding-left:18px; }} li {{ margin-bottom:3px; }}
 <table class="toc">
 <tr><td>1. Executive Summary</td></tr><tr><td>2. Site and Design Basis</td></tr>
 <tr><td>3. PV Array Layout</td></tr><tr><td>4. Electrical Design</td></tr>
-<tr><td>5. Estimated PV Solar Generation</td></tr><tr><td>6. Cost Estimate (Bill of Quantities)</td></tr>
-<tr><td>7. Financial Analysis</td></tr><tr><td>8. Expansion Options</td></tr>
-<tr><td>9. Assumptions, Exclusions and Next Steps</td></tr>
+<tr><td>5. Estimated PV Solar Generation</td></tr><tr><td>6. Solar Impact on Time-of-Use Tariff</td></tr><tr><td>7. Cost Estimate (Bill of Quantities)</td></tr>
+<tr><td>8. Financial Analysis</td></tr><tr><td>9. Expansion Options</td></tr>
+<tr><td>10. Assumptions, Exclusions and Next Steps</td></tr>
 </table>
 </div>
 
@@ -184,7 +187,7 @@ At an avoided tariff of USD {d['TARIFF']:.2f}/kWh this saves about <b>USD {d['y1
 <li><b>Cost and return.</b> The budget turnkey (EPC) cost is <b>USD {usd(d['capex'])}</b> excluding taxes, including 7 % contingency.
 Simple payback is <b>{d['payback']:.1f} years</b>, project IRR {d['irr']*100:.0f} % and 25-year NPV (10 %) USD {usd(d['npv'])}.
 The levelised cost of solar energy is about <b>USD {d['lcoe']:.3f}/kWh</b>, below the grid tariff.</li>
-<li><b>Path to 500 kWp.</b> The architect's solar zone limits this roof to 185.4 kWp. The balance of ≈315 kWp would need other roof areas or car-park canopies (Section 8).</li>
+<li><b>Path to 500 kWp.</b> The architect's solar zone limits this roof to 185.4 kWp. The balance of ≈315 kWp would need other roof areas or car-park canopies (Section 9).</li>
 </ul>
 <h3>Recommendation</h3>
 <p>Proceed with the {KWP:.1f} kWp mezzanine roof system as Phase 1, subject to (i) a structural check of both slabs
@@ -290,9 +293,39 @@ so all of this energy is used on site.</p>
 simulation using the site coordinates at detailed design.</p>
 </div>
 
-<!-- ===================== 6 BOQ ===================== -->
+<!-- ===================== 6 TOU ===================== -->
 <div class="section">
-<h2>6. Cost Estimate (Bill of Quantities)</h2>
+<h2>6. Solar Impact on Time-of-Use Tariff</h2>
+<p>The hotel is billed on a time-of-use (TOU) tariff, so each kWh is worth a different amount depending on when it is used.
+This section shows when the solar energy is produced and which part of the bill it reduces.</p>
+<table>
+<tr><th>Tariff period</th><th>Hours</th><th class="r">Indicative rate (USD/kWh)</th></tr>
+{''.join(f"<tr><td>{b['band']}</td><td>{b['hours']}</td><td class='r'>{b['rate']:.2f}</td></tr>" for b in tou['bands'])}
+</table>
+<p class="note">Period hours follow the Uganda ERA time-of-use structure; rates are indicative – replace both with the values on the hotel's electricity bill.</p>
+<div class="fig" style="border:0">{touA}</div>
+<div class="cap">Figure 3 – Average-day solar generation by hour and tariff period (sunrise ≈ 06:50, sunset ≈ 18:56)</div>
+<table>
+<tr><th>Period</th><th class="r">Hotel use (MWh/yr)</th><th class="r">Solar (MWh/yr)</th><th class="r">Share of solar</th><th class="r">Grid after solar (MWh/yr)</th><th class="r">Reduction</th><th class="r">Saving (USD/yr)</th></tr>
+{''.join(f"<tr><td>{b['band']}</td><td class='r'>{b['load']/1000:,.0f}</td><td class='r'>{b['pv']/1000:,.1f}</td><td class='r'>{b['pv_share']*100:.1f} %</td><td class='r'>{b['grid']/1000:,.0f}</td><td class='r'>{b['red']*100:.2f} %</td><td class='r'>{b['saving']:,.0f}</td></tr>" for b in tou['bands'])}
+<tr class="tot"><td>Total</td><td class="r">{tou['total']['load']/1000:,.0f}</td><td class="r">{tou['total']['pv']/1000:,.1f}</td><td class="r">100 %</td><td class="r">{tou['total']['grid']/1000:,.0f}</td><td class="r">{tou['total']['pv']/tou['total']['load']*100:.2f} %</td><td class="r">{tou['total']['saving']:,.0f}</td></tr>
+</table>
+<div class="fig" style="border:0">{touB}</div>
+<div class="cap">Figure 4 – Reduction of grid energy in each tariff period</div>
+<h3>What this means</h3>
+<ul>
+<li><b>Shoulder period:</b> {tou['bands'][1]['pv_share']*100:.1f} % of the solar energy is produced between 06:00 and 18:00, cutting shoulder-period grid energy by {tou['bands'][1]['red']*100:.1f} %.</li>
+<li><b>Peak period:</b> only {tou['bands'][2]['pv_share']*100:.1f} % falls in the peak period, in the last hour of daylight (18:00–19:00). Solar does not reduce the evening peak, and it does not lower a maximum-demand (kVA) charge set in the evening.</li>
+<li><b>Off-peak period:</b> no solar generation, so no change.</li>
+<li><b>Bill impact:</b> at these rates the energy bill falls by {tou['total']['saving']/tou['total']['cost0']*100:.1f} %, about USD {tou['total']['saving']:,.0f} per year. Each solar kWh is worth ≈ USD {tou['blended']:.3f}, close to the shoulder rate used in the financial analysis.</li>
+<li>Reducing peak-period energy would need battery storage or moving flexible loads (laundry, water heating, pool pumps) into daylight hours.</li>
+</ul>
+<p class="note">Average-day model: year-1 solar generation spread over the day at the site's sun times; hotel load assumed at 1,000,000 kWh/month with a typical hotel hourly profile. Confirm with interval-meter data.</p>
+</div>
+
+<!-- ===================== 7 BOQ ===================== -->
+<div class="section">
+<h2>7. Cost Estimate (Bill of Quantities)</h2>
 <p>Budget turnkey (EPC) estimate in US dollars, based on 2026 East African market prices for commercial rooftop
 systems. Accuracy class ±15 %.</p>
 <table>
@@ -310,7 +343,7 @@ is estimated at USD {usd(d['om0'])}/yr (≈1.2 % of capex), escalating at 3 %/yr
 
 <!-- ===================== 7 FINANCIAL ===================== -->
 <div class="section">
-<h2>7. Financial Analysis</h2>
+<h2>8. Financial Analysis</h2>
 <table class="kv">
 <tr><td>Investment (EPC, excluding taxes)</td><td>USD {usd(d['capex'])}</td></tr>
 <tr><td>Avoided grid tariff (year 1) / escalation</td><td>USD {d['TARIFF']:.2f}/kWh / {d['ESC']*100:.0f} % per year</td></tr>
@@ -323,7 +356,7 @@ is estimated at USD {usd(d['om0'])}/yr (≈1.2 % of capex), escalating at 3 %/yr
 <tr><td>25-year cumulative savings, net of O&amp;M</td><td>USD {usd(d['cum'][-1] + d['capex'])}</td></tr>
 </table>
 <div class="fig" style="border:0">{chart}</div>
-<div class="cap">Figure 3 – Cumulative net cash flow (USD)</div>
+<div class="cap">Figure 5 – Cumulative net cash flow (USD)</div>
 <h3>Tariff sensitivity</h3>
 <table>
 <tr><th class="c">Avoided tariff (USD/kWh)</th><th class="r">Payback (yrs)</th><th class="r">IRR</th><th class="r">NPV @10 % (USD)</th></tr>
@@ -340,7 +373,7 @@ is estimated at USD {usd(d['om0'])}/yr (≈1.2 % of capex), escalating at 3 %/yr
 </table>
 
 <!-- ===================== 8 EXPANSION ===================== -->
-<h2 style="margin-top:18px">8. Expansion Options</h2>
+<h2 style="margin-top:18px">9. Expansion Options</h2>
 <p>The target of about 500 kWp exceeds what the mezzanine roof can hold. Because the hotel load is around ten times the PV output,
 every additional kWp would also be fully self-consumed. Expansion can be added in stages without a battery.</p>
 <table>
@@ -354,8 +387,8 @@ every additional kWp would also be fully self-consumed. Expansion can be added i
 
 <!-- ===================== 9 ASSUMPTIONS ===================== -->
 <div class="section">
-<h2>9. Assumptions, Exclusions and Next Steps</h2>
-<h3>9.1 Key assumptions</h3>
+<h2>10. Assumptions, Exclusions and Next Steps</h2>
+<h3>10.1 Key assumptions</h3>
 <ul>
 <li>Roof geometry is taken from drawing D18102-DD-A-104; the hatched +4.85 m slab strip is available for PV, as confirmed by the client.</li>
 <li>Both roof slabs can carry the PV dead load and wind loads without strengthening, subject to verification by the structural engineer.</li>
@@ -363,13 +396,13 @@ every additional kWp would also be fully self-consumed. Expansion can be added i
 <li>The avoided tariff is USD {d['TARIFF']:.2f}/kWh escalating at {d['ESC']*100:.0f} %/yr, to be confirmed from the latest utility bills (energy plus demand components).</li>
 <li>Prices are 2026 East African market levels in USD, excluding taxes. The exchange rate is not considered.</li>
 </ul>
-<h3>9.2 Exclusions</h3>
+<h3>10.2 Exclusions</h3>
 <ul>
 <li>Battery storage, diesel-generator synchronisation and export metering.</li>
 <li>Roof waterproofing renewal, structural strengthening, and civil works to the LV room.</li>
 <li>Utility network upgrades, permit fees and financing costs.</li>
 </ul>
-<h3>9.3 Recommended next steps</h3>
+<h3>10.3 Recommended next steps</h3>
 <ol>
 <li>Obtain 12 months of utility bills or interval-meter data and confirm the tariff structure.</li>
 <li>Commission a structural assessment of both slabs (dead load, ballast, wind uplift) and agree the roof fixing method with the architect.</li>

@@ -9,6 +9,7 @@ const {
 
 const D = JSON.parse(fs.readFileSync(path.join(__dirname, "calc.json")));
 const MO = JSON.parse(fs.readFileSync(path.join(__dirname, "monthly.json")));
+const TOU = JSON.parse(fs.readFileSync(path.join(__dirname, "tou.json")));
 const img = (f) => fs.readFileSync(path.join(__dirname, f));
 const usd = (x) => Math.round(x).toLocaleString("en-US");
 const f1 = (x) => x.toFixed(1);
@@ -132,7 +133,7 @@ const exec = [
   bullet([B("Self-consumption. "), T("The hotel uses about 1,000,000 kWh per month (average demand ≈1.37 MW). The PV peak output (≈160 kW AC) is about one-tenth of the daytime load, so 100 % of the solar energy is used on site. No energy is exported and no battery is needed.")]),
   bullet([B("Energy and savings. "), T(`Year-1 generation is about ${usd(Y1 / 1000)} MWh (${(D.share * 100).toFixed(1)} % of annual consumption). At an avoided tariff of USD ${D.TARIFF.toFixed(2)}/kWh this saves about USD ${usd(D.y1_sav)} in year 1.`)]),
   bullet([B("Cost and return. "), T(`The budget turnkey (EPC) cost is USD ${usd(D.capex)} excluding taxes, including 7 % contingency. Simple payback is ${f1(D.payback)} years, project IRR ${(D.irr * 100).toFixed(0)} % and 25-year NPV (10 %) USD ${usd(D.npv)}. The levelised cost of solar energy is about USD ${D.lcoe.toFixed(3)}/kWh.`)]),
-  bullet([B("Path to 500 kWp. "), T("The architect's solar zone limits this roof to 185.4 kWp. The balance of ≈315 kWp would need other roof areas or car-park canopies (Section 8).")]),
+  bullet([B("Path to 500 kWp. "), T("The architect's solar zone limits this roof to 185.4 kWp. The balance of ≈315 kWp would need other roof areas or car-park canopies (Section 9).")]),
   H2("Recommendation"),
   P(`Proceed with the ${f1(KWP)} kWp mezzanine roof system as Phase 1, subject to (i) a structural check of the slab for the ballasted structure (dead load, ballast and wind uplift), and (ii) confirmation of the avoided tariff from recent utility bills. In parallel, survey other roof areas and the car park for Phase 2.`),
 ];
@@ -231,7 +232,35 @@ const yieldS = [
   note("The monthly split uses typical Kampala solar irradiation; the annual total is the design yield above. Confirm with a PVsyst simulation using the site coordinates at detailed design."),
 ];
 
-// ---------------- 6 BOQ ----------------
+// ---------------- 6 TOU ----------------
+const pct = (x, n = 1) => `${(x * 100).toFixed(n)} %`;
+const TB = TOU.bands, TT = TOU.total;
+const touS = [
+  H1("6. Solar Impact on Time-of-Use Tariff"),
+  P("The hotel is billed on a time-of-use (TOU) tariff, so each kWh is worth a different amount depending on when it is used. This section shows when the solar energy is produced and which part of the bill it reduces."),
+  table([3200, 3200, 3238], [["Tariff period", "Hours", "Indicative rate (USD/kWh)"],
+    ...TB.map((b) => [b.band, b.hours, b.rate.toFixed(2)])], { aligns: ["l", "l", "r"] }),
+  note("Period hours follow the Uganda ERA time-of-use structure; rates are indicative – replace both with the values on the hotel's electricity bill."),
+  picture("tou_chartA.png", "png", 2160, 900, 620),
+  caption("Figure 3 – Average-day solar generation by hour and tariff period (sunrise ≈ 06:50, sunset ≈ 18:56)"),
+  table([1500, 1350, 1250, 1250, 1600, 1250, 1438], [
+    ["Period", "Hotel use (MWh/yr)", "Solar (MWh/yr)", "Share of solar", "Grid after solar (MWh/yr)", "Reduction", "Saving (USD/yr)"],
+    ...TB.map((b) => [b.band, usd(b.load / 1000), (b.pv / 1000).toFixed(1), pct(b.pv_share), usd(b.grid / 1000), pct(b.red, 2), usd(b.saving)]),
+    ["Total", usd(TT.load / 1000), (TT.pv / 1000).toFixed(1), "100 %", usd(TT.grid / 1000), pct(TT.pv / TT.load, 2), usd(TT.saving)],
+  ], { aligns: ["l", "r", "r", "r", "r", "r", "r"], totalRows: [4] }),
+  gap(),
+  picture("tou_chartB.png", "png", 2160, 510, 620),
+  caption("Figure 4 – Reduction of grid energy in each tariff period"),
+  H2("What this means"),
+  bullet([B("Shoulder period: "), T(`${pct(TB[1].pv_share)} of the solar energy is produced between 06:00 and 18:00, cutting shoulder-period grid energy by ${pct(TB[1].red)}.`)]),
+  bullet([B("Peak period: "), T(`only ${pct(TB[2].pv_share)} falls in the peak period, in the last hour of daylight (18:00–19:00). Solar does not reduce the evening peak, and it does not lower a maximum-demand (kVA) charge set in the evening.`)]),
+  bullet([B("Off-peak period: "), T("no solar generation, so no change.")]),
+  bullet([B("Bill impact: "), T(`at these rates the energy bill falls by ${pct(TT.saving / TT.cost0)}, about USD ${usd(TT.saving)} per year. Each solar kWh is worth ≈ USD ${TOU.blended.toFixed(3)}, close to the shoulder rate used in the financial analysis.`)]),
+  bullet("Reducing peak-period energy would need battery storage or moving flexible loads (laundry, water heating, pool pumps) into daylight hours."),
+  note("Average-day model: year-1 solar generation spread over the day at the site's sun times; hotel load assumed at 1,000,000 kWh/month with a typical hotel hourly profile. Confirm with interval-meter data."),
+];
+
+// ---------------- 7 BOQ ----------------
 const boqRows = [["No.", "Description", "Qty", "Rate", "Amount (USD)"]];
 D.boq.forEach((b, i) => boqRows.push([String(i + 1), b[0], b[1], b[2], usd(b[3])]));
 const nB = boqRows.length;
@@ -240,7 +269,7 @@ boqRows.push(["", "Contingency (7 %)", "", "", usd(D.cont)]);
 boqRows.push(["", "Total budget EPC cost (excluding taxes)", "", "", usd(D.capex)]);
 boqRows.push(["", "Specific cost", "", "", `${D.usd_wp.toFixed(3)} USD/Wp`]);
 const boq = [
-  H1("6. Cost Estimate (Bill of Quantities)"),
+  H1("7. Cost Estimate (Bill of Quantities)"),
   P("Budget turnkey (EPC) estimate in US dollars, based on 2026 East African market prices for commercial rooftop systems. Accuracy ±15 %."),
   table([600, 4838, 1300, 1500, 1400], boqRows, { aligns: ["c", "l", "c", "r", "r"], totalRows: [nB, nB + 2] }),
   note(`Excludes VAT, withholding tax and import duties (solar equipment is generally zero-rated or exempt in Uganda; confirm with URA), roof waterproofing upgrades, structural strengthening if required, and utility charges. Annual O&M is estimated at USD ${usd(D.om0)}/yr (≈1.2 % of capex), escalating at 3 %/yr. The Enerack structure quote (≈USD 9,500 CIF Mombasa for 299 modules) falls within item 3, which also covers ballast blocks, transport and pads.`),
@@ -254,7 +283,7 @@ cfRows.push(["0", "", "", "", "", "", usd(-D.capex), usd(-D.capex)]);
 D.rows.filter((r) => [1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25].includes(r[0])).forEach((r) =>
   cfRows.push([String(r[0]), f1(r[1] / 1000), r[2].toFixed(3), usd(r[3]), usd(r[4]), r[5] ? usd(r[5]) : "–", usd(r[6]), usd(r[7])]));
 const fin = [
-  H1("7. Financial Analysis"),
+  H1("8. Financial Analysis"),
   table([4400, 5238], [
     ["Investment (EPC, excluding taxes)", `USD ${usd(D.capex)}`],
     ["Avoided grid tariff (year 1) / escalation", `USD ${D.TARIFF.toFixed(2)}/kWh / ${(D.ESC * 100).toFixed(0)} % per year`],
@@ -268,7 +297,7 @@ const fin = [
   ], { header: false, kv: true }),
   gap(),
   picture("chart.png", "png", 1920, 753, 600),
-  caption("Figure 3 – Cumulative net cash flow (USD)"),
+  caption("Figure 5 – Cumulative net cash flow (USD)"),
   H2("Tariff sensitivity"),
   table([2800, 2200, 2000, 2638], sensRows, { aligns: ["c", "r", "r", "r"], totalRows: [3] }),
   H2("Annual cash flow (selected years, USD)"),
@@ -277,7 +306,7 @@ const fin = [
 
 // ---------------- 8 EXPANSION ----------------
 const exp = [
-  H1("8. Expansion Options"),
+  H1("9. Expansion Options"),
   P("The target of about 500 kWp exceeds what the architect's solar zone on the mezzanine roof can hold. Because the hotel load is around ten times the PV output, every additional kWp would also be fully self-consumed, so expansion can be added in stages without a battery."),
   table([2900, 1300, 1400, 1700, 2338], [
     ["Option", "Capacity", "Year-1 energy", "Budget cost (USD)", "Remarks"],
@@ -290,18 +319,18 @@ const exp = [
 
 // ---------------- 9 ASSUMPTIONS ----------------
 const assum = [
-  H1("9. Assumptions, Exclusions and Next Steps"),
-  H2("9.1 Key assumptions"),
+  H1("10. Assumptions, Exclusions and Next Steps"),
+  H2("10.1 Key assumptions"),
   bullet("Roof geometry is taken from drawing D18102-DD-A-104; PV is limited to the architect's solar zones."),
   bullet("The roof slab can carry the ballasted structure and wind loads without strengthening, subject to verification by the structural engineer."),
   bullet("The hotel load is about 1,000,000 kWh per month with a continuous daytime demand well above 160 kW."),
   bullet(`The avoided tariff is USD ${D.TARIFF.toFixed(2)}/kWh escalating at ${(D.ESC * 100).toFixed(0)} %/yr, to be confirmed from the latest utility bills.`),
   bullet("Prices are 2026 East African market levels in USD, excluding taxes."),
-  H2("9.2 Exclusions"),
+  H2("10.2 Exclusions"),
   bullet("Battery storage, diesel-generator synchronisation and export metering."),
   bullet("Roof waterproofing renewal, structural strengthening, and civil works to the LV room."),
   bullet("Utility network upgrades, permit fees and financing costs."),
-  H2("9.3 Recommended next steps"),
+  H2("10.3 Recommended next steps"),
   num("next", "Obtain 12 months of utility bills or interval-meter data and confirm the tariff structure."),
   num("next", "Obtain the Enerack structural calculation (loads per foot, ballast weights) and have the building structural engineer approve the roof load."),
   num("next", "Confirm the inverter location, AC cable route and spare way on the main LV switchboard."),
@@ -344,7 +373,7 @@ const doc = new Document({
         children: [new TextRun({ children: ["Page ", PageNumber.CURRENT, " of ", PageNumber.TOTAL_PAGES], size: 15, color: MUTED })] })] }) },
       children: [
         ...control, pageBreak(), ...exec, pageBreak(), ...basis, pageBreak(), ...layout, pageBreak(),
-        ...elec, pageBreak(), ...yieldS, pageBreak(), ...boq, pageBreak(), ...fin, pageBreak(), ...exp, gap(), ...assum,
+        ...elec, pageBreak(), ...yieldS, pageBreak(), ...touS, pageBreak(), ...boq, pageBreak(), ...fin, pageBreak(), ...exp, gap(), ...assum,
       ] },
   ],
 });
