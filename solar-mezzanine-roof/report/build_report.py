@@ -175,7 +175,7 @@ D18102-DD-A-104. The system has no battery storage and supplies the hotel's own 
 +4.85 m slab strip) accommodate <b>{d['N']} modules of {d['P']} Wp in 13 rows of 23</b>, giving <b>{KWP:.1f} kWp</b>
 at 10° tilt with 800 mm maintenance aisles and 1.0 m edge setbacks.</li>
 <li><b>Self-consumption.</b> The hotel consumes approximately <b>1,000,000 kWh per month</b> (average demand ≈1.37 MW).
-The PV peak output (≈150 kW AC) is around one-tenth of the daytime load, so <b>100 % of the solar energy is consumed on site</b>.
+The PV peak output (≈160 kW AC) is around one-tenth of the daytime load, so <b>100 % of the solar energy is consumed on site</b>.
 No energy is exported and no battery is required.</li>
 <li><b>Energy and savings.</b> Year-1 generation is about <b>{y1/1000:,.0f} MWh</b>, or {d['share']*100:.1f} % of the annual consumption.
 At an avoided tariff of USD {d['TARIFF']:.2f}/kWh this saves about <b>USD {d['y1_sav']:,.0f} in year 1</b>.</li>
@@ -240,11 +240,11 @@ tariff from recent utility bills. In parallel, survey other roof areas and the c
 <h3>4.1 Configuration</h3>
 <table>
 <tr><th>Item</th><th>Inverter INV-01</th><th>Inverter INV-02</th><th>Total</th></tr>
-<tr><td>Rated AC power</td><td>75 kW</td><td>75 kW</td><td>150 kW</td></tr>
+<tr><td>Rated AC power</td><td>80 kW</td><td>80 kW</td><td>160 kW</td></tr>
 <tr><td>Strings</td><td>8 × 19 modules</td><td>3 × 19 + 5 × 18 modules</td><td>16 strings</td></tr>
 <tr><td>Modules</td><td>152</td><td>147</td><td>{d['N']}</td></tr>
 <tr><td>DC capacity</td><td>94.2 kWp</td><td>91.1 kWp</td><td>{KWP:.1f} kWp</td></tr>
-<tr><td>DC/AC ratio</td><td>1.26</td><td>1.21</td><td>1.24</td></tr>
+<tr><td>DC/AC ratio</td><td>1.18</td><td>1.14</td><td>1.16</td></tr>
 </table>
 <h3>4.2 String voltage check</h3>
 <table>
@@ -273,7 +273,7 @@ tariff from recent utility bills. In parallel, survey other roof areas and the c
 <tr><td>Year-1 generation</td><td>{y1:,.0f} kWh (≈ {y1/12:,.0f} kWh per month)</td></tr>
 <tr><td>Degradation</td><td>1.0 % in year 1, then 0.4 %/yr</td></tr>
 <tr><td>25-year generation</td><td>{d['gen25']/1000:,.0f} MWh</td></tr>
-<tr><td>Self-consumption</td><td>100 % (PV peak ≈150 kW vs. daytime load ≈1,700 kW)</td></tr>
+<tr><td>Self-consumption</td><td>100 % (PV peak ≈160 kW vs. daytime load ≈1,700 kW)</td></tr>
 <tr><td>Share of hotel consumption</td><td>{d['share']*100:.1f} %</td></tr>
 </table>
 <p>At the equator the sun crosses close to overhead and day length is nearly constant, so monthly output is fairly even.
@@ -308,7 +308,7 @@ is estimated at USD {usd(d['om0'])}/yr (≈1.2 % of capex), escalating at 3 %/yr
 <tr><td>Investment (EPC, excluding taxes)</td><td>USD {usd(d['capex'])}</td></tr>
 <tr><td>Avoided grid tariff (year 1) / escalation</td><td>USD {d['TARIFF']:.2f}/kWh / {d['ESC']*100:.0f} % per year</td></tr>
 <tr><td>Year-1 savings</td><td>USD {usd(d['y1_sav'])}</td></tr>
-<tr><td>Inverter replacement (year 12)</td><td>USD 9,000</td></tr>
+<tr><td>Inverter replacement (year 12)</td><td>USD 9,600</td></tr>
 <tr><td>Simple payback</td><td>{d['payback']:.1f} years</td></tr>
 <tr><td>Project IRR (25 years, unlevered)</td><td>{d['irr']*100:.1f} %</td></tr>
 <tr><td>NPV at 10 % discount rate</td><td>USD {usd(d['npv'])}</td></tr>
@@ -352,7 +352,7 @@ every additional kWp would also be fully self-consumed. Expansion can be added i
 <ul>
 <li>Roof geometry is taken from drawing D18102-DD-A-104; the hatched +4.85 m slab strip is available for PV, as confirmed by the client.</li>
 <li>Both roof slabs can carry the PV dead load and wind loads without strengthening, subject to verification by the structural engineer.</li>
-<li>The hotel load is about 1,000,000 kWh per month with a continuous daytime demand well above 150 kW.</li>
+<li>The hotel load is about 1,000,000 kWh per month with a continuous daytime demand well above 160 kW.</li>
 <li>The avoided tariff is USD {d['TARIFF']:.2f}/kWh escalating at {d['ESC']*100:.0f} %/yr, to be confirmed from the latest utility bills (energy plus demand components).</li>
 <li>Prices are 2026 East African market levels in USD, excluding taxes. The exchange rate is not considered.</li>
 </ul>
