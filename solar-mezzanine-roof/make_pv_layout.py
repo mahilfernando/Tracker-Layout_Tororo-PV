@@ -72,7 +72,7 @@ def table(y_top, rows, optional=False):
 
 # ---- roof reference outline (inner faces) ----
 rect(0, UPPER_TOP, ROOF_W, UPPER_BOT, "PV-ROOF-REF")
-rect(0, LOWER_TOP, ROOF_W, OPT_LIMIT, "PV-ROOF-REF")
+rect(0, LOWER_TOP, ROOF_W, LOWER_LIMIT, "PV-ROOF-REF")
 msp.add_line((0, LOWER_LIMIT), (ROOF_W, LOWER_LIMIT), dxfattribs={"layer": "PV-ROOF-REF", "linetype": "DASHDOT"})
 # obstructions
 ox1, oy1 = P(7614, 801); ox2, oy2 = P(7676, 1273)
@@ -92,9 +92,6 @@ y = LOWER_TOP - SET_EDGE
 for i in range(4):
     y = table(y if i == 0 else y - AISLE, 2)
 assert y >= LOWER_LIMIT - 1, ("lower overflow", y, LOWER_LIMIT)
-# ---- optional strip below architect's zone (confirm it is open roof) ----
-y = table(y - AISLE, 2, optional=True); y = table(y - AISLE, 1, optional=True)
-assert y >= OPT_LIMIT, ("optional overflow", y, OPT_LIMIT)
 
 base = counts["PV-MODULE"]; opt = counts.get("PV-MODULE-OPTIONAL", 0)
 kwp = lambda n: n * MOD_P / 1000
@@ -115,8 +112,6 @@ notes = [
     f"CLAMP GAP {GAP} mm, AISLE {AISLE} mm, EDGE SETBACK {SET_EDGE} mm (east {SET_E} mm for roof opening)",
     f"{N_COLS} modules per row, row length {ROW_LEN:.0f} mm",
     f"BASE (architect PV zone incl. hatched +4.85 strip): {base} modules = {kwp(base):.1f} kWp",
-    f"OPTIONAL strip below (orange, confirm open roof): {opt} modules = {kwp(opt):.1f} kWp",
-    f"TOTAL: {base + opt} modules = {kwp(base + opt):.1f} kWp",
     "Origin 0,0 = inner face NW corner of upper PV roof. Geometry traced from PDF plot; verify vs DWG.",
 ]
 for i, t in enumerate(notes):

@@ -62,14 +62,12 @@ y = stack(-SET_EDGE, ["2P", "2P", "1P"])
 assert y >= UPPER_BOT + SET_EDGE - 1
 y = stack(LOWER_TOP - SET_EDGE, ["2P"] * 4)
 assert y >= LOWER_LIMIT - 1
-y = stack(y - AISLE, ["2P", "1P"], optional=True)
-assert y >= OPT_LIMIT
 
 # ---------------- DXF ----------------
 doc = ezdxf.new("R2010", setup=True); doc.units = ezdxf.units.MM
 msp = doc.modelspace()
 LAY = {"PV-ROOF-REF": 8, "PV-SETBACK": 1, "PV-MODULE": 5, "PV-RAIL": 4, "PV-FRAME": 3, "PV-FOOT": 6,
-       "PV-OPTIONAL": 30, "PV-OBSTRUCTION": 6, "PV-TEXT": 7, "PV-DIM": 2}
+"PV-OBSTRUCTION": 6, "PV-TEXT": 7, "PV-DIM": 2}
 for n, col in LAY.items(): doc.layers.add(n, color=col)
 doc.layers.get("PV-SETBACK").dxf.linetype = "DASHED"
 hm = MOD_L * c
@@ -118,7 +116,7 @@ for idx, (ty, yt, opt) in enumerate(tables, 1):
 
 # roof, setbacks, obstructions
 rect(0, 0, ROOF_W, UPPER_BOT, "PV-ROOF-REF", "roof")
-rect(0, LOWER_TOP, ROOF_W, OPT_LIMIT, "PV-ROOF-REF", "roof")
+rect(0, LOWER_TOP, ROOF_W, LOWER_LIMIT - SET_EDGE, "PV-ROOF-REF", "roof")
 rect(SET_W, -SET_EDGE, ROOF_W - SET_E, UPPER_BOT + SET_EDGE, "PV-SETBACK", "set")
 rect(SET_W, LOWER_TOP - SET_EDGE, ROOF_W - SET_E, LOWER_LIMIT, "PV-SETBACK", "set")
 for (a, b, name) in OBS:
@@ -145,8 +143,7 @@ notes = [
     f"2P TABLE: 2x23 modules, rails 4 x {RAIL_LEN} mm, 11 frames @2600, feet span 3402, front post 595",
     f"1P TABLE: 1x23 modules, rails 2 x {RAIL_LEN} mm, 11 frames @2600, feet span 1136, front post 200",
     f"BASE: {counts['2P'][0]} x 2P + {counts['1P'][0]} x 1P = {nb} modules = {kw(nb):.1f} kWp",
-    f"OPTIONAL (orange): {counts['2P'][1]} x 2P + {counts['1P'][1]} x 1P = {no} modules = {kw(no):.1f} kWp",
-    f"TOTAL WITH OPTIONAL: {nb + no} modules = {kw(nb + no):.1f} kWp",
+    "All tables within the architect's solar zone on D18102-DD-A-104.",
     "Foot blocks drawn 300x300 indicative - size/weight by Enerack. Origin 0,0 = inner NW corner of upper roof.",
 ]
 for i, tx in enumerate(notes):
@@ -157,7 +154,7 @@ doc.saveas(os.path.join(HERE, "PV_Layout_Enerack_10deg.dxf"))
 # ---------------- SVG drawing sheet (plan) ----------------
 S = 0.0105                                     # px per mm
 minx, maxx = -3200, ROOF_W + 9800
-miny, maxy = OPT_LIMIT - 1500, 3800
+miny, maxy = LOWER_LIMIT - 2500, 3800
 W, H = (maxx - minx) * S, (maxy - miny) * S
 tx = lambda x: (x - minx) * S
 ty_ = lambda y: (maxy - y) * S

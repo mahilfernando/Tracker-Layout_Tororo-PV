@@ -94,10 +94,8 @@ td.r {{ text-align:right; }}
   <table><tr><th>Table</th><th>Type</th><th class="r">Modules</th><th class="r">Frames</th><th class="r">Rail lines</th></tr>
   <tr><td>T1, T2, T4–T7</td><td>2P × 23</td><td class="r">6 × 46 = 276</td><td class="r">66</td><td class="r">24</td></tr>
   <tr><td>T3</td><td>1P × 23</td><td class="r">23</td><td class="r">11</td><td class="r">2</td></tr>
-  <tr><th colspan="2">BASE TOTAL</th><th class="r">299 (185.4 kWp)</th><th class="r">77</th><th class="r">26</th></tr>
-  <tr><td>T8 (optional)</td><td>2P × 23</td><td class="r">46</td><td class="r">11</td><td class="r">4</td></tr>
-  <tr><td>T9 (optional)</td><td>1P × 23</td><td class="r">23</td><td class="r">11</td><td class="r">2</td></tr>
-  <tr><th colspan="2">WITH OPTIONAL</th><th class="r">368 (228.2 kWp)</th><th class="r">99</th><th class="r">32</th></tr></table>
+  <tr><th colspan="2">TOTAL</th><th class="r">299 (185.4 kWp)</th><th class="r">77</th><th class="r">26</th></tr>
+</table>
  </div>
  <div class="box"><h4>DESIGN DATA</h4>
   <table>
@@ -110,13 +108,12 @@ td.r {{ text-align:right; }}
   </table>
  </div>
  <div class="box legend"><h4>LEGEND</h4>
-  <div><span style="border-color:#1f4fb5"></span>Module (base) &nbsp; <span style="border-color:#d97a00"></span>Optional table</div>
+  <div><span style="border-color:#1f4fb5"></span>Module</div>
   <div><span style="border-color:#00a3b4"></span>Rail &nbsp; <span style="border-color:#1f8a3a"></span>Frame / post &nbsp; ■ Foot block (300 × 300 indicative)</div>
   <div><span style="border-color:#d0202a;border-top-style:dashed"></span>Setback line &nbsp; <span style="border-color:#a100a1"></span>Obstruction</div>
  </div>
  <div class="box grow" style="font-size:7.5pt;color:#4a5561">NOTES: 1. Dimensions in mm. 2. Roof outline traced from D18102-DD-A-104; verify on site.
- 3. Foot block size and ballast weight per Enerack calculation; roof load to be approved by the building structural engineer.
- 4. Optional tables T8–T9 subject to confirmation that the area is open roof.</div>
+ 3. Foot block size and ballast weight per Enerack calculation; roof load to be approved by the building structural engineer. 4. All tables lie within the architect's solar zone.</div>
  <div class="tb"><table>
   <tr><td colspan="2" class="big">ROOFTOP SOLAR PV LAYOUT</td></tr>
   <tr><td>Project</td><td>Marriott Hotel – Mezzanine Roof</td></tr>

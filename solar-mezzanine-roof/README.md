@@ -19,12 +19,10 @@
 |---|---|---|---|
 | Upper block (+6.80, incl. hatched +4.85 strip) | 2 × 2P + 1 × 1P | 115 | 71.3 |
 | Lower block (architect's PV zone) | 4 × 2P | 184 | 114.1 |
-| **Base total** | | **299** | **185.4** |
-| Optional strip below the PV zone (orange layer, confirm it is open roof) | 1 × 2P + 1 × 1P | 69 | 42.8 |
-| **Total with optional** | | **368** | **228.2** |
+| **Total** | | **299** | **185.4** |
 
 ## Layers
-`PV-MODULE`, `PV-TABLE`, `PV-MODULE-OPTIONAL`, `PV-TABLE-OPTIONAL`, `PV-SETBACK`,
+`PV-MODULE`, `PV-TABLE`, `PV-SETBACK`,
 `PV-OBSTRUCTION`, `PV-ROOF-REF`, `PV-DIM`, `PV-TEXT`. Modules are block `PV_MOD_620W`.
 
 ## Inserting into the DWG
@@ -35,3 +33,8 @@ of the upper PV roof**.
 2. In the DWG, `PASTECLIP` and pick the same inner corner.
 3. If the model space is rotated relative to the plot, `ROTATE` about that corner.
 4. Check that the `PV-ROOF-REF` outline sits on the walls, then freeze or delete that layer.
+
+## Enerack structure version (current)
+`PV_Layout_Enerack_10deg.dxf` / `.pdf` – same 299-module layout drawn with the Enerack ballast
+structure (EPJ-26110401): rails, 11 frames per table, feet and sections. Built by
+`make_pv_layout_enerack.py` and `build_layout_sheet.py`. All tables are within the architect's solar zone.

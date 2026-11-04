@@ -489,7 +489,7 @@ $SKPOLY
   9
 $TDCREATE
  40
-2461348.3249074076
+2461349.5650694445
   9
 $TDUCREATE
  40
@@ -497,7 +497,7 @@ $TDUCREATE
   9
 $TDUPDATE
  40
-2461348.3249074076
+2461349.5650694445
   9
 $TDUUPDATE
  40
@@ -549,7 +549,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-3E1
+353
   9
 $SURFTAB1
  70
@@ -929,11 +929,11 @@ $PSTYLEMODE
   9
 $FINGERPRINTGUID
   2
-{28C96609-C1AE-46CF-8993-05458E6720B7}
+{A6CCA8AB-5C7E-45EF-A810-88FDEB976320}
   9
 $VERSIONGUID
   2
-{BEAD9CF8-4925-40B5-BACB-B25852C030F1}
+{F7F2D75B-8DF4-48B1-A8B0-A4BA5793AEE8}
   9
 $EXTNAMES
 290
@@ -3301,7 +3301,7 @@ ACAD
   0
 APPID
   5
-3DE
+350
 330
 3
 100
@@ -3315,7 +3315,7 @@ HATCHBACKGROUNDCOLOR
   0
 APPID
   5
-3DF
+351
 330
 3
 100
@@ -5141,7 +5141,7 @@ PV_MOD_620W
   0
 BLOCK_RECORD
   5
-389
+2FD
 330
 9
 100
@@ -5161,7 +5161,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-398
+30C
 330
 9
 100
@@ -5181,7 +5181,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-3A7
+31B
 330
 9
 100
@@ -5201,7 +5201,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-3B6
+32A
 330
 9
 100
@@ -5221,7 +5221,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-3C5
+339
 330
 9
 100
@@ -5635,9 +5635,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-38A
+2FE
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5661,9 +5661,9 @@ AcDbBlockBegin
   0
 LINE
   5
-38C
+300
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5685,9 +5685,9 @@ AcDbLine
   0
 LINE
   5
-38D
+301
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5709,9 +5709,9 @@ AcDbLine
   0
 INSERT
   5
-38E
+302
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5735,9 +5735,9 @@ _ARCHTICK
   0
 INSERT
   5
-390
+304
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5759,9 +5759,9 @@ _ARCHTICK
   0
 LINE
   5
-392
+306
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5783,9 +5783,9 @@ AcDbLine
   0
 MTEXT
   5
-393
+307
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5809,9 +5809,9 @@ OpenSansCondensed-Light
   0
 POINT
   5
-394
+308
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5827,9 +5827,9 @@ AcDbPoint
   0
 POINT
   5
-395
+309
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5845,9 +5845,9 @@ AcDbPoint
   0
 POINT
   5
-396
+30A
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5863,9 +5863,9 @@ AcDbPoint
   0
 ENDBLK
   5
-38B
+2FF
 330
-389
+2FD
 100
 AcDbEntity
   8
@@ -5875,9 +5875,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-399
+30D
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -5901,9 +5901,9 @@ AcDbBlockBegin
   0
 LINE
   5
-39B
+30F
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -5925,9 +5925,9 @@ AcDbLine
   0
 LINE
   5
-39C
+310
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -5949,9 +5949,9 @@ AcDbLine
   0
 INSERT
   5
-39D
+311
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -5975,9 +5975,9 @@ _ARCHTICK
   0
 INSERT
   5
-39F
+313
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -5999,9 +5999,9 @@ _ARCHTICK
   0
 LINE
   5
-3A1
+315
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -6023,9 +6023,9 @@ AcDbLine
   0
 MTEXT
   5
-3A2
+316
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -6049,9 +6049,9 @@ OpenSansCondensed-Light
   0
 POINT
   5
-3A3
+317
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -6067,9 +6067,9 @@ AcDbPoint
   0
 POINT
   5
-3A4
+318
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -6085,9 +6085,9 @@ AcDbPoint
   0
 POINT
   5
-3A5
+319
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -6103,9 +6103,9 @@ AcDbPoint
   0
 ENDBLK
   5
-39A
+30E
 330
-398
+30C
 100
 AcDbEntity
   8
@@ -6115,9 +6115,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-3A8
+31C
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6141,9 +6141,9 @@ AcDbBlockBegin
   0
 LINE
   5
-3AA
+31E
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6165,9 +6165,9 @@ AcDbLine
   0
 LINE
   5
-3AB
+31F
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6189,9 +6189,9 @@ AcDbLine
   0
 INSERT
   5
-3AC
+320
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6215,9 +6215,9 @@ _ARCHTICK
   0
 INSERT
   5
-3AE
+322
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6241,9 +6241,9 @@ _ARCHTICK
   0
 LINE
   5
-3B0
+324
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6265,9 +6265,9 @@ AcDbLine
   0
 MTEXT
   5
-3B1
+325
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6293,9 +6293,9 @@ OpenSansCondensed-Light
   0
 POINT
   5
-3B2
+326
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6311,9 +6311,9 @@ AcDbPoint
   0
 POINT
   5
-3B3
+327
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6329,9 +6329,9 @@ AcDbPoint
   0
 POINT
   5
-3B4
+328
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6347,9 +6347,9 @@ AcDbPoint
   0
 ENDBLK
   5
-3A9
+31D
 330
-3A7
+31B
 100
 AcDbEntity
   8
@@ -6359,9 +6359,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-3B7
+32B
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6385,9 +6385,9 @@ AcDbBlockBegin
   0
 LINE
   5
-3B9
+32D
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6409,9 +6409,9 @@ AcDbLine
   0
 LINE
   5
-3BA
+32E
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6433,9 +6433,9 @@ AcDbLine
   0
 INSERT
   5
-3BB
+32F
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6459,9 +6459,9 @@ _ARCHTICK
   0
 INSERT
   5
-3BD
+331
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6485,9 +6485,9 @@ _ARCHTICK
   0
 LINE
   5
-3BF
+333
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6509,9 +6509,9 @@ AcDbLine
   0
 MTEXT
   5
-3C0
+334
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6537,9 +6537,9 @@ OpenSansCondensed-Light
   0
 POINT
   5
-3C1
+335
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6555,9 +6555,9 @@ AcDbPoint
   0
 POINT
   5
-3C2
+336
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6573,9 +6573,9 @@ AcDbPoint
   0
 POINT
   5
-3C3
+337
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6591,9 +6591,9 @@ AcDbPoint
   0
 ENDBLK
   5
-3B8
+32C
 330
-3B6
+32A
 100
 AcDbEntity
   8
@@ -6603,9 +6603,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-3C6
+33A
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6629,9 +6629,9 @@ AcDbBlockBegin
   0
 LINE
   5
-3C8
+33C
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6653,9 +6653,9 @@ AcDbLine
   0
 LINE
   5
-3C9
+33D
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6677,9 +6677,9 @@ AcDbLine
   0
 INSERT
   5
-3CA
+33E
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6703,9 +6703,9 @@ _ARCHTICK
   0
 INSERT
   5
-3CC
+340
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6729,9 +6729,9 @@ _ARCHTICK
   0
 LINE
   5
-3CE
+342
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6753,9 +6753,9 @@ AcDbLine
   0
 MTEXT
   5
-3CF
+343
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6781,9 +6781,9 @@ OpenSansCondensed-Light
   0
 POINT
   5
-3D0
+344
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6799,9 +6799,9 @@ AcDbPoint
   0
 POINT
   5
-3D1
+345
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6817,9 +6817,9 @@ AcDbPoint
   0
 POINT
   5
-3D2
+346
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6835,9 +6835,9 @@ AcDbPoint
   0
 ENDBLK
   5
-3C7
+33B
 330
-3C5
+339
 100
 AcDbEntity
   8
@@ -6909,11 +6909,11 @@ AcDbPolyline
  10
 29264.0
  20
--47926.0
+-38657.0
  10
 0.0
  20
--47926.0
+-38657.0
   0
 LINE
   5
@@ -13273,1453 +13273,9 @@ PV_MOD_620W
  30
 0.0
   0
-LWPOLYLINE
-  5
-2FC
-330
-17
-100
-AcDbEntity
-  8
-PV-TABLE-OPTIONAL
-100
-AcDbPolyline
- 90
-4
- 70
-1
- 10
-1000.0
- 20
--38948.281161641615
- 10
-27522.0
- 20
--38948.281161641615
- 10
-27522.0
- 20
--43659.60145205202
- 10
-1000.0
- 20
--43659.60145205202
-  0
-INSERT
-  5
-2FD
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-1000.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-2FF
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-2154.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-301
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-3308.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-303
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-4462.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-305
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-5616.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-307
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-6770.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-309
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-7924.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-30B
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-9078.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-30D
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-10232.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-30F
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-11386.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-311
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-12540.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-313
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-13694.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-315
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-14848.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-317
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-16002.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-319
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-17156.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-31B
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-18310.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-31D
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-19464.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-31F
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-20618.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-321
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-21772.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-323
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-22926.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-325
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-24080.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-327
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-25234.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-329
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-26388.0
- 20
--41294.09322931669
- 30
-0.0
-  0
-INSERT
-  5
-32B
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-1000.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-32D
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-2154.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-32F
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-3308.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-331
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-4462.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-333
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-5616.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-335
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-6770.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-337
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-7924.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-339
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-9078.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-33B
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-10232.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-33D
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-11386.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-33F
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-12540.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-341
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-13694.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-343
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-14848.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-345
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-16002.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-347
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-17156.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-349
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-18310.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-34B
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-19464.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-34D
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-20618.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-34F
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-21772.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-351
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-22926.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-353
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-24080.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-355
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-25234.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-INSERT
-  5
-357
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-26388.0
- 20
--43659.60145205202
- 30
-0.0
-  0
-LWPOLYLINE
-  5
-359
-330
-17
-100
-AcDbEntity
-  8
-PV-TABLE-OPTIONAL
-100
-AcDbPolyline
- 90
-4
- 70
-1
- 10
-1000.0
- 20
--44459.60145205202
- 10
-27522.0
- 20
--44459.60145205202
- 10
-27522.0
- 20
--46805.413519727095
- 10
-1000.0
- 20
--46805.413519727095
-  0
-INSERT
-  5
-35A
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-1000.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-35C
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-2154.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-35E
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-3308.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-360
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-4462.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-362
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-5616.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-364
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-6770.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-366
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-7924.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-368
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-9078.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-36A
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-10232.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-36C
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-11386.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-36E
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-12540.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-370
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-13694.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-372
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-14848.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-374
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-16002.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-376
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-17156.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-378
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-18310.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-37A
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-19464.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-37C
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-20618.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-37E
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-21772.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-380
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-22926.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-382
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-24080.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-384
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-25234.0
- 20
--46805.413519727095
- 30
-0.0
-  0
-INSERT
-  5
-386
-330
-17
-100
-AcDbEntity
-  8
-PV-MODULE-OPTIONAL
-100
-AcDbBlockReference
-  2
-PV_MOD_620W
- 10
-26388.0
- 20
--46805.413519727095
- 30
-0.0
-  0
 DIMENSION
   5
-388
+2FC
 330
 17
 100
@@ -14773,7 +13329,7 @@ AcDbRotatedDimension
   0
 DIMENSION
   5
-397
+30B
 330
 17
 100
@@ -14827,7 +13383,7 @@ AcDbRotatedDimension
   0
 DIMENSION
   5
-3A6
+31A
 330
 17
 100
@@ -14881,7 +13437,7 @@ AcDbRotatedDimension
   0
 DIMENSION
   5
-3B5
+329
 330
 17
 100
@@ -14935,7 +13491,7 @@ AcDbRotatedDimension
   0
 DIMENSION
   5
-3C4
+338
 330
 17
 100
@@ -14989,7 +13545,7 @@ AcDbRotatedDimension
   0
 TEXT
   5
-3D3
+347
 330
 17
 100
@@ -15019,7 +13575,7 @@ AcDbText
   0
 TEXT
   5
-3D4
+348
 330
 17
 100
@@ -15049,7 +13605,7 @@ AcDbText
   0
 TEXT
   5
-3D5
+349
 330
 17
 100
@@ -15079,7 +13635,7 @@ AcDbText
   0
 TEXT
   5
-3D6
+34A
 330
 17
 100
@@ -15109,7 +13665,7 @@ AcDbText
   0
 TEXT
   5
-3D7
+34B
 330
 17
 100
@@ -15139,7 +13695,7 @@ AcDbText
   0
 TEXT
   5
-3D8
+34C
 330
 17
 100
@@ -15169,7 +13725,7 @@ AcDbText
   0
 TEXT
   5
-3D9
+34D
 330
 17
 100
@@ -15182,66 +13738,6 @@ AcDbText
 31764.0
  20
 -5800.0
- 30
-0.0
- 40
-350.0
-  1
-OPTIONAL strip below (orange, confirm open roof): 69 modules = 42.8 kWp
- 11
-31764.0
- 21
--5800.0
- 31
-0.0
-100
-AcDbText
-  0
-TEXT
-  5
-3DA
-330
-17
-100
-AcDbEntity
-  8
-PV-TEXT
-100
-AcDbText
- 10
-31764.0
- 20
--6600.0
- 30
-0.0
- 40
-350.0
-  1
-TOTAL: 368 modules = 228.2 kWp
- 11
-31764.0
- 21
--6600.0
- 31
-0.0
-100
-AcDbText
-  0
-TEXT
-  5
-3DB
-330
-17
-100
-AcDbEntity
-  8
-PV-TEXT
-100
-AcDbText
- 10
-31764.0
- 20
--7400.0
  30
 0.0
  40
@@ -15251,7 +13747,7 @@ Origin 0,0 = inner face NW corner of upper PV roof. Geometry traced from PDF plo
  11
 31764.0
  21
--7400.0
+-5800.0
  31
 0.0
 100
@@ -15259,7 +13755,7 @@ AcDbText
   0
 TEXT
   5
-3DC
+34E
 330
 17
 100
@@ -15289,7 +13785,7 @@ AcDbText
   0
 CIRCLE
   5
-3DD
+34F
 330
 17
 100
@@ -16397,7 +14893,7 @@ CREATED_BY_EZDXF
   3
 WRITTEN_BY_EZDXF
 350
-3E0
+352
   0
 DICTIONARYVAR
   5
@@ -16409,7 +14905,7 @@ DictionaryVariables
 280
 0
   1
-1.4.5 @ 2026-11-03T07:47:52.796658+00:00
+1.4.5 @ 2026-11-04T13:33:42.939447+00:00
   0
 VISUALSTYLE
   5
@@ -17113,7 +15609,7 @@ X-Ray
   0
 DICTIONARYVAR
   5
-3E0
+352
 330
 2D
 100
@@ -17121,7 +15617,7 @@ DictionaryVariables
 280
 0
   1
-1.4.5 @ 2026-11-03T07:47:52.818982+00:00
+1.4.5 @ 2026-11-04T13:33:42.964099+00:00
   0
 ENDSEC
   0
