@@ -6,6 +6,8 @@ import base64, json, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 d = json.load(open(os.path.join(HERE, "calc.json")))
+mo = json.load(open(os.path.join(HERE, "monthly.json")))
+genchart = open(os.path.join(HERE, "gen_chart.svg")).read()
 
 def b64(name, mime):
     return f"data:{mime};base64," + base64.b64encode(open(os.path.join(HERE, name), "rb").read()).decode()
@@ -14,7 +16,7 @@ def usd(x):
     return f"{x:,.0f}"
 
 DOC_NO = "PV-RPT-D18102-001"
-REV = "A"
+REV = "B"
 DATE = "3 November 2026"
 
 # ---------- cumulative cash-flow chart (inline SVG, single series) ----------
@@ -151,7 +153,7 @@ ul,ol {{ margin:0 0 8px 0; padding-left:18px; }} li {{ margin-bottom:3px; }}
 <table class="toc">
 <tr><td>1. Executive Summary</td></tr><tr><td>2. Site and Design Basis</td></tr>
 <tr><td>3. PV Array Layout</td></tr><tr><td>4. Electrical Design</td></tr>
-<tr><td>5. Energy Yield</td></tr><tr><td>6. Cost Estimate (Bill of Quantities)</td></tr>
+<tr><td>5. Estimated PV Solar Generation</td></tr><tr><td>6. Cost Estimate (Bill of Quantities)</td></tr>
 <tr><td>7. Financial Analysis</td></tr><tr><td>8. Expansion Options</td></tr>
 <tr><td>9. Assumptions, Exclusions and Next Steps</td></tr>
 </table>
@@ -196,7 +198,7 @@ tariff from recent utility bills. In parallel, survey other roof areas and the c
 <h3>2.1 Site and load</h3>
 <table class="kv">
 <tr><td>Facility</td><td>Marriott Hotel – twin towers with podium; PV on the mezzanine-level roof</td></tr>
-<tr><td>Location</td><td>Uganda, equatorial (≈0–1° N); irradiation basis to be confirmed with site coordinates</td></tr>
+<tr><td>Location</td><td>Kampala, Uganda – 0°18'11.34"N, 32°35'13.76"E</td></tr>
 <tr><td>Roof zones used</td><td>Upper block (+6.80 m SSL, 29.39 × 15.81 m) incl. hatched +4.85 m strip; lower block (architect's PV zone)</td></tr>
 <tr><td>Annual electricity consumption</td><td>≈12,000,000 kWh (≈1,000,000 kWh/month)</td></tr>
 <tr><td>Average / daytime demand</td><td>≈1,370 kW / ≈1,700 kW (hotel load profile assumed)</td></tr>
@@ -266,21 +268,26 @@ tariff from recent utility bills. In parallel, survey other roof areas and the c
 
 <!-- ===================== 5 YIELD ===================== -->
 <div class="section">
-<h2>5. Energy Yield</h2>
+<h2>5. Estimated PV Solar Generation</h2>
 <table class="kv">
-<tr><td>Specific yield (year 1, incl. losses)</td><td>{d['SY']:,} kWh/kWp/yr</td></tr>
-<tr><td>Performance ratio assumed</td><td>≈ 0.80 (temperature, soiling, cabling, inverter, availability)</td></tr>
-<tr><td>Year-1 generation</td><td>{y1:,.0f} kWh (≈ {y1/12:,.0f} kWh per month)</td></tr>
-<tr><td>Degradation</td><td>1.0 % in year 1, then 0.4 %/yr</td></tr>
-<tr><td>25-year generation</td><td>{d['gen25']/1000:,.0f} MWh</td></tr>
-<tr><td>Self-consumption</td><td>100 % (PV peak ≈160 kW vs. daytime load ≈1,700 kW)</td></tr>
-<tr><td>Share of hotel consumption</td><td>{d['share']*100:.1f} %</td></tr>
+<tr><td>Site</td><td>Kampala, 0°18'11.34"N, 32°35'13.76"E · 185.4 kWp · 10° fixed tilt</td></tr>
+<tr><td>Specific yield (year 1, incl. losses)</td><td>{d['SY']:,} kWh/kWp/yr · performance ratio ≈ 0.80</td></tr>
+<tr><td>Year-1 generation</td><td><b>{y1:,.0f} kWh</b> · average {mo['avg_month']:,} kWh/month · {mo['avg_day']:,} kWh/day</td></tr>
+<tr><td>25-year generation</td><td>{d['gen25']/1000:,.0f} MWh (1.0 % degradation in year 1, then 0.4 %/yr)</td></tr>
+<tr><td>Self-consumption / share of hotel use</td><td>100 % · {d['share']*100:.1f} % of annual consumption</td></tr>
 </table>
-<p>At the equator the sun crosses close to overhead and day length is nearly constant, so monthly output is fairly even.
-It is lowest in the main rainy seasons (March–May and October–November). Because the hotel load exceeds the PV output in
-every hour, cloudy days reduce savings but never cause curtailment.</p>
-<p class="note">The yield figure is a desktop estimate for an equatorial Ugandan site. A PVsyst simulation using the exact site coordinates
-and Meteonorm/PVGIS data is recommended at detailed design.</p>
+<div class="fig" style="border:0">{genchart}</div>
+<div class="cap">Figure 2 – Estimated monthly PV generation, year 1 (MWh)</div>
+<table>
+<tr><th>Month</th>{''.join(f"<th class='r'>{r['m']}</th>" for r in mo['rows'])}<th class='r'>Year</th></tr>
+<tr><td>MWh</td>{''.join(f"<td class='r'>{r['kwh']/1000:.1f}</td>" for r in mo['rows'])}<td class='r'><b>{mo['total']/1000:.1f}</b></td></tr>
+<tr><td>kWh/day</td>{''.join(f"<td class='r'>{r['per_day']}</td>" for r in mo['rows'])}<td class='r'>{mo['avg_day']}</td></tr>
+</table>
+<p>Output is highest from January to March and lowest in June–July, when cloud cover in Kampala is heaviest. Because the site is on the
+equator, the difference between the best and worst month is only about 20 %. The hotel load is higher than the PV output in every hour,
+so all of this energy is used on site.</p>
+<p class="note">The monthly split uses typical Kampala solar irradiation; the annual total is the design yield above. Confirm with a PVsyst
+simulation using the site coordinates at detailed design.</p>
 </div>
 
 <!-- ===================== 6 BOQ ===================== -->
@@ -316,7 +323,7 @@ is estimated at USD {usd(d['om0'])}/yr (≈1.2 % of capex), escalating at 3 %/yr
 <tr><td>25-year cumulative savings, net of O&amp;M</td><td>USD {usd(d['cum'][-1] + d['capex'])}</td></tr>
 </table>
 <div class="fig" style="border:0">{chart}</div>
-<div class="cap">Figure 2 – Cumulative net cash flow (USD)</div>
+<div class="cap">Figure 3 – Cumulative net cash flow (USD)</div>
 <h3>Tariff sensitivity</h3>
 <table>
 <tr><th class="c">Avoided tariff (USD/kWh)</th><th class="r">Payback (yrs)</th><th class="r">IRR</th><th class="r">NPV @10 % (USD)</th></tr>

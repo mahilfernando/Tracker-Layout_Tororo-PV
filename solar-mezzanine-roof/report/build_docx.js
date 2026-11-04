@@ -8,6 +8,7 @@ const {
 } = require("docx");
 
 const D = JSON.parse(fs.readFileSync(path.join(__dirname, "calc.json")));
+const MO = JSON.parse(fs.readFileSync(path.join(__dirname, "monthly.json")));
 const img = (f) => fs.readFileSync(path.join(__dirname, f));
 const usd = (x) => Math.round(x).toLocaleString("en-US");
 const f1 = (x) => x.toFixed(1);
@@ -142,7 +143,7 @@ const basis = [
   H2("2.1 Site and load"),
   table([3400, 6238], [
     ["Facility", "Marriott Hotel – twin towers with podium; PV on the mezzanine-level roof"],
-    ["Location", "Uganda, equatorial (≈0–1° N); irradiation basis to be confirmed with site coordinates"],
+    ["Location", "Kampala, Uganda – 0°18'11.34\"N, 32°35'13.76\"E"],
     ["Roof", "Flat reinforced-concrete slab, single level, with parapet; architect's two PV zones (29.39 m wide)"],
     ["Annual electricity consumption", "≈12,000,000 kWh (≈1,000,000 kWh/month)"],
     ["Average / daytime demand", "≈1,370 kW / ≈1,700 kW (hotel load profile assumed)"],
@@ -209,19 +210,25 @@ const elec = [
 
 // ---------------- 5 YIELD ----------------
 const yieldS = [
-  H1("5. Energy Yield"),
+  H1("5. Estimated PV Solar Generation"),
   table([3800, 5838], [
-    ["Specific yield (year 1, incl. losses)", `${D.SY.toLocaleString("en-US")} kWh/kWp/yr`],
-    ["Performance ratio assumed", "≈ 0.80 (temperature, soiling, cabling, inverter, availability)"],
-    ["Year-1 generation", `${usd(Y1)} kWh (≈ ${usd(Y1 / 12)} kWh per month)`],
-    ["Degradation", "1.0 % in year 1, then 0.4 %/yr"],
-    ["25-year generation", `${usd(D.gen25 / 1000)} MWh`],
-    ["Self-consumption", "100 % (PV peak ≈160 kW vs. daytime load ≈1,700 kW)"],
-    ["Share of hotel consumption", `${(D.share * 100).toFixed(1)} %`],
+    ["Site", "Kampala, 0°18'11.34\"N, 32°35'13.76\"E · 185.4 kWp · 10° fixed tilt"],
+    ["Specific yield (year 1, incl. losses)", `${D.SY.toLocaleString("en-US")} kWh/kWp/yr · performance ratio ≈ 0.80`],
+    ["Year-1 generation", `${usd(Y1)} kWh · average ${usd(MO.avg_month)} kWh/month · ${usd(MO.avg_day)} kWh/day`],
+    ["25-year generation", `${usd(D.gen25 / 1000)} MWh (1.0 % degradation in year 1, then 0.4 %/yr)`],
+    ["Self-consumption / share of hotel use", `100 % · ${(D.share * 100).toFixed(1)} % of annual consumption`],
   ], { header: false, kv: true }),
   gap(),
-  P("At the equator, day length is nearly constant, so monthly output is fairly even. It is lowest in the main rainy seasons (March–May and October–November). Because the hotel load exceeds the PV output in every hour, cloudy days reduce savings but never cause curtailment."),
-  note("The yield figure is a desktop estimate. A PVsyst simulation with the exact site coordinates is recommended at detailed design."),
+  picture("gen_chart.png", "png", 2160, 900, 620),
+  caption("Figure 2 – Estimated monthly PV generation, year 1 (MWh)"),
+  table([1104].concat(Array(12).fill(642)).concat([830]), [
+    ["Month", ...MO.rows.map((r) => r.m), "Year"],
+    ["MWh", ...MO.rows.map((r) => (r.kwh / 1000).toFixed(1)), (MO.total / 1000).toFixed(1)],
+    ["kWh/day", ...MO.rows.map((r) => String(r.per_day)), String(MO.avg_day)],
+  ], { aligns: Array(14).fill("r").map((x, i) => (i ? "r" : "l")) }),
+  gap(),
+  P("Output is highest from January to March and lowest in June–July, when cloud cover in Kampala is heaviest. Because the site is on the equator, the difference between the best and worst month is only about 20 %. The hotel load is higher than the PV output in every hour, so all of this energy is used on site."),
+  note("The monthly split uses typical Kampala solar irradiation; the annual total is the design yield above. Confirm with a PVsyst simulation using the site coordinates at detailed design."),
 ];
 
 // ---------------- 6 BOQ ----------------
@@ -261,7 +268,7 @@ const fin = [
   ], { header: false, kv: true }),
   gap(),
   picture("chart.png", "png", 1920, 753, 600),
-  caption("Figure 2 – Cumulative net cash flow (USD)"),
+  caption("Figure 3 – Cumulative net cash flow (USD)"),
   H2("Tariff sensitivity"),
   table([2800, 2200, 2000, 2638], sensRows, { aligns: ["c", "r", "r", "r"], totalRows: [3] }),
   H2("Annual cash flow (selected years, USD)"),

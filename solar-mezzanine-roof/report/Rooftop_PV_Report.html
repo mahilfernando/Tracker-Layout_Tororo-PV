@@ -62,12 +62,12 @@ ul,ol { margin:0 0 8px 0; padding-left:18px; } li { margin-bottom:3px; }
     <div class="sub">Marriott Hotel – Mezzanine Roof (Drawing D18102-DD-A-104)</div>
     <table class="kv">
       <tr><td>Document No.</td><td>PV-RPT-D18102-001</td></tr>
-      <tr><td>Revision</td><td>A – Issued for review</td></tr>
+      <tr><td>Revision</td><td>B – Issued for review</td></tr>
       <tr><td>Date</td><td>3 November 2026</td></tr>
       <tr><td>System capacity</td><td>185.4 kWp DC / 160 kW AC, grid-tied, no battery</td></tr>
     </table>
   </div>
-  <div class="foot"><span>Rooftop Solar PV – Design Basis &amp; Cost Estimate</span><span>PV-RPT-D18102-001 Rev A</span></div>
+  <div class="foot"><span>Rooftop Solar PV – Design Basis &amp; Cost Estimate</span><span>PV-RPT-D18102-001 Rev B</span></div>
 </div>
 
 <!-- ===================== DOC CONTROL ===================== -->
@@ -75,7 +75,7 @@ ul,ol { margin:0 0 8px 0; padding-left:18px; } li { margin-bottom:3px; }
 <h2>Document Control</h2>
 <table>
 <tr><th style="width:12%">Rev</th><th style="width:20%">Date</th><th>Description</th><th style="width:16%">Prepared</th><th style="width:16%">Checked</th><th style="width:16%">Approved</th></tr>
-<tr class="sig"><td class="c">A</td><td>3 November 2026</td><td>Issued for review</td><td></td><td></td><td></td></tr>
+<tr class="sig"><td class="c">B</td><td>3 November 2026</td><td>Issued for review</td><td></td><td></td><td></td></tr>
 <tr class="sig"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 </table>
 <h3>Reference documents</h3>
@@ -89,7 +89,7 @@ ul,ol { margin:0 0 8px 0; padding-left:18px; } li { margin-bottom:3px; }
 <table class="toc">
 <tr><td>1. Executive Summary</td></tr><tr><td>2. Site and Design Basis</td></tr>
 <tr><td>3. PV Array Layout</td></tr><tr><td>4. Electrical Design</td></tr>
-<tr><td>5. Energy Yield</td></tr><tr><td>6. Cost Estimate (Bill of Quantities)</td></tr>
+<tr><td>5. Estimated PV Solar Generation</td></tr><tr><td>6. Cost Estimate (Bill of Quantities)</td></tr>
 <tr><td>7. Financial Analysis</td></tr><tr><td>8. Expansion Options</td></tr>
 <tr><td>9. Assumptions, Exclusions and Next Steps</td></tr>
 </table>
@@ -134,7 +134,7 @@ tariff from recent utility bills. In parallel, survey other roof areas and the c
 <h3>2.1 Site and load</h3>
 <table class="kv">
 <tr><td>Facility</td><td>Marriott Hotel – twin towers with podium; PV on the mezzanine-level roof</td></tr>
-<tr><td>Location</td><td>Uganda, equatorial (≈0–1° N); irradiation basis to be confirmed with site coordinates</td></tr>
+<tr><td>Location</td><td>Kampala, Uganda – 0°18'11.34"N, 32°35'13.76"E</td></tr>
 <tr><td>Roof zones used</td><td>Upper block (+6.80 m SSL, 29.39 × 15.81 m) incl. hatched +4.85 m strip; lower block (architect's PV zone)</td></tr>
 <tr><td>Annual electricity consumption</td><td>≈12,000,000 kWh (≈1,000,000 kWh/month)</td></tr>
 <tr><td>Average / daytime demand</td><td>≈1,370 kW / ≈1,700 kW (hotel load profile assumed)</td></tr>
@@ -204,21 +204,26 @@ tariff from recent utility bills. In parallel, survey other roof areas and the c
 
 <!-- ===================== 5 YIELD ===================== -->
 <div class="section">
-<h2>5. Energy Yield</h2>
+<h2>5. Estimated PV Solar Generation</h2>
 <table class="kv">
-<tr><td>Specific yield (year 1, incl. losses)</td><td>1,480 kWh/kWp/yr</td></tr>
-<tr><td>Performance ratio assumed</td><td>≈ 0.80 (temperature, soiling, cabling, inverter, availability)</td></tr>
-<tr><td>Year-1 generation</td><td>274,362 kWh (≈ 22,864 kWh per month)</td></tr>
-<tr><td>Degradation</td><td>1.0 % in year 1, then 0.4 %/yr</td></tr>
-<tr><td>25-year generation</td><td>6,477 MWh</td></tr>
-<tr><td>Self-consumption</td><td>100 % (PV peak ≈160 kW vs. daytime load ≈1,700 kW)</td></tr>
-<tr><td>Share of hotel consumption</td><td>2.3 %</td></tr>
+<tr><td>Site</td><td>Kampala, 0°18'11.34"N, 32°35'13.76"E · 185.4 kWp · 10° fixed tilt</td></tr>
+<tr><td>Specific yield (year 1, incl. losses)</td><td>1,480 kWh/kWp/yr · performance ratio ≈ 0.80</td></tr>
+<tr><td>Year-1 generation</td><td><b>274,362 kWh</b> · average 22,864 kWh/month · 752 kWh/day</td></tr>
+<tr><td>25-year generation</td><td>6,477 MWh (1.0 % degradation in year 1, then 0.4 %/yr)</td></tr>
+<tr><td>Self-consumption / share of hotel use</td><td>100 % · 2.3 % of annual consumption</td></tr>
 </table>
-<p>At the equator the sun crosses close to overhead and day length is nearly constant, so monthly output is fairly even.
-It is lowest in the main rainy seasons (March–May and October–November). Because the hotel load exceeds the PV output in
-every hour, cloudy days reduce savings but never cause curtailment.</p>
-<p class="note">The yield figure is a desktop estimate for an equatorial Ugandan site. A PVsyst simulation using the exact site coordinates
-and Meteonorm/PVGIS data is recommended at detailed design.</p>
+<div class="fig" style="border:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" class="genchart" role="img" aria-label="Estimated monthly PV generation, year 1"><style>.genchart .grid{stroke:#e3e7ec;stroke-width:1}.genchart .base{stroke:#8c96a1;stroke-width:1}.genchart .bar{fill:#14365d}.genchart .ax{font:10px Inter,Arial,sans-serif;fill:#5b6673}.genchart .val{font:600 10.5px Inter,Arial,sans-serif;fill:#1b2430}.genchart .avg{stroke:#8c96a1;stroke-width:1.2;stroke-dasharray:5 4}.genchart .avgt{font:600 10px Inter,Arial,sans-serif;fill:#5b6673}</style><line x1="52" x2="704" y1="260.0" y2="260.0" class="base"/><text x="44" y="263.5" class="ax" text-anchor="end">0</text><line x1="52" x2="704" y1="220.3" y2="220.3" class="grid"/><text x="44" y="223.8" class="ax" text-anchor="end">5</text><line x1="52" x2="704" y1="180.7" y2="180.7" class="grid"/><text x="44" y="184.2" class="ax" text-anchor="end">10</text><line x1="52" x2="704" y1="141.0" y2="141.0" class="grid"/><text x="44" y="144.5" class="ax" text-anchor="end">15</text><line x1="52" x2="704" y1="101.3" y2="101.3" class="grid"/><text x="44" y="104.8" class="ax" text-anchor="end">20</text><line x1="52" x2="704" y1="61.7" y2="61.7" class="grid"/><text x="44" y="65.2" class="ax" text-anchor="end">25</text><line x1="52" x2="704" y1="22.0" y2="22.0" class="grid"/><text x="44" y="25.5" class="ax" text-anchor="end">30</text><text x="14" y="141.0" class="ax" text-anchor="middle" transform="rotate(-90 14 141.0)">MWh per month</text><path class="bar" d="M64.0,260.0 V64.5 Q64.0,60.5 68.0,60.5 H90.4 Q94.4,60.5 94.4,64.5 V260.0 Z"/><text x="79.2" y="276" class="ax" text-anchor="middle">Jan</text><text x="79.2" y="54.5" class="val" text-anchor="middle">25.1</text><path class="bar" d="M118.3,260.0 V77.2 Q118.3,73.2 122.3,73.2 H144.7 Q148.7,73.2 148.7,77.2 V260.0 Z"/><text x="133.5" y="276" class="ax" text-anchor="middle">Feb</text><path class="bar" d="M172.6,260.0 V64.5 Q172.6,60.5 176.6,60.5 H199.0 Q203.0,60.5 203.0,64.5 V260.0 Z"/><text x="187.8" y="276" class="ax" text-anchor="middle">Mar</text><path class="bar" d="M227.0,260.0 V85.3 Q227.0,81.3 231.0,81.3 H253.4 Q257.4,81.3 257.4,85.3 V260.0 Z"/><text x="242.2" y="276" class="ax" text-anchor="middle">Apr</text><path class="bar" d="M281.3,260.0 V90.4 Q281.3,86.4 285.3,86.4 H307.7 Q311.7,86.4 311.7,90.4 V260.0 Z"/><text x="296.5" y="276" class="ax" text-anchor="middle">May</text><path class="bar" d="M335.6,260.0 V99.6 Q335.6,95.6 339.6,95.6 H362.0 Q366.0,95.6 366.0,99.6 V260.0 Z"/><text x="350.8" y="276" class="ax" text-anchor="middle">Jun</text><text x="350.8" y="89.6" class="val" text-anchor="middle">20.7</text><path class="bar" d="M390.0,260.0 V97.8 Q390.0,93.8 394.0,93.8 H416.4 Q420.4,93.8 420.4,97.8 V260.0 Z"/><text x="405.2" y="276" class="ax" text-anchor="middle">Jul</text><path class="bar" d="M444.3,260.0 V86.7 Q444.3,82.7 448.3,82.7 H470.7 Q474.7,82.7 474.7,86.7 V260.0 Z"/><text x="459.5" y="276" class="ax" text-anchor="middle">Aug</text><path class="bar" d="M498.6,260.0 V81.7 Q498.6,77.7 502.6,77.7 H525.0 Q529.0,77.7 529.0,81.7 V260.0 Z"/><text x="513.8" y="276" class="ax" text-anchor="middle">Sep</text><path class="bar" d="M553.0,260.0 V79.3 Q553.0,75.3 557.0,75.3 H579.4 Q583.4,75.3 583.4,79.3 V260.0 Z"/><text x="568.2" y="276" class="ax" text-anchor="middle">Oct</text><path class="bar" d="M607.3,260.0 V88.8 Q607.3,84.8 611.3,84.8 H633.7 Q637.7,84.8 637.7,88.8 V260.0 Z"/><text x="622.5" y="276" class="ax" text-anchor="middle">Nov</text><path class="bar" d="M661.6,260.0 V75.6 Q661.6,71.6 665.6,71.6 H688.0 Q692.0,71.6 692.0,75.6 V260.0 Z"/><text x="676.8" y="276" class="ax" text-anchor="middle">Dec</text><line x1="52" x2="704" y1="78.6" y2="78.6" class="avg"/><text x="702" y="49.0" class="avgt" text-anchor="end">-- -- Average 22.9 MWh/month</text></svg></div>
+<div class="cap">Figure 2 – Estimated monthly PV generation, year 1 (MWh)</div>
+<table>
+<tr><th>Month</th><th class='r'>Jan</th><th class='r'>Feb</th><th class='r'>Mar</th><th class='r'>Apr</th><th class='r'>May</th><th class='r'>Jun</th><th class='r'>Jul</th><th class='r'>Aug</th><th class='r'>Sep</th><th class='r'>Oct</th><th class='r'>Nov</th><th class='r'>Dec</th><th class='r'>Year</th></tr>
+<tr><td>MWh</td><td class='r'>25.1</td><td class='r'>23.6</td><td class='r'>25.1</td><td class='r'>22.5</td><td class='r'>21.9</td><td class='r'>20.7</td><td class='r'>21.0</td><td class='r'>22.3</td><td class='r'>23.0</td><td class='r'>23.3</td><td class='r'>22.1</td><td class='r'>23.7</td><td class='r'><b>274.4</b></td></tr>
+<tr><td>kWh/day</td><td class='r'>811</td><td class='r'>841</td><td class='r'>811</td><td class='r'>751</td><td class='r'>706</td><td class='r'>691</td><td class='r'>676</td><td class='r'>721</td><td class='r'>766</td><td class='r'>751</td><td class='r'>736</td><td class='r'>766</td><td class='r'>752</td></tr>
+</table>
+<p>Output is highest from January to March and lowest in June–July, when cloud cover in Kampala is heaviest. Because the site is on the
+equator, the difference between the best and worst month is only about 20 %. The hotel load is higher than the PV output in every hour,
+so all of this energy is used on site.</p>
+<p class="note">The monthly split uses typical Kampala solar irradiation; the annual total is the design yield above. Confirm with a PVsyst
+simulation using the site coordinates at detailed design.</p>
 </div>
 
 <!-- ===================== 6 BOQ ===================== -->
@@ -262,7 +267,7 @@ is estimated at USD 1,311/yr (≈1.2 % of capex), escalating at 3 %/yr.</p>
 <text x="620.0" y="38.4" class="ann" text-anchor="end">USD 825k at year 25</text>
 <text x="344.0" y="248" class="ax" text-anchor="middle">Year of operation</text>
 </svg></div>
-<div class="cap">Figure 2 – Cumulative net cash flow (USD)</div>
+<div class="cap">Figure 3 – Cumulative net cash flow (USD)</div>
 <h3>Tariff sensitivity</h3>
 <table>
 <tr><th class="c">Avoided tariff (USD/kWh)</th><th class="r">Payback (yrs)</th><th class="r">IRR</th><th class="r">NPV @10 % (USD)</th></tr>
