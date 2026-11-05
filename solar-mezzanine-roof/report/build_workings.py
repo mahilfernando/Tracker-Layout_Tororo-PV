@@ -155,7 +155,7 @@ r = kv(I, r, "String inverter", 4800, "USD each", "80 kW, incl. comms", "c_inv",
 r = kv(I, r, "Mounting structure (incl. ballast, pads)", 0.090, "USD/Wp", "Enerack quote within this allowance", "c_mnt", "0.000")
 r = kv(I, r, "DC system", 0.040, "USD/Wp", "Cable, MC4, isolators, SPD", "c_dc", "0.000")
 r = kv(I, r, "AC system (ACCP, MCCBs, 120 mm² cable, tray)", 9500, "USD", "Lump sum", "c_ac", "#,##0")
-r = kv(I, r, "Use detailed breakdowns in BOQ (1 = yes, 0 = allowance)", 0, "", "DC System, AC System and Earthing & LPS sheets", "useDet", "0")
+r = kv(I, r, "Use detailed breakdowns in BOQ (1 = yes, 0 = allowance)", 0, "", "DC System, AC System, Earthing & LPS and Roof Access & Safety sheets", "useDet", "0")
 r = kv(I, r, "Zero-export controller & monitoring", 3500, "USD", "Lump sum", "c_zx", "#,##0")
 r = kv(I, r, "Earthing & lightning protection", 3000, "USD", "Lump sum", "c_earth", "#,##0")
 r = kv(I, r, "Walkways, lifeline, water point", 3500, "USD", "Lump sum", "c_walk", "#,##0")
@@ -565,6 +565,21 @@ N["earthDet"] = breakdown("Earthing & LPS", "Earthing & Lightning Protection –
                           "Equipotential bonding of the array, connection to building earth and existing lightning protection (IEC 62305, IEC 60364-7-712).",
                           earth_rows, f"={N['c_earth']}", "Current BOQ allowance (lump sum)")
 
+walk_rows = [
+    ("Walkway pads, rubber/GRP 600 mm wide (roof door → station → east corridor)", f"=ROUNDUP(({N['upD']}+{N['loD']})/1000+10,0)", "m", 15.00,
+     "length of both PV blocks + 10 m access; protects waterproofing on the main route"),
+    ("Walkway pads in front of inverter station (service area)", 5, "m²", 25.00, "1 m clearance zone in front of INV-01/02 and ACCP"),
+    ("Deadweight (ballasted) fall-arrest anchor, non-penetrating", 2, "nos", 800.00,
+     "needed only if parapet < 1.1 m; one per PV block, EN 795 type E"),
+    ("Harness + 2 m energy-absorbing lanyard kit", 2, "sets", 150.00, "for O&M staff"),
+    ("Water supply pipe HDPE 25 mm to roof", 40, "m", 3.00, "from nearest hotel water point (route TBC)"),
+    ("Tap, isolation valve, backflow preventer, hose reel 30 m", 1, "set", 280.00, "for module cleaning (soft water / no detergents)"),
+    ("Roof access & PV hazard signage", 1, "lot", 80.00, "roof door, station, DC warning"),
+]
+N["walkDet"] = breakdown("Roof Access & Safety", "Roof Walkways, Safety Lifeline & Water Point – Bottom-up Breakdown",
+                         "Safe access for installation, cleaning and O&M; protection of the roof waterproofing.",
+                         walk_rows, f"={N['c_walk']}", "Current BOQ allowance (lump sum)")
+
 # =====================================================================================
 # BOQ
 # =====================================================================================
@@ -592,6 +607,7 @@ for i, (d, q, u, rate) in enumerate(items, start=1):
     if rate == "c_dc": B[f"F{r}"] = f"=IF({N['useDet']}=1,{N['dcDet']},ROUND(C{r}*E{r},0))"
     if rate == "c_ac": B[f"F{r}"] = f"=IF({N['useDet']}=1,{N['acDet']},ROUND(C{r}*E{r},0))"
     if rate == "c_earth": B[f"F{r}"] = f"=IF({N['useDet']}=1,{N['earthDet']},ROUND(C{r}*E{r},0))"
+    if rate == "c_walk": B[f"F{r}"] = f"=IF({N['useDet']}=1,{N['walkDet']},ROUND(C{r}*E{r},0))"
     B[f"C{r}"].number_format = "#,##0"; B[f"E{r}"].number_format = "#,##0.000" if u == "Wp" else "#,##0"
     B[f"F{r}"].number_format = "#,##0"; B[f"E{r}"].font = GRN
     if not isinstance(q, str): B[f"C{r}"].font = BLUE; B[f"C{r}"].fill = YEL
