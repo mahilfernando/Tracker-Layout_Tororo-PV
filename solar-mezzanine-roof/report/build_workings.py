@@ -155,7 +155,7 @@ r = kv(I, r, "String inverter", 4800, "USD each", "80 kW, incl. comms", "c_inv",
 r = kv(I, r, "Mounting structure (incl. ballast, pads)", 0.090, "USD/Wp", "Enerack quote within this allowance", "c_mnt", "0.000")
 r = kv(I, r, "DC system", 0.040, "USD/Wp", "Cable, MC4, isolators, SPD", "c_dc", "0.000")
 r = kv(I, r, "AC system (ACCP, MCCBs, 120 mm² cable, tray)", 9500, "USD", "Lump sum", "c_ac", "#,##0")
-r = kv(I, r, "Use detailed DC & AC breakdown in BOQ (1 = yes, 0 = allowance)", 0, "", "See DC System / AC System sheets", "useDet", "0")
+r = kv(I, r, "Use detailed breakdowns in BOQ (1 = yes, 0 = allowance)", 0, "", "DC System, AC System and Earthing & LPS sheets", "useDet", "0")
 r = kv(I, r, "Zero-export controller & monitoring", 3500, "USD", "Lump sum", "c_zx", "#,##0")
 r = kv(I, r, "Earthing & lightning protection", 3000, "USD", "Lump sum", "c_earth", "#,##0")
 r = kv(I, r, "Walkways, lifeline, water point", 3500, "USD", "Lump sum", "c_walk", "#,##0")
@@ -546,6 +546,25 @@ N["acDet"] = breakdown("AC System", "AC System – Bottom-up Breakdown",
                        "Inverter AC outputs to the main LV switchboard. Lengths from Inputs (30 m and 80 m runs).",
                        ac_rows, f"={N['c_ac']}", "Current BOQ allowance (lump sum)")
 
+earth_rows = [
+    ("Bonding conductor 16 mm² Cu, green/yellow, UV-resistant (along each table)", f"=ROUNDUP({ntab}*({N['rowlen']}/1000+1),-1)", "m", 2.50,
+     "1 run per table (row length + 1 m)"),
+    ("Main PV earth conductor 35 mm² Cu (array spine → building earth bar)", f"=ROUNDUP({N['lac2']},-1)", "m", 5.00,
+     "follows the main cable route to the LV room"),
+    ("Bimetallic (Al–Cu) bonding clamps / lugs on rails & frames", f"=ROUNDUP({ntab}*4+{ntab}*{N['rowlen']}/1000/3,0)", "nos", 3.00,
+     "4 per table + 1 every 3 m of bonding run (Enerack lugs in structure quote)"),
+    ("Inverter & ACCP earth bonding (16 mm² Cu + lugs)", f"={N['ninv']}+1", "sets", 25.00, "1 per inverter + ACCP earth bar"),
+    ("Air-termination rods 1 m with concrete bases (array perimeter)", 6, "nos", 80.00,
+     "only if the array is outside the existing LPS protection zone"),
+    ("Connection to existing LPS: clamps, test joints, separation-distance fittings", 1, "lot", 250.00, "IEC 62305 tie-in"),
+    ("Earth pit: 1.5 m Cu-bonded rod + inspection chamber (if required)", 1, "nos", 350.00, "only if the building earth is inadequate"),
+    ("Earth resistance testing & LPS risk assessment (IEC 62305-2)", 1, "lot", 300.00, "before and after installation"),
+    ("Earthing labels & warning signs", 1, "lot", 50.00, "lot"),
+]
+N["earthDet"] = breakdown("Earthing & LPS", "Earthing & Lightning Protection – Bottom-up Breakdown",
+                          "Equipotential bonding of the array, connection to building earth and existing lightning protection (IEC 62305, IEC 60364-7-712).",
+                          earth_rows, f"={N['c_earth']}", "Current BOQ allowance (lump sum)")
+
 # =====================================================================================
 # BOQ
 # =====================================================================================
@@ -572,6 +591,7 @@ for i, (d, q, u, rate) in enumerate(items, start=1):
     B[f"F{r}"] = f"=ROUND(C{r}*E{r},0)"
     if rate == "c_dc": B[f"F{r}"] = f"=IF({N['useDet']}=1,{N['dcDet']},ROUND(C{r}*E{r},0))"
     if rate == "c_ac": B[f"F{r}"] = f"=IF({N['useDet']}=1,{N['acDet']},ROUND(C{r}*E{r},0))"
+    if rate == "c_earth": B[f"F{r}"] = f"=IF({N['useDet']}=1,{N['earthDet']},ROUND(C{r}*E{r},0))"
     B[f"C{r}"].number_format = "#,##0"; B[f"E{r}"].number_format = "#,##0.000" if u == "Wp" else "#,##0"
     B[f"F{r}"].number_format = "#,##0"; B[f"E{r}"].font = GRN
     if not isinstance(q, str): B[f"C{r}"].font = BLUE; B[f"C{r}"].fill = YEL
