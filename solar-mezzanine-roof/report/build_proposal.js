@@ -56,6 +56,7 @@ const fin = { y1gen: D.gen[0], y1sav: D.cf[1], pb: D.pb, irr: D.irr, npv: D.npv,
 
 // ------------------------------------------------------------------ cover
 const cover = [
+  P([T("NILE SUN POWER LIMITED", { size: 30, bold: true, color: ACC, characterSpacing: 30 })], { alignment: AlignmentType.RIGHT, spacing: { after: 160 } }),
   img(R("hotel.jpg"), "jpg", 1080, 718, 642),
   new Paragraph({ spacing: { after: 360 }, border: { bottom: { style: BorderStyle.SINGLE, size: 24, color: NAVY, space: 1 } }, children: [] }),
   P([T("TECHNICAL & COMMERCIAL PROPOSAL", { size: 18, color: MUTED, characterSpacing: 40 })], { spacing: { before: 200, after: 80 } }),
@@ -63,7 +64,7 @@ const cover = [
   P([T("Kampala Marriott Hotel – Mezzanine Roof", { size: 28, color: "1B2430" })], { spacing: { after: 480 } }),
   table([2600, 4400], [
     ["Prepared for", "Kampala Marriott Hotel, Kampala, Uganda"],
-    ["Prepared by", "Tororo PV Power Company Ltd."],
+    ["Prepared by", "Nile Sun Power Limited"],
     ["Proposal ref.", REF],
     ["Date", DATE],
     ["Validity", "30 days"],
@@ -74,7 +75,7 @@ const cover = [
 const kpi = (v, l) => [new TextRun({ text: v, bold: true, size: 28, color: NAVY }), new TextRun({ text: "", break: 1 }), new TextRun({ text: l, size: 15, color: MUTED })];
 const exec = [
   H1("1. Executive Summary"),
-  P("Tororo PV Power Company Ltd. is pleased to propose a turnkey 185.4 kWp grid-tied solar PV system on the mezzanine roof of the Kampala Marriott Hotel. The system generates clean electricity during the day that is used entirely by the hotel, reducing purchases from the grid. It operates with zero export and needs no battery storage."),
+  P("Nile Sun Power Limited is pleased to propose a turnkey 185.4 kWp grid-tied solar PV system on the mezzanine roof of the Kampala Marriott Hotel. The system generates clean electricity during the day that is used entirely by the hotel, reducing purchases from the grid. It operates with zero export and needs no battery storage."),
   new Table({ width: { size: TW, type: WidthType.DXA }, columnWidths: [2409, 2410, 2410, 2409], rows: [
     new TableRow({ children: [
       cell(kpi("185.4 kWp", "Solar capacity"), 2409, { align: AlignmentType.CENTER }),
@@ -225,7 +226,7 @@ const q = [
   table([2400, 2419, 2400, 2419], [
     ["Quotation No.", "Q-KMH-PV-2026-001", "Date", "05-11-2026"],
     ["Revision", "A", "Valid until", "05-12-2026 (30 days)"],
-    ["Client", "Kampala Marriott Hotel", "Supplier", "Tororo PV Power Company Ltd."],
+    ["Client", "Kampala Marriott Hotel", "Supplier", "Nile Sun Power Limited"],
   ], { header: false, kv: false }),
   gap(),
   new Table({ width: { size: TW, type: WidthType.DXA }, columnWidths: [600, 5200, 900, 900, 2038], rows: [
@@ -261,7 +262,7 @@ const q = [
   gap(),
   new Table({ width: { size: TW, type: WidthType.DXA }, columnWidths: [4819, 4819], rows: [new TableRow({ children: [
     new TableCell({ borders: { top: bd, bottom: bd, left: bd, right: bd }, width: { size: 4819, type: WidthType.DXA }, margins: { top: 100, bottom: 100, left: 120, right: 120 },
-      children: [P([B("For Tororo PV Power Company Ltd.")]), P(" "), P(" "), P([T("Signature / Name / Date", { size: 16, color: MUTED })])] }),
+      children: [P([B("For Nile Sun Power Limited")]), P(" "), P(" "), P([T("Signature / Name / Date", { size: 16, color: MUTED })])] }),
     new TableCell({ borders: { top: bd, bottom: bd, left: bd, right: bd }, width: { size: 4819, type: WidthType.DXA }, margins: { top: 100, bottom: 100, left: 120, right: 120 },
       children: [P([B("Accepted by Kampala Marriott Hotel")]), P(" "), P(" "), P([T("Signature / Name / Date", { size: 16, color: MUTED })])] }),
   ] })] }),
@@ -280,7 +281,7 @@ const nextS = [
 ];
 
 const doc = new Document({
-  creator: "Tororo PV Power Company Ltd.", title: "Technical & Commercial Proposal – 185.4 kWp Rooftop Solar PV",
+  creator: "Nile Sun Power Limited", title: "Technical & Commercial Proposal – 185.4 kWp Rooftop Solar PV",
   features: { updateFields: true },
   styles: {
     default: { document: { run: { font: FONT, size: 19 } } },
@@ -300,9 +301,9 @@ const doc = new Document({
     { properties: { page: { size: { width: PAGE_W, height: 16838 }, margin: { top: 1300, bottom: 1134, left: MARGIN, right: MARGIN, header: 600, footer: 600 } } },
       headers: { default: new Header({ children: [new Paragraph({ tabStops: [{ type: TabStopType.RIGHT, position: TW }],
         border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: RULE, space: 4 } },
-        children: [T("Kampala Marriott Hotel – Rooftop Solar PV Proposal", { size: 15, color: MUTED }), T(`\t${REF}`, { size: 15, color: MUTED })] })] }) },
+        children: [T("NILE SUN POWER LIMITED", { size: 16, bold: true, color: ACC }), T(`\tKampala Marriott Hotel – Rooftop Solar PV · ${REF}`, { size: 15, color: MUTED })] })] }) },
       footers: { default: new Footer({ children: [new Paragraph({ tabStops: [{ type: TabStopType.RIGHT, position: TW }], children: [
-        T("Tororo PV Power Company Ltd. · Confidential", { size: 15, color: MUTED }),
+        T("Nile Sun Power Limited · Confidential", { size: 15, color: MUTED }),
         new TextRun({ children: ["\tPage ", PageNumber.CURRENT, " of ", PageNumber.TOTAL_PAGES], size: 15, color: MUTED })] })] }) },
       children: [...exec, pageBreak(), ...site, pageBreak(), ...sol, pageBreak(), ...energy, pageBreak(), ...fin5, pageBreak(),
                  ...scope, gap(), ...warr, pageBreak(), ...q, pageBreak(), ...nextS] },

@@ -48,6 +48,8 @@ def kv(label, value, label2=None, value2=None, bold_value=False, h=16, fill_valu
     r += 1
 
 # ---------------- header ----------------
+merge(r, "A", "F", "NILE SUN POWER LIMITED", font(bold=True, size=13, color=ACC), None,
+      Alignment(horizontal="right", vertical="center"), 20, border=False); r += 1
 merge(r, "A", "F", "Commercial Proposal & Quotation – Rooftop Solar PV System", font(bold=True, size=16, color=NAVY),
       None, Alignment(horizontal="center", vertical="center"), 34); r += 1
 merge(r, "A", "F", "Turnkey EPC supply, installation and commissioning · 185.4 kWp grid-tied · zero export · no battery",
@@ -63,8 +65,8 @@ kv("Location:", "Kampala, Uganda · 0°18'11.34\"N, 32°35'13.76\"E · Ref. draw
 
 # ---------------- 2. client / supplier ----------------
 section("2. Client & Supplier Details")
-kv("Client:", "Kampala Marriott Hotel", "Supplier:", "Tororo PV Power Company Ltd.", h=26)
-kv("Address:", "Kampala, Uganda", "Address:", "Aha Tower, 4th Floor, Lourdel Road, Nakasero, Kampala", h=28)
+kv("Client:", "Kampala Marriott Hotel", "Supplier:", "Nile Sun Power Limited", h=26)
+kv("Address:", "Kampala, Uganda", "Address:", "Kampala, Uganda", h=18)
 kv("Contact:", "", "Contact:", "Mr. Mahil", fill_value=None)
 kv("Mobile / Email:", "", "Mobile / Email:", "+94 773 55 96 82 · mahil@windforce.lk", h=28)
 for rr in (r - 2, r - 1): ws[f"C{rr}"].fill = PatternFill("solid", fgColor=YEL)
@@ -132,7 +134,7 @@ for n in notes:
 
 # ---------------- signatures ----------------
 r += 1
-merge(r, "A", "C", "For Tororo PV Power Company Ltd.", font(bold=True, size=9), None, None, 16, border=False)
+merge(r, "A", "C", "For Nile Sun Power Limited", font(bold=True, size=9), None, None, 16, border=False)
 merge(r, "D", "F", "Accepted by Client (Kampala Marriott Hotel)", font(bold=True, size=9), None, None, 16, border=False); r += 1
 merge(r, "A", "C", "\n\nSignature / Name / Date: ____________________", font(size=9), None, Alignment(vertical="bottom", wrap_text=True), 40, border=False)
 merge(r, "D", "F", "\n\nSignature / Name / Date: ____________________", font(size=9), None, Alignment(vertical="bottom", wrap_text=True), 40, border=False)
