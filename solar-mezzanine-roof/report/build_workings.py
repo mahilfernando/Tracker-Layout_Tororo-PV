@@ -155,6 +155,7 @@ r = kv(I, r, "String inverter", 4800, "USD each", "80 kW, incl. comms", "c_inv",
 r = kv(I, r, "Mounting structure (incl. ballast, pads)", 0.090, "USD/Wp", "Enerack quote within this allowance", "c_mnt", "0.000")
 r = kv(I, r, "DC system", 0.040, "USD/Wp", "Cable, MC4, isolators, SPD", "c_dc", "0.000")
 r = kv(I, r, "AC system (ACCP, MCCBs, 120 mm² cable, tray)", 9500, "USD", "Lump sum", "c_ac", "#,##0")
+r = kv(I, r, "Use detailed DC & AC breakdown in BOQ (1 = yes, 0 = allowance)", 0, "", "See DC System / AC System sheets", "useDet", "0")
 r = kv(I, r, "Zero-export controller & monitoring", 3500, "USD", "Lump sum", "c_zx", "#,##0")
 r = kv(I, r, "Earthing & lightning protection", 3000, "USD", "Lump sum", "c_earth", "#,##0")
 r = kv(I, r, "Walkways, lifeline, water point", 3500, "USD", "Lump sum", "c_walk", "#,##0")
@@ -474,6 +475,78 @@ T.add_chart(c2, "L22")
 widths(T, [16, 13, 12, 11, 11, 12, 12, 13, 14, 14]); landscape(T)
 
 # =====================================================================================
+# DC SYSTEM & AC SYSTEM breakdowns
+# =====================================================================================
+def breakdown(name, heading, sub, rows, allowance_formula, allowance_label):
+    ws = wb.create_sheet(name)
+    title(ws, heading, sub)
+    header(ws, 4, ["No.", "Item", "Quantity", "Unit", "Rate (USD)", "Amount (USD)", "Quantity working"], height=30)
+    r = 5
+    for i, (item, qty, unit, rate, work) in enumerate(rows, start=1):
+        ws[f"A{r}"] = i; ws[f"B{r}"] = item; ws[f"C{r}"] = qty; ws[f"D{r}"] = unit; ws[f"E{r}"] = rate
+        ws[f"F{r}"] = f"=ROUND(C{r}*E{r},0)"; ws[f"G{r}"] = work
+        ws[f"E{r}"].font = BLUE; ws[f"E{r}"].fill = YEL
+        is_f = isinstance(qty, str) and qty.startswith("=")
+        ws[f"C{r}"].font = (GRN if "!" in qty else BLK) if is_f else BLUE
+        if not is_f: ws[f"C{r}"].fill = YEL
+        ws[f"C{r}"].number_format = "#,##0"; ws[f"E{r}"].number_format = "#,##0.00"; ws[f"F{r}"].number_format = "#,##0"
+        for c in "ABDFG": ws[f"{c}{r}"].font = font(color="5B6673") if c == "G" else font()
+        for c in "ABCDEFG": ws[f"{c}{r}"].border = BOX
+        r += 1
+    last = r - 1
+    rows_tot = [("Total (bottom-up)", f"=SUM(F5:F{last})"), (allowance_label, allowance_formula),
+                ("Difference (bottom-up − allowance)", f"=F{r}-F{r+1}"), ("Bottom-up cost per Wp", f"=F{r}/({N['kwp']}*1000)")]
+    tot_r = r
+    for k, (lab, f) in enumerate(rows_tot):
+        ws[f"B{r}"] = lab; ws[f"F{r}"] = f
+        ws[f"F{r}"].number_format = "0.000" if k == 3 else "#,##0;(#,##0)"
+        for c in "ABCDEFG": ws[f"{c}{r}"].border = BOX; ws[f"{c}{r}"].fill = BAND
+        ws[f"B{r}"].font = BOLD; ws[f"F{r}"].font = GRN if k == 1 else BOLD
+        r += 1
+    r += 1
+    ws[f"A{r}"] = ("Rates are indicative landed Kampala prices (2026), excluding VAT – replace with supplier quotes. "
+                   "Yellow + blue = input · black = formula · green = link to another sheet."); ws[f"A{r}"].font = NOTE
+    widths(ws, [6, 50, 11, 8, 11, 14, 46]); landscape(ws)
+    return ref(ws, f"F{tot_r}")
+
+nstr = f"({N['i1na']}+{N['i1nb']}+{N['i2na']}+{N['i2nb']})"
+ntab = f"({N['t2']}+{N['t1']})"
+dc_rows = [
+    ("PV cable 6 mm² H1Z2Z2-K (red + black), UV-resistant", f"=ROUNDUP({nstr}*(2*{N['ldc']}+10)*1.1,-1)", "m", 1.30,
+     "strings × (2 × one-way run + 10 m row links) × 1.10 waste"),
+    ("MC4 connector pairs (genuine, 1,500 V)", f"=ROUNDUP({nstr}*4*1.1,0)", "pairs", 4.00, "4 pairs per string + 10 % spares"),
+    ("String DC isolator 1,000 V, 32 A, IP66 (at array)", f"={nstr}", "nos", 45.00, "1 per string"),
+    ("DC SPD Type II", 0, "nos", 150.00, "0 – built into inverters (enter qty if external SPDs required)"),
+    ("Cable tray, HDG perforated 100 mm with UV cover", f"={ntab}*15+40", "m", 14.00, "15 m per table + 40 m main run to inverters"),
+    ("Tray supports / non-penetrating roof blocks & fixings", 1, "lot", 450.00, "lot"),
+    ("Flexible conduit, glands & entry fittings", 1, "lot", 250.00, "lot"),
+    ("UV-resistant cable ties, module cable clips", 1, "lot", 150.00, "lot"),
+    ("String labels & DC warning signage", 1, "lot", 120.00, "lot"),
+]
+N["dcDet"] = breakdown("DC System", "DC System – Bottom-up Breakdown",
+                       "PV strings to inverter DC inputs. Quantities from Inputs (strings, cable run) and Layout (tables).",
+                       dc_rows, f"=ROUND({N['kwp']}*1000*{N['c_dc']},0)", "Current BOQ allowance (USD/Wp × Wp)")
+ac_rows = [
+    ("ACCP enclosure IP65, 250 A busbar, wiring, assembly", 1, "nos", 900.00, "AC combiner panel on the roof"),
+    ("MCCB 125 A 3P, Icu ≥ 36 kA (inverter incomers)", f"={N['ninv']}", "nos", 220.00, "1 per inverter"),
+    ("MCCB 250 A 3P (ACCP outgoing)", 1, "nos", 450.00, ""),
+    ("SPD Type II, 3P+N, 400 V (ACCP)", 1, "nos", 250.00, ""),
+    ("Switch-disconnector 250 A (roof isolator)", 1, "nos", 350.00, ""),
+    ("Cable 4C × 50 mm² Cu XLPE (inverter → ACCP)", f"={N['ninv']}*{N['lac1']}", "m", 25.00, "inverters × run length"),
+    ("Earth cable 25 mm² Cu (inverter → ACCP)", f"={N['ninv']}*{N['lac1']}", "m", 4.00, "same route"),
+    ("Cable 4C × 120 mm² Cu XLPE/SWA (ACCP → MLVS)", f"={N['lac2']}", "m", 60.00, "route length (confirm)"),
+    ("Earth cable 70 mm² Cu (ACCP → MLVS)", f"={N['lac2']}", "m", 9.00, "same route"),
+    ("Cable ladder/tray 300 mm HDG incl. riser supports", f"={N['lac2']}", "m", 18.00, "main route roof → LV room"),
+    ("Cable glands, lugs, terminations", 1, "lot", 250.00, "lot"),
+    ("MLVS PV way: MCCB 250 A, Icu ≥ 65 kA (e.g. NSX250 H)", 1, "nos", 900.00, "matches Masterpact NW10 H1 fault level"),
+    ("MLVS busbar connection kit & panel modification", 1, "lot", 300.00, ""),
+    ("Inverter mounting frames & sun-shade canopies", f"={N['ninv']}", "nos", 300.00, "1 per inverter"),
+]
+N["acDet"] = breakdown("AC System", "AC System – Bottom-up Breakdown",
+                       "Inverter AC outputs to the main LV switchboard. Lengths from Inputs (30 m and 80 m runs).",
+                       ac_rows, f"={N['c_ac']}", "Current BOQ allowance (lump sum)")
+
+# =====================================================================================
 # BOQ
 # =====================================================================================
 B = wb.create_sheet("BOQ")
@@ -497,6 +570,8 @@ r = 4
 for i, (d, q, u, rate) in enumerate(items, start=1):
     B[f"A{r}"] = i; B[f"B{r}"] = d; B[f"C{r}"] = q; B[f"D{r}"] = u; B[f"E{r}"] = f"={N[rate]}"
     B[f"F{r}"] = f"=ROUND(C{r}*E{r},0)"
+    if rate == "c_dc": B[f"F{r}"] = f"=IF({N['useDet']}=1,{N['dcDet']},ROUND(C{r}*E{r},0))"
+    if rate == "c_ac": B[f"F{r}"] = f"=IF({N['useDet']}=1,{N['acDet']},ROUND(C{r}*E{r},0))"
     B[f"C{r}"].number_format = "#,##0"; B[f"E{r}"].number_format = "#,##0.000" if u == "Wp" else "#,##0"
     B[f"F{r}"].number_format = "#,##0"; B[f"E{r}"].font = GRN
     if not isinstance(q, str): B[f"C{r}"].font = BLUE; B[f"C{r}"].fill = YEL
