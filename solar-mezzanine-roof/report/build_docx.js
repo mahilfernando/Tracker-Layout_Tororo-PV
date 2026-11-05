@@ -272,7 +272,7 @@ const boq = [
   H1("7. Cost Estimate (Bill of Quantities)"),
   P("Budget turnkey (EPC) estimate in US dollars, based on 2026 East African market prices for commercial rooftop systems. Accuracy ±15 %."),
   table([600, 4838, 1300, 1500, 1400], boqRows, { aligns: ["c", "l", "c", "r", "r"], totalRows: [nB, nB + 2] }),
-  note(`Excludes VAT, withholding tax and import duties (solar equipment is generally zero-rated or exempt in Uganda; confirm with URA), roof waterproofing upgrades, structural strengthening if required, and utility charges. Annual O&M is estimated at USD ${usd(D.om0)}/yr (≈1.2 % of capex), escalating at 3 %/yr. The Enerack structure quote (≈USD 9,500 CIF Mombasa for 299 modules) falls within item 3, which also covers ballast blocks, transport and pads.`),
+  note(`Excludes VAT, withholding tax and import duties (solar equipment is generally zero-rated or exempt in Uganda; confirm with URA), roof waterproofing upgrades, structural strengthening if required, and utility charges. Annual O&M is estimated at USD ${usd(D.om0)}/yr (≈1.2 % of capex), escalating at 3 %/yr. The Enerack structure quote ERKI20261104TP (USD 11,303.92 CIF Mombasa, as quoted) falls within item 3, which also covers ballast blocks, pads, clearing and inland transport.`),
 ];
 
 // ---------------- 7 FINANCIAL ----------------

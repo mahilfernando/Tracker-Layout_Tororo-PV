@@ -162,18 +162,6 @@ r = kv(I, r, "Installation, testing & commissioning", 0.060, "USD/Wp", "", "c_in
 r = kv(I, r, "Engineering & structural check", 4000, "USD", "Lump sum", "c_eng", "#,##0")
 r = kv(I, r, "Approvals & utility interface", 2000, "USD", "Lump sum", "c_appr", "#,##0")
 r = kv(I, r, "Transport, logistics & customs clearing", 4000, "USD", "Lump sum", "c_trans", "#,##0")
-r = section(I, r, "Enerack structure unit prices (quote ERKI20261104TP, EXW)")
-for key, lab, v in [("e_r3000", "R80 rail L=3000", 16.64), ("e_r2630", "R80 rail L=2630", 14.58), ("e_conn", "Rail connect", 1.19),
-                    ("e_rclamp", "Rail clamp", 0.22), ("e_end", "30 mm end clamp", 0.30), ("e_inner", "Inner clamp 30–40 mm", 0.30),
-                    ("e_f3800", "Pre-assembly frame L=3800 (2P)", 40.40), ("e_f1400", "Pre-assembly frame L=1400 (1P)", 20.64),
-                    ("e_cross", "Cross brace L=2725", 6.85), ("e_bolt", "M8×70 bolt", 0.20), ("e_lug", "Earthing lug", 0.28)]:
-    r = kv(I, r, lab, v, "USD/kit", "", key, "0.00")
-r = kv(I, r, "Freight to Mombasa", 1300, "USD", "", "e_frt", "#,##0")
-r = kv(I, r, "Rail clamps per rail–frame crossing", "=795/352", "nos", "From quote: 795 clamps for 352 crossings", "e_rc_ratio", "0.000", kind="in")
-r = kv(I, r, "Bolts per frame", "=155/99", "nos", "From quote: 155 bolts for 99 frames", "e_bolt_ratio", "0.000", kind="in")
-r = kv(I, r, "Earthing lugs per rail line", "=33/32", "nos", "From quote: 33 lugs for 32 rail lines", "e_lug_ratio", "0.000", kind="in")
-r = kv(I, r, "Cross braces per 2P table", 20, "nos", "From quote: 140 for 7 tables", "e_cross_pt", "0", kind="in")
-r = kv(I, r, "Frames per table", 11, "nos", "First at 315 mm, then 10 × 2,600 mm", "e_fpt", "0")
 widths(I, [44, 16, 12, 58]); landscape(I)
 
 # =====================================================================================
@@ -308,49 +296,50 @@ widths(E, [44, 16, 16, 30]); landscape(E)
 # STRUCTURE
 # =====================================================================================
 S = wb.create_sheet("Structure")
-title(S, "Mounting Structure Quantities & Cost – Enerack Ballast System (EPJ-26110401)")
-header(S, 3, ["Item", "Quantity", "Unit price (USD)", "Amount (USD)", "Working"], height=30)
-r = 4
-qrows = [
-    ("Rail lines", f"={N['t2']}*4+{N['t1']}*2", None, "4 per 2P table, 2 per 1P table", "rl"),
-    ("Rail–frame crossings", f"=({N['t2']}*4+{N['t1']}*2)*{N['e_fpt']}", None, "rail lines × frames per table", "rx"),
-    ("R80 rail L=3000", "=B4*8", "e_r3000", "8 per rail line", None),
-    ("R80 rail L=2630", "=B4", "e_r2630", "1 per rail line", None),
-    ("Rail connect", "=B4*8", "e_conn", "8 joints per rail line", None),
-    ("Rail clamp", f"=ROUND(B5*{N['e_rc_ratio']},0)", "e_rclamp", "crossings × ratio from quote", None),
-    ("30 mm end clamp", "=B4*2", "e_end", "2 per rail line", None),
-    ("Inner clamp", f"=B4*({N['ncol']}-1)", "e_inner", "(modules per row − 1) per rail line", None),
-    ("Pre-assembly frame L=3800 (2P)", f"={N['t2']}*{N['e_fpt']}", "e_f3800", "frames per 2P table", None),
-    ("Pre-assembly frame L=1400 (1P)", f"={N['t1']}*{N['e_fpt']}", "e_f1400", "frames per 1P table", None),
-    ("Cross brace L=2725", f"={N['t2']}*{N['e_cross_pt']}", "e_cross", "per 2P table", None),
-    ("M8×70 bolt", f"=ROUND((B12+B13)*{N['e_bolt_ratio']},0)", "e_bolt", "frames × ratio from quote", None),
-    ("Earthing lug", f"=ROUND(B4*{N['e_lug_ratio']},0)", "e_lug", "rail lines × ratio from quote", None),
-]
-for lab, q, price, note, nm in qrows:
-    S[f"A{r}"] = lab; S[f"B{r}"] = q; S[f"E{r}"] = note
-    if price:
-        S[f"C{r}"] = f"={N[price]}"; S[f"D{r}"] = f"=B{r}*C{r}"
-        S[f"C{r}"].font = GRN; S[f"C{r}"].number_format = "0.00"; S[f"D{r}"].number_format = "#,##0.00"
-    S[f"B{r}"].number_format = "#,##0"
-    for c in "ABDE": S[f"{c}{r}"].font = font(color="5B6673") if c == "E" else font()
-    for c in "ABCDE": S[f"{c}{r}"].border = BOX
-    if nm: N[nm] = ref(S, f"B{r}")
+title(S, "Mounting Structure – Enerack Ballast System (supplier quote as issued)",
+      "Xiamen Enerack Technology Co., Ltd. · Invoice/quote ERKI20261104TP dated 2026-11-04 · Drawing EPJ-26110401 V1.0 · Panel 2382×1134×30 mm")
+header(S, 4, ["Item No.", "Description", "Qty", "Unit", "Unit price EXW (USD)", "Amount EXW (USD)"], height=30)
+QUOTE = [("ERK-R80-3000", "R80 Rail L=3000", 256, 16.64, 4258.56), ("ERK-R80-2630", "R80 Rail L=2630", 32, 14.58, 466.67),
+         ("ERK-SFR-R80", "Rail connect", 256, 1.19, 304.64), ("ERK-GRC", "Rail clamp", 795, 0.22, 178.59),
+         ("ERK-FEC-30", "30 mm end clamp", 65, 0.30, 19.47), ("ERK-AIC", "Adjustable (30-40 mm) inner clamp", 707, 0.30, 212.10),
+         ("ERK-W45-3800", "Pre-assembly L=3800 (2P frame)", 77, 40.40, 3110.80), ("ERK-W45-1400", "Pre-assembly L=1400 (1P frame)", 22, 20.64, 454.08),
+         ("ERK-35JL-2725", "Cross L=2725", 140, 6.85, 958.77), ("ERK-M8X70", "M8×70 bolt", 155, 0.20, 31.00),
+         ("ERK-ELG-03", "Earthing lug", 33, 0.28, 9.24)]
+r = 5
+for code, d, q, u, amt in QUOTE:
+    S[f"A{r}"] = code; S[f"B{r}"] = d; S[f"C{r}"] = q; S[f"D{r}"] = "kits"; S[f"E{r}"] = u; S[f"F{r}"] = amt
+    for c in "CEF": S[f"{c}{r}"].font = BLUE
+    S[f"C{r}"].number_format = "#,##0"; S[f"E{r}"].number_format = "#,##0.00"; S[f"F{r}"].number_format = "#,##0.00"
+    for c in "ABD": S[f"{c}{r}"].font = font()
+    for c in "ABCDEF": S[f"{c}{r}"].border = BOX
     r += 1
-S[f"A{r}"] = "Sub-total EXW"; S[f"D{r}"] = f"=SUM(D6:D{r-1})"; r += 1
-S[f"A{r}"] = "Freight to Mombasa"; S[f"D{r}"] = f"={N['e_frt']}"; S[f"D{r}"].font = GRN; r += 1
-S[f"A{r}"] = "Total CIF Mombasa"; S[f"D{r}"] = f"=D{r-2}+D{r-1}"; N["strCIF"] = ref(S, f"D{r}")
-for rr in range(r - 2, r + 1):
-    for c in "ABCDE": S[f"{c}{rr}"].border = BOX; S[f"{c}{rr}"].fill = BAND
-    S[f"A{rr}"].font = BOLD; S[f"D{rr}"].number_format = "#,##0"
-    if S[f"D{rr}"].font != GRN: S[f"D{rr}"].font = BOLD
+q0, q1 = 5, r - 1
+S[f"B{r}"] = "Sub-total EXW"; S[f"C{r}"] = f"=SUM(C{q0}:C{q1})"; S[f"F{r}"] = f"=SUM(F{q0}:F{q1})"; sub_r = r; r += 1
+S[f"B{r}"] = "Freight cost to Mombasa Port, Kenya"; S[f"F{r}"] = 1300; S[f"F{r}"].font = BLUE; r += 1
+S[f"B{r}"] = "Total CIF Mombasa"; S[f"F{r}"] = f"=F{sub_r}+F{r-1}"; N["strCIF"] = ref(S, f"F{r}"); cif_r = r
+for rr in range(sub_r, r + 1):
+    for c in "ABCDEF": S[f"{c}{rr}"].border = BOX; S[f"{c}{rr}"].fill = BAND
+    S[f"B{rr}"].font = BOLD; S[f"F{rr}"].number_format = "#,##0.00"
+    if rr != sub_r + 1: S[f"F{rr}"].font = BOLD
+S[f"C{sub_r}"].number_format = "#,##0"; S[f"C{sub_r}"].font = BOLD
 r += 2
-S[f"A{r}"] = "Enerack quoted CIF for 368 modules (7 × 2P + 2 × 1P): USD 11,303.92. Customs duty, VAT, clearing and inland transport excluded."; S[f"A{r}"].font = NOTE
-r += 1
-S[f"A{r}"] = "Structure cost per Wp (CIF)"; S[f"B{r}"] = f"=D{r-3}/({N['kwp']}*1000)"; S[f"B{r}"].number_format = "0.000"
-r += 1
-S[f"A{r}"] = "Roof load – modules + structure (excl. ballast)"; S[f"B{r}"] = f"=({N['mt']}*1000+{N['marea']}*4.5)/(({N['t2']}*{N['d2']}+{N['t1']}*{N['d1']})*{N['rowlen']}/1000000)"
-S[f"C{r}"] = "kg/m²"; S[f"E{r}"] = "structure allowance 4.5 kg/m² of module area; ballast per Enerack calculation"; S[f"B{r}"].number_format = "0.0"
-widths(S, [40, 12, 16, 16, 44]); landscape(S)
+S[f"A{r}"] = "Quote terms: 30 % T/T deposit, balance before shipment · Port of destination Mombasa · Delivery 10–15 days after deposit · CIF excludes import clearance, customs duties and VAT."; S[f"A{r}"].font = NOTE; r += 1
+S[f"A{r}"] = "Line amounts are as printed on the supplier's quote (some differ from qty × unit price by a few cents due to the supplier's rounding)."; S[f"A{r}"].font = NOTE; r += 2
+r = section(S, r, "Quote scope vs. current layout")
+header(S, r, ["", "Item", "Quoted", "Current layout", "Difference", ""]); r += 1
+for lab, quoted, cur in [("2P frames (L=3800)", f"=C{q0+6}", f"={N['t2']}*11"), ("1P frames (L=1400)", f"=C{q0+7}", f"={N['t1']}*11"),
+                         ("Rail lines (R80 L=2630, 1 per line)", f"=C{q0+1}", f"={N['t2']}*4+{N['t1']}*2"),
+                         ("Modules supported", "=(C11/11*46)+(C12/11*23)", f"={N['nmod']}")]:
+    S[f"B{r}"] = lab; S[f"C{r}"] = quoted; S[f"D{r}"] = cur; S[f"E{r}"] = f"=C{r}-D{r}"
+    for c in "CDE": S[f"{c}{r}"].number_format = "#,##0"; S[f"{c}{r}"].font = font()
+    S[f"B{r}"].font = font()
+    for c in "BCDE": S[f"{c}{r}"].border = BOX
+    r += 1
+S[f"A{r}"] = "The quote covers 7 × 2P + 2 × 1P tables (368 modules); the current layout uses 6 × 2P + 1 × 1P (299 modules). Value kept as quoted – confirm final quantities with Enerack."; S[f"A{r}"].font = NOTE; r += 2
+r = kv(S, r, "Structure cost per Wp of current plant (CIF)", f"=F{cif_r}/({N['kwp']}*1000)", "USD/Wp", "", None, "0.000")
+S.merge_cells(start_row=r-1, start_column=4, end_row=r-1, end_column=6)
+r = kv(S, r, "Roof load – modules + structure (excl. ballast)", f"=({N['mt']}*1000+{N['marea']}*4.5)/(({N['t2']}*{N['d2']}+{N['t1']}*{N['d1']})*{N['rowlen']}/1000000)", "kg/m²", "4.5 kg/m² structure allowance; ballast per Enerack calculation", None, "0.0")
+widths(S, [44, 36, 12, 16, 18, 18]); landscape(S)
 
 # =====================================================================================
 # GENERATION (monthly + 25 years)
