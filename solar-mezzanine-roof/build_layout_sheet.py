@@ -139,7 +139,7 @@ td.r {{ text-align:right; }}
  <div class="tb"><table>
   <tr><td colspan="2" class="big">ROOFTOP SOLAR PV LAYOUT</td></tr>
   <tr><td>Project</td><td>Marriott Hotel – Mezzanine Roof</td></tr>
-  <tr><td>Client</td><td>Tororo PV Power Company Limited</td></tr>
+  <tr><td>Client</td><td>Kampala Marriott Hotel</td></tr>
   <tr><td>Drawing No.</td><td>PV-LAY-D18102-002 &nbsp; Rev B</td></tr>
   <tr><td>Date / Scale</td><td>4 November 2026 · NTS (A3)</td></tr>
  </table></div>

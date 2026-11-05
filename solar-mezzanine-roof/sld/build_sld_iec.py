@@ -217,7 +217,7 @@ notes = ["1. 299 × 620 Wp = 185.4 kWp DC; 2 × 80 kW = 160 kW AC; DC/AC 1.16.",
 for i, n in enumerate(notes): T(TX + 10, BAND + 38 + i * 15, n, "ts")
 tb_y = BAND + 104
 L(TX, tb_y, X1, tb_y, "frame2")
-cells = [("CLIENT", "Tororo PV Power Company Limited", TX, tb_y, 300, 34),
+cells = [("CLIENT", "Kampala Marriott Hotel", TX, tb_y, 300, 34),
          ("PROJECT", "Kampala Marriott – Rooftop PV 185.4 kWp", TX + 300, tb_y, X1 - TX - 300, 34),
          ("TITLE", "SINGLE-LINE DIAGRAM – PV SYSTEM & GRID CONNECTION", TX, tb_y + 34, X1 - TX, 40),
          ("DRAWING No.", "PV-SLD-D18102-004", TX, tb_y + 74, 200, 34), ("REV", "A", TX + 200, tb_y + 74, 60, 34),

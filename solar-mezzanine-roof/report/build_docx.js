@@ -90,7 +90,7 @@ const cover = [
   new Paragraph({ spacing: { after: 480 }, children: [new TextRun({ text: "Marriott Hotel – Mezzanine Roof (Drawing D18102-DD-A-104)", size: 26 })] }),
   table([2600, 4400], [
     ["Document No.", DOC_NO], ["Revision", `${REV} – Issued for review`], ["Date", DATE],
-    ["Client", "Tororo PV Power Company Limited"],
+    ["Client", "Kampala Marriott Hotel"],
     ["System capacity", `${f1(KWP)} kWp DC / ${D.AC.toFixed(0)} kW AC, grid-tied, no battery`],
   ], { header: false, kv: true }),
 ];
@@ -341,7 +341,7 @@ const assum = [
 
 const doc = new Document({
   features: { updateFields: true },
-  creator: "Tororo PV Power Company Limited",
+  creator: "Nile Sun Power Limited",
   title: "Rooftop Solar PV System – Design Basis & Cost Estimate",
   styles: {
     default: { document: { run: { font: FONT, size: 19 } } },

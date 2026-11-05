@@ -73,7 +73,7 @@ title(I, "Inputs & Assumptions – Kampala Marriott Rooftop PV",
 header(I, 3, ["Parameter", "Value", "Unit", "Source / note"])
 r = 4
 r = section(I, r, "Site")
-r = kv(I, r, "Project", "Kampala Marriott Hotel – mezzanine roof", "", "Client: Tororo PV Power Company Limited", kind="in")
+r = kv(I, r, "Project", "Kampala Marriott Hotel – mezzanine roof", "", "Client: Kampala Marriott Hotel", kind="in")
 r = kv(I, r, "Latitude", 0.30315, "° N", "0°18'11.34\"N", "lat", "0.00000")
 r = kv(I, r, "Longitude", 32.58716, "° E", "32°35'13.76\"E", "lon", "0.00000")
 r = kv(I, r, "Time zone", 3, "UTC +h", "East Africa Time", "tz", "0")
