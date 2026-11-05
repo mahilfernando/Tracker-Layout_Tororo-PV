@@ -57,7 +57,7 @@ merge(r, "A", "F", "Commercial Proposal & Quotation – Rooftop Solar PV System"
       None, Alignment(horizontal="center", vertical="center"), 34); r += 1
 merge(r, "A", "F", "Turnkey EPC supply, installation and commissioning · 185.4 kWp grid-tied · zero export · no battery",
       font(italic=True, size=9, color="5B6673"), None, Alignment(horizontal="center", vertical="center"), 16, border=False); r += 1
-kv("Quotation No.:", "Q-KMH-PV-2026-001", "Date:", "05-11-2026")
+kv("Quotation No.:", "NSP-261105-KMH", "Date:", "05-11-2026")
 kv("Revision:", "A", "Valid until:", "05-12-2026 (30 days)")
 
 # ---------------- 1. project ----------------
@@ -81,8 +81,8 @@ for col, h in zip("ABCDEF", ["No.", "Scope of supply & works", "", "Qty", "Unit"
     c.font = font(bold=True, size=9, color=NAVY); c.fill = PatternFill("solid", fgColor=BAND); c.border = BOX
     c.alignment = Alignment(horizontal="center", vertical="center")
 ws.merge_cells(f"B{r}:C{r}"); ws.row_dimensions[r].height = 18; r += 1
-items = [("PV modules – 620 Wp bifacial N-type TOPCon (Tier-1)", "299", "nos"),
-         ("String inverters – 80 kW, 1100 V, multi-MPPT", "2", "nos"),
+items = [("PV modules – Astronergy ASTRO N7 620 Wp bifacial N-type TOPCon", "299", "nos"),
+         ("String inverters – Sigenergy Sigen PV 80M1, 80 kW, 1100 V", "2", "nos"),
          ("Ballasted aluminium mounting structure, 10° tilt", "1", "lot"),
          ("DC system – PV cable, connectors, string isolators, cable tray", "1", "lot"),
          ("AC system – AC combiner panel, MCCBs, cabling to main LV switchboard", "1", "lot"),
@@ -123,7 +123,7 @@ kv("Programme:", "Equipment delivery 8–10 weeks from PO and advance payment; i
 
 # ---------------- 7. warranties ----------------
 section("6. Warranties")
-kv("PV modules:", "12-yr product · 30-yr linear power", "Inverters:", "5 years (extendable)")
+kv("PV modules:", "15-yr product · 30-yr linear power", "Inverters:", "5 years (extendable)")
 kv("Mounting structure:", "10 years", "Workmanship:", "2 years from commissioning")
 
 # ---------------- 8. notes ----------------
@@ -135,16 +135,9 @@ notes = ["1. Final quantities are subject to detailed engineering and site surve
 for n in notes:
     merge(r, "A", "F", n, font(size=8.5), None, Alignment(vertical="center", wrap_text=True), 18); r += 1
 
-# ---------------- signatures ----------------
-r += 1
-merge(r, "A", "C", "For Nile Sun Power Limited", font(bold=True, size=9), None, None, 16, border=False)
-merge(r, "D", "F", "Accepted by Client (Kampala Marriott Hotel)", font(bold=True, size=9), None, None, 16, border=False); r += 1
-merge(r, "A", "C", "\n\nSignature / Name / Date: ____________________", font(size=9), None, Alignment(vertical="bottom", wrap_text=True), 40, border=False)
-merge(r, "D", "F", "\n\nSignature / Name / Date: ____________________", font(size=9), None, Alignment(vertical="bottom", wrap_text=True), 40, border=False)
-
 ws.page_setup.paperSize = ws.PAPERSIZE_A4; ws.page_setup.orientation = "portrait"
 ws.page_setup.fitToWidth = 1; ws.page_setup.fitToHeight = 1; ws.sheet_properties.pageSetUpPr.fitToPage = True
 ws.page_margins.left = ws.page_margins.right = 0.4; ws.page_margins.top = ws.page_margins.bottom = 0.4
-ws.print_area = f"A1:F{r}"
+ws.print_area = f"A1:F{r-1}"
 ws.sheet_view.showGridLines = False
 out = os.path.join(HERE, "Kampala_Marriott_PV_Quotation.xlsx"); wb.save(out); print(out, "rows", r)

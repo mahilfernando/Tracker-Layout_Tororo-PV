@@ -110,7 +110,7 @@ per month, so every solar kWh is used on site (zero export) and directly reduces
 <li>Fast payback ({pb:.1f} years) and {usd(net25)} net savings over 25 years.</li>
 <li>No roof penetrations: ballasted structure within the architect's solar zone (drawing D18102-DD-A-104).</li>
 <li>Zero-export control: no power is fed back to the UEDCL grid; no battery needed.</li>
-<li>Long life: Tier-1 N-type panels (30-year output warranty); remote monitoring of generation and savings.</li></ul>''')
+<li>Long life: Astronergy N-type bifacial panels (15-year product, 30-year power warranty); remote monitoring of generation and savings.</li></ul>''')
 
 # ---------------- page 3: equipment, array, generation ----------------
 mk = [r["kwh"] for r in mon["rows"]]
@@ -121,9 +121,9 @@ genchart = f'<svg viewBox="0 0 680 150" class="chart">{"".join(s)}</svg>'
 page(3, "SYSTEM DESIGN", f'''
 {H("2. Equipment Schedule (Bill of Materials)")}
 {tbl([["#", "Item", "Specification", "Qty", "UoM"],
-      ["1", "Solar panels", "620 Wp N-type TOPCon bifacial, Tier-1, 2382 × 1134 × 30 mm (total 185.4 kWp)", "299", "pcs"],
-      ["2", "String inverters", "80 kW three-phase grid-tied, 1100 V DC, ≥ 8 MPPT, with monitoring", "2", "pcs"],
-      ["3", "Mounting structure", "Enerack ballasted aluminium system, 10° tilt, 6 × 2P + 1 × 1P tables, no roof penetration", "1", "system"],
+      ["1", "Solar panels", "Astronergy ASTRO N7 CHSM66RN(DG)/F-BH 620 Wp N-type TOPCon bifacial, 2382 × 1134 × 30 mm (Annex 4)", "299", "pcs"],
+      ["2", "String inverters", "Sigenergy Sigen PV 80M1, 80 kW three-phase, 1100 V DC, with monitoring (Annex 3)", "2", "pcs"],
+      ["3", "Mounting structure", "Enerack ballasted aluminium system, 10° tilt, 6 × 2P + 1 × 1P tables, no roof penetration (Annex 5)", "1", "system"],
       ["4", "DC protection", "DC switch-disconnectors 1000 V 32 A (1 per string), surge protection", "16", "pcs"],
       ["5", "AC combiner panel", "250 A, MCCBs 2 × 125 A + 250 A outgoing, AC surge protection, roof isolator", "1", "set"],
       ["6", "Grid connection", "New 250 A MCCB way on the existing main LV switchboard", "1", "set"],
@@ -203,7 +203,7 @@ page(6, "ELECTRICAL DESIGN", f'''
       ["4. Commissioning", "Testing, zero-export setting, monitoring set-up, grid synchronisation", "Weeks 13–14"],
       ["5. Training &amp; handover", "Operator training, as-built drawings and O&amp;M manual", "Week 14"]], widths=[24, 60, 16])}
 {H("11. Warranty &amp; After-Sales Support")}
-<div class="two">{tbl([["Component", "Warranty"], ["Solar panels", "12 yrs product / 30 yrs output"], ["Inverters", "5 years (extendable)"],
+<div class="two">{tbl([["Component", "Warranty"], ["Solar panels", "15 yrs product / 30 yrs linear power"], ["Inverters", "5 years (extendable)"],
                        ["Mounting structure", "10 years"], ["Installation workmanship", "2 years"]], widths=[48, 52])}
 <p class="small">Installed to IEC solar installation standards and Uganda Electricity Regulatory Authority requirements. After handover we provide
 remote monitoring support, a free 6-month check-up visit and optional annual maintenance (panel cleaning, connection checks, inverter
@@ -233,7 +233,7 @@ page(7, "FINANCIAL ANALYSIS", f'''
 <p class="small">Year 12 includes the USD 9,600 inverter replacement. Values in brackets are negative (investment not yet recovered).</p>''')
 
 # ---------------- page 8: quotation + financial summary ----------------
-items = [("PV modules – 620 Wp bifacial N-type TOPCon (Tier-1)", "299", "nos"), ("String inverters – 80 kW, 1100 V, multi-MPPT", "2", "nos"),
+items = [("PV modules – Astronergy ASTRO N7 620 Wp bifacial N-type TOPCon", "299", "nos"), ("String inverters – Sigenergy Sigen PV 80M1, 80 kW, 1100 V", "2", "nos"),
          ("Ballasted aluminium mounting structure, 10° tilt", "1", "lot"), ("DC system – PV cable, connectors, string isolators, cable tray", "1", "lot"),
          ("AC system – AC combiner panel, MCCBs, cabling to main LV switchboard", "1", "lot"), ("Smart data logger, remote monitoring &amp; zero-export control", "1", "set"),
          ("Earthing &amp; lightning protection integration", "1", "lot"), ("Installation, testing &amp; commissioning", "1", "lot"),
@@ -254,7 +254,7 @@ page(8, "QUOTATION", f'''
       ["Taxes", "VAT, withholding tax and statutory levies excluded – charged as applicable"],
       ["Exclusions", "Roof strengthening / waterproofing, battery storage, utility and permit fees, works not listed above"],
       ["Client to provide", "Roof access, spare 250 A way on the main LV switchboard, power &amp; water during installation"]], head=False, cls="kv", widths=[20, 80])}
-<div class="sign"><div><b>For NileSun Power Ltd</b><span>Signature / Name / Date</span></div><div><b>Accepted by Kampala Marriott Hotel</b><span>Signature / Name / Date</span></div></div>''')
+''')
 
 # ---------------- page 9: tariff sensitivity + annex index ----------------
 page(9, "FINANCIAL SUMMARY", f'''
@@ -267,8 +267,13 @@ page(9, "FINANCIAL SUMMARY", f'''
 <p class="small">The project remains attractive over a wide tariff range. The break-even tariff (NPV = 0 at 10 %) is about
 <b>USD {fin['breakeven']:.4f}/kWh</b> – roughly {round((1-fin['breakeven']/0.07)*100)} % below today's tariff.</p>
 {H("Annexes")}
-{tbl([["Annex", "Title", "Page"], ["Annex 1", "Single-line diagram – PV system &amp; grid connection (PV-SLD-D18102-004)", "10"],
-      ["Annex 2", "Rooftop PV layout – Enerack ballast, inverters &amp; ACCP (PV-LAY-D18102-002 Rev B)", "11"]], widths=[14, 74, 12])}
+{tbl([["Annex", "Title", "Page"],
+      ["Annex 1", "Single-line diagram – PV system &amp; grid connection", "10"],
+      ["Annex 2", "Solar PV layout – mezzanine roof", "11"],
+      ["Annex 3", "Data sheet – Sigenergy Sigen PV inverter (80 kW)", "12–13"],
+      ["Annex 4", "Data sheet – Astronergy ASTRO N7 620 W bifacial solar module", "14–15"],
+      ["Annex 5", "PV structural drawing – Enerack ballast system", "16–17"],
+      ["Annex 6", "Quotation – 185.4 kWp rooftop solar PV (one page)", "18"]], widths=[14, 74, 12])}
 {H("Next Steps")}
 <ol class="steps"><li>Review of this proposal and clarification meeting with the hotel's engineering team.</li>
 <li>Site survey: roof condition, LV switchboard, cable route and inverter location.</li>
@@ -276,11 +281,6 @@ page(9, "FINANCIAL SUMMARY", f'''
 <li>Purchase order and advance payment – project start.</li></ol>
 <p class="thanks">Thank you for considering NileSun Power Ltd. Clean Energy - Brighter Tomorrow.<br/>
 Contact: Mahil Fernando &nbsp;|&nbsp; +256 708669574 &nbsp;|&nbsp; +94 773 55 96 82 &nbsp;|&nbsp; sales@nilesunpower.com</p>''')
-
-# ---------------- annexes (landscape-ish images rotated to fit portrait) ----------------
-for n, (title, src) in enumerate([("ANNEX 1 – SINGLE-LINE DIAGRAM", SLD), ("ANNEX 2 – ROOFTOP PV LAYOUT", LAYOUT)], 10):
-    pages.append(f'''<section class="page annex"><div class="atag">{title}</div><div class="rot"><img src="{src}"/></div>
-<div class="ftr"><span>{FOOT}</span><span>Annex {n-9}</span></div></section>''')
 
 CSS = f"""
 @page {{ size:A4; margin:0 }} * {{ box-sizing:border-box }}
