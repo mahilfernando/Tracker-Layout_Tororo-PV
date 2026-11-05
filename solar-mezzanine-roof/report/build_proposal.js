@@ -56,8 +56,9 @@ const fin = { y1gen: D.gen[0], y1sav: D.cf[1], pb: D.pb, irr: D.irr, npv: D.npv,
 
 // ------------------------------------------------------------------ cover
 const cover = [
-  P([T("NILE SUN POWER LIMITED", { size: 30, bold: true, color: ACC, characterSpacing: 30 })], { alignment: AlignmentType.RIGHT, spacing: { after: 160 } }),
-  img(R("hotel.jpg"), "jpg", 1080, 718, 642),
+  new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { after: 120 }, children: [new ImageRun({ type: "png", data: fs.readFileSync(R("nilesun_logo.png")),
+    transformation: { width: 120, height: 122 }, altText: { title: "Nile Sun Power logo", description: "Nile Sun Power Ltd logo", name: "logo" } })] }),
+  img(R("hotel.jpg"), "jpg", 1080, 718, 600),
   new Paragraph({ spacing: { after: 360 }, border: { bottom: { style: BorderStyle.SINGLE, size: 24, color: NAVY, space: 1 } }, children: [] }),
   P([T("TECHNICAL & COMMERCIAL PROPOSAL", { size: 18, color: MUTED, characterSpacing: 40 })], { spacing: { before: 200, after: 80 } }),
   P([T("185.4 kWp Rooftop Solar PV System", { size: 48, bold: true, color: NAVY })], { spacing: { after: 60 } }),
@@ -301,7 +302,9 @@ const doc = new Document({
     { properties: { page: { size: { width: PAGE_W, height: 16838 }, margin: { top: 1300, bottom: 1134, left: MARGIN, right: MARGIN, header: 600, footer: 600 } } },
       headers: { default: new Header({ children: [new Paragraph({ tabStops: [{ type: TabStopType.RIGHT, position: TW }],
         border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: RULE, space: 4 } },
-        children: [T("NILE SUN POWER LIMITED", { size: 16, bold: true, color: ACC }), T(`\tKampala Marriott Hotel – Rooftop Solar PV · ${REF}`, { size: 15, color: MUTED })] })] }) },
+        children: [new ImageRun({ type: "png", data: fs.readFileSync(R("nilesun_logo.png")), transformation: { width: 34, height: 34 },
+          altText: { title: "Nile Sun Power logo", description: "logo", name: "hlogo" } }),
+          T("  Nile Sun Power Limited", { size: 16, bold: true, color: NAVY }), T(`\tKampala Marriott Hotel – Rooftop Solar PV · ${REF}`, { size: 15, color: MUTED })] })] }) },
       footers: { default: new Footer({ children: [new Paragraph({ tabStops: [{ type: TabStopType.RIGHT, position: TW }], children: [
         T("Nile Sun Power Limited · Confidential", { size: 15, color: MUTED }),
         new TextRun({ children: ["\tPage ", PageNumber.CURRENT, " of ", PageNumber.TOTAL_PAGES], size: 15, color: MUTED })] })] }) },

@@ -48,8 +48,11 @@ def kv(label, value, label2=None, value2=None, bold_value=False, h=16, fill_valu
     r += 1
 
 # ---------------- header ----------------
-merge(r, "A", "F", "NILE SUN POWER LIMITED", font(bold=True, size=13, color=ACC), None,
-      Alignment(horizontal="right", vertical="center"), 20, border=False); r += 1
+from openpyxl.drawing.image import Image as XLImage
+logo = XLImage(os.path.join(HERE, "nilesun_logo.png")); logo.width, logo.height = 74, 75
+ws.add_image(logo, "A1")
+merge(r, "C", "F", "Nile Sun Power Limited\nKampala, Uganda", font(bold=True, size=11, color=NAVY), None,
+      Alignment(horizontal="right", vertical="center", wrap_text=True), 60, border=False); r += 1
 merge(r, "A", "F", "Commercial Proposal & Quotation – Rooftop Solar PV System", font(bold=True, size=16, color=NAVY),
       None, Alignment(horizontal="center", vertical="center"), 34); r += 1
 merge(r, "A", "F", "Turnkey EPC supply, installation and commissioning · 185.4 kWp grid-tied · zero export · no battery",
