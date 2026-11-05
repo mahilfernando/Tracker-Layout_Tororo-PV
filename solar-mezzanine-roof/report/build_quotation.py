@@ -106,34 +106,27 @@ r += 1
 merge(r, "A", "F", "Equivalent to USD 0.65 per Wp · Amount in words: One hundred twenty-one thousand one hundred fifteen US Dollars only.",
       font(italic=True, size=8.5, color="5B6673"), None, None, 15); r += 1
 
-# ---------------- 4. performance ----------------
-section("4. Expected Performance & Savings (indicative)")
-kv("Year-1 generation:", "274,362 kWh (≈ 22,900 kWh/month)", "Year-1 savings:", "USD 19,212 (at USD 0.070/kWh)", h=26)
-kv("Simple payback:", "≈ 6.1 years", "Project IRR (25 yrs):", "16.6 %")
-kv("NPV @ 10 % (25 yrs):", "USD 71,221", "25-yr net savings:", "USD 569,043")
-kv("Cost of solar energy:", "USD 0.052/kWh (LCOE)", "Self-consumption:", "100 % used on site")
-
 # ---------------- 5. commercial terms ----------------
-section("5. Payment & Commercial Terms")
+section("4. Payment & Commercial Terms")
 kv("Price basis:", "Turnkey EPC, delivered, installed and commissioned at site, Kampala. Currency: USD.")
 kv("Payment terms:", "30 % advance with purchase order · 60 % on delivery of main equipment to site · 10 % on commissioning", h=26)
 kv("Taxes:", "Prices exclude VAT, withholding tax and any other statutory levies, which shall be charged as applicable.", h=26)
 
 # ---------------- 6. delivery ----------------
-section("6. Delivery & Project Schedule")
+section("5. Delivery & Project Schedule")
 kv("Programme:", "Equipment delivery 8–10 weeks from PO and advance payment; installation and commissioning ≈ 4 weeks after delivery (≈ 12–14 weeks in total).", h=26)
 
 # ---------------- 7. warranties ----------------
-section("7. Warranties")
+section("6. Warranties")
 kv("PV modules:", "12-yr product · 30-yr linear power", "Inverters:", "5 years (extendable)")
 kv("Mounting structure:", "10 years", "Workmanship:", "2 years from commissioning")
 
 # ---------------- 8. notes ----------------
-section("8. Notes & Exclusions")
+section("7. Notes & Exclusions")
 notes = ["1. Final quantities are subject to detailed engineering and site survey; price will be adjusted for any change in scope.",
          "2. Excluded: roof structural strengthening or waterproofing works, battery storage, utility/permit fees, and works not listed above.",
          "3. Client to provide roof access, a spare 250 A way on the main LV switchboard, and power/water during installation.",
-         "4. Savings figures are estimates based on the stated tariff and typical Kampala irradiation; actual results may vary."]
+         "4. Energy and savings estimates are given in the accompanying proposal and are indicative only."]
 for n in notes:
     merge(r, "A", "F", n, font(size=8.5), None, Alignment(vertical="center", wrap_text=True), 18); r += 1
 
