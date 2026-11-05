@@ -70,7 +70,7 @@ kv("Location:", "Kampala, Uganda · 0°18'11.34\"N, 32°35'13.76\"E · Ref. draw
 section("2. Client & Supplier Details")
 kv("Client:", "Kampala Marriott Hotel", "Supplier:", "Nile Sun Power Limited", h=26)
 kv("Address:", "Kampala, Uganda", "Address:", "Kampala, Uganda", h=18)
-kv("Contact:", "", "Contact:", "Mr. Mahil", fill_value=None)
+kv("Contact:", "", "Contact:", "Mahil Fernando", fill_value=None)
 kv("Mobile / Email:", "", "Mobile / Email:", "+94 773 55 96 82 · mahil@windforce.lk", h=28)
 for rr in (r - 2, r - 1): ws[f"C{rr}"].fill = PatternFill("solid", fgColor=YEL)
 

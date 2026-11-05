@@ -317,7 +317,7 @@ page(16, "Timeline & Contact", f'''
 <div class="thanks"><img src="{LOGO}"/><div><div class="ty">Thank you</div>
 <p>We appreciate the opportunity to support Kampala Marriott Hotel with a clean, reliable and sustainable energy future.</p></div></div>
 <div class="contact"><div><small>Company</small><b>Nile Sun Power Limited</b>Kampala, Uganda</div>
-<div><small>Contact</small><b>Mr. Mahil</b>+94 773 55 96 82<br/>mahil@windforce.lk</div></div>''')
+<div><small>Contact</small><b>Mahil Fernando</b>+94 773 55 96 82<br/>mahil@windforce.lk</div></div>''')
 
 CSS = f"""
 @page {{ size: A4; margin: 0 }}

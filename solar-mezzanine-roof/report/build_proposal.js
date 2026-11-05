@@ -7,6 +7,7 @@ const {
 } = require("docx");
 
 const D = JSON.parse(fs.readFileSync(path.join(__dirname, "proposal_fin.json")));
+const M = JSON.parse(fs.readFileSync(path.join(__dirname, "monthly.json")));
 const R = (...p) => path.join(__dirname, ...p);
 const usd = (x) => Math.round(x).toLocaleString("en-US");
 const NAVY = "14365D", BAND = "EEF2F6", RULE = "C9D0D8", MUTED = "5B6673", ACC = "C27A00";
@@ -137,6 +138,12 @@ const energy = [
   P(`The system is expected to generate about ${usd(fin.y1gen)} kWh in its first year – about 22,900 kWh per month or 750 kWh per day. Because Kampala lies on the equator, output is stable through the year: the best months (January–March) are only about 20 % above the lowest (June–July).`),
   img(R("gen_chart.png"), "png", 2160, 900, 600),
   caption("Figure 3 – Estimated monthly generation, year 1 (MWh)"),
+  table([1100, 1200, 1300, 1600, 1500, 2938], [
+    ["Month", "GHI (kWh/m²/day)", "Days", "Generation (kWh)", "kWh per day", "Share of year"],
+    ...M.rows.map((r) => [r.m, r.ghi.toFixed(1), String(r.days), usd(r.kwh), usd(r.per_day), `${(r.share * 100).toFixed(1)} %`]),
+    ["Total", "", "365", usd(M.rows.reduce((a, r) => a + r.kwh, 0)), usd(M.rows.reduce((a, r) => a + r.kwh, 0) / 365), "100 %"],
+  ], { aligns: ["c", "r", "r", "r", "r", "r"], totals: [13] }),
+  gap(),
   P("Almost all generation (≈ 98.6 %) falls in the shoulder tariff period (06:00–18:00), when the hotel's demand is high, so every kWh directly reduces grid purchases. Panel output degrades slowly (about 0.4 % per year); total generation over 25 years is about 6,477 MWh."),
 ];
 
@@ -161,6 +168,8 @@ const fin5 = [
     ["Net present value @ 10 %", `USD ${usd(fin.npv)}`],
     ["Levelised cost of solar energy", `USD ${fin.lcoe.toFixed(3)}/kWh`],
     ["25-year net savings (after inverter replacement)", `USD ${usd(fin.net25)}`],
+    ["Net gain after recovering the investment", `USD ${usd(fin.net25 - fin.capex)}`],
+    ["Return on investment (25 years) / year-1 return", `${Math.round((fin.net25 - fin.capex) / fin.capex * 100)} % (${(fin.net25 / fin.capex).toFixed(1)}× the investment) / ${(fin.y1sav / fin.capex * 100).toFixed(1)} %`],
   ], { header: false, kv: true }),
   gap(),
   img(R("cashflow_chart.png"), "png", 2160, 900, 600),
@@ -228,6 +237,8 @@ const q = [
     ["Quotation No.", "Q-KMH-PV-2026-001", "Date", "05-11-2026"],
     ["Revision", "A", "Valid until", "05-12-2026 (30 days)"],
     ["Client", "Kampala Marriott Hotel", "Supplier", "Nile Sun Power Limited"],
+    ["Address", "Kampala, Uganda", "Contact", "Mahil Fernando"],
+    ["Project", "185.4 kWp rooftop PV, mezzanine roof", "Mobile / Email", "+94 773 55 96 82 · mahil@windforce.lk"],
   ], { header: false, kv: false }),
   gap(),
   new Table({ width: { size: TW, type: WidthType.DXA }, columnWidths: [600, 5200, 900, 900, 2038], rows: [
@@ -278,7 +289,7 @@ const nextS = [
   new Paragraph({ numbering: { reference: "num", level: 0 }, spacing: { after: 60 }, children: [T("Purchase order and advance payment – project start.")] }),
   gap(),
   P("We thank the Kampala Marriott Hotel for the opportunity and look forward to delivering this project together."),
-  P([B("Contact: "), T("Mr. Mahil · +94 773 55 96 82 · mahil@windforce.lk")]),
+  P([B("Contact: "), T("Mahil Fernando, Nile Sun Power Limited · +94 773 55 96 82 · mahil@windforce.lk")]),
 ];
 
 const doc = new Document({
