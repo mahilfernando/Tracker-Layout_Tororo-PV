@@ -72,9 +72,13 @@ doc = ezdxf.new("R2010", setup=True); doc.units = ezdxf.units.MM
 msp = doc.modelspace()
 LAY = {"PV-ROOF-REF": 8, "PV-SETBACK": 1, "PV-MODULE": 5, "PV-RAIL": 4, "PV-FRAME": 3, "PV-FOOT": 6,
 "PV-OBSTRUCTION": 6, "PV-TEXT": 7, "PV-DIM": 2,
-"PV-EQUIPMENT": 1, "PV-CABLE-ROUTE": 30, "PV-EXISTING": 8}
+"PV-EQUIPMENT": 1, "PV-EXISTING": 8,
+"PV-CABLE-TRAY": 8, "PV-CABLE-DC-STRING": 10, "PV-CABLE-DC-HOMERUN": 1, "PV-CABLE-AC-C1-C2": 5,
+"PV-CABLE-AC-C3": 6, "PV-CABLE-EARTH": 3, "PV-CABLE-COMMS": 30, "PV-CABLE-TAGS": 7}
 for n, col in LAY.items(): doc.layers.add(n, color=col)
 doc.layers.get("PV-SETBACK").dxf.linetype = "DASHED"
+for _ln, _lt in (("PV-CABLE-EARTH", "DASHDOT"), ("PV-CABLE-COMMS", "DASHED"), ("PV-CABLE-DC-STRING", "DOT")):
+    doc.layers.get(_ln).dxf.linetype = _lt
 hm = MOD_L * c
 blk = doc.blocks.new("PV_MOD_620W")
 blk.add_lwpolyline([(0, 0), (MOD_W, 0), (MOD_W, hm), (0, hm)], close=True)
@@ -90,6 +94,8 @@ def line(x1, y1, x2, y2, layer, svg_cls=None):
 
 counts = {"2P": [0, 0], "1P": [0, 0]}   # [base, optional]
 mod_no = [0]
+row_no = [0]
+mod_centres = []                                 # (x, y, table index) in string order
 table_mid = []
 xr = SET_W - RAIL_OH_START              # rail start x
 for idx, (ty, yt, opt) in enumerate(tables, 1):
@@ -102,12 +108,14 @@ for idx, (ty, yt, opt) in enumerate(tables, 1):
     # y of a point at slope distance s from the LOW (front) edge; front edge = table bottom (south)
     ybot = yt - t["depth"]
     ys = lambda s: ybot + s * c
-    for r in reversed(range(t["rows"])):          # top row first, so strings run row by row
+    for r in reversed(range(t["rows"])):          # top row first; snake order so rows join at the same end
         yb = ys(r * (MOD_L + GAP))
-        for col in range(N_COLS):
+        row_no[0] += 1
+        for col in (range(N_COLS) if row_no[0] % 2 else reversed(range(N_COLS))):
             x = SET_W + col * (MOD_W + GAP)
             msp.add_blockref("PV_MOD_620W", (x, yb), dxfattribs={"layer": lm})
             mod_no[0] += 1
+            mod_centres.append((x + MOD_W / 2, yb + hm / 2, idx))
             svg_items.append(("rect", ("mod" if mod_no[0] <= INV1_MODULES else "mod2") + sfx, (x, yb, x + MOD_W, yb + hm)))
     for s in t["rails"]:
         line(xr, ys(s), xr + RAIL_LEN, ys(s), lr, "rail" + sfx)
@@ -149,13 +157,13 @@ svg_items.append(("text", "elab2", (ROOF_W + 500, EQ_Y - 900, "INV-01 + INV-02 +
 svg_items.append(("text", "elab2", (ROOF_W + 500, EQ_Y - 2000, "see Detail A")))
 # DC cable tray: east corridor between rail ends and the east wall, with a stub to each table
 TRAY_X = 27900
-line(TRAY_X, -1000 - 600, TRAY_X, EQ_Y + 300, "PV-CABLE-ROUTE", "tray")
+line(TRAY_X, -1000 - 600, TRAY_X, EQ_Y + 300, "PV-CABLE-TRAY", "tray")
 for ym in table_mid:
-    line(xr + RAIL_LEN, ym, TRAY_X, ym, "PV-CABLE-ROUTE", "tray")
+    line(xr + RAIL_LEN, ym, TRAY_X, ym, "PV-CABLE-TRAY", "tray")
 svg_items.append(("text", "trlab", (ROOF_W + 500, -15350, "DC cable tray (east corridor)")))
 # C3 route from ACCP to the riser at the building face
 cx3 = x0 + 2 * INV_W + 900 + ACCP_W / 2
-line(cx3, EQ_Y - ACCP_D, cx3, BUILD, "PV-CABLE-ROUTE", "c3")
+svg_items.append(("line", "c3", (cx3, EQ_Y - ACCP_D, cx3, BUILD)))      # sheet only; DXF gets the real cables below
 line(cx3, -50000, ROOF_W + 400, -50000, "PV-TEXT", "leader")
 svg_items.append(("text", "c3lab", (ROOF_W + 500, -49700, "C3 4C×120 mm² + E3 70 mm²")))
 svg_items.append(("text", "c3lab", (ROOF_W + 500, -50900, "to MLVS via riser")))
@@ -223,6 +231,70 @@ notes = [
 for i, tx in enumerate(notes):
     msp.add_text(tx, height=450 if i == 0 else 330, dxfattribs={"layer": "PV-TEXT"}).set_placement(
         (ROOF_W + 6500, -1000 - i * 750), align=TextEntityAlignment.LEFT)
+
+# =====================================================================================
+# CABLES (DXF only) – indicative routing, one entity per conductor group
+# =====================================================================================
+def pl(pts, layer, w=None):
+    msp.add_lwpolyline(pts, dxfattribs={"layer": layer, **({"const_width": w} if w else {})})
+def tagtxt(t, xy, h=220, rot=0):
+    msp.add_text(t, height=h, rotation=rot, dxfattribs={"layer": "PV-CABLE-TAGS"}).set_placement(xy, align=TextEntityAlignment.MIDDLE_LEFT)
+
+# cable tray outline (100 mm wide) along the east corridor and the stubs
+pl([(TRAY_X - 50, -1600), (TRAY_X - 50, EQ_Y + 300), (TRAY_X + 50, EQ_Y + 300), (TRAY_X + 50, -1600), (TRAY_X - 50, -1600)], "PV-CABLE-TRAY")
+tagtxt("CABLE TRAY 100 mm HDG + UV cover", (TRAY_X + 200, -30000), 220, 90)
+
+# strings: sequences of modules in snake order
+sizes = [19] * 8 + [19] * 3 + [18] * 5
+inv_of = ["INV-01"] * 8 + ["INV-02"] * 8
+assert sum(sizes) == len(mod_centres) == 299
+inv_x = {"INV-01": x0, "INV-02": x0 + INV_W + 450}
+term_no = {"INV-01": 0, "INV-02": 0}
+k = 0; hr_no = 0
+for si, n in enumerate(sizes):
+    seg = mod_centres[k:k + n]; k += n
+    sname = f"S{si % 8 + 1}"; inv = inv_of[si]
+    # string path through the modules (module-to-module leads)
+    pl([(x, y) for x, y, _ in seg], "PV-CABLE-DC-STRING")
+    mid = seg[len(seg) // 2]
+    tagtxt(f"{inv} {sname} ({n} mod.)", (mid[0] - 900, mid[1] + 250), 180)
+    # home runs (+ and −) from both string ends to the inverter DC inputs
+    for end, pol in ((seg[0], "+"), (seg[-1], "−")):
+        off = 30 + hr_no * 22; hr_no += 1
+        tx_ = TRAY_X - 40 + (off % 80)
+        xi = inv_x[inv] + 80 + term_no[inv] * 56; term_no[inv] += 1
+        yrun = end[1] - 300 - (hr_no % 4) * 40           # along the rail under the modules
+        pts = [(end[0], end[1]), (end[0], yrun), (tx_, yrun), (tx_, EQ_Y + 600 + (hr_no % 16) * 15),
+               (xi, EQ_Y + 600 + (hr_no % 16) * 15), (xi, EQ_Y)]
+        pl(pts, "PV-CABLE-DC-HOMERUN")
+tagtxt("DC HOME RUNS: 16 strings × (+/−) 6 mm² Cu H1Z2Z2-K in tray", (TRAY_X + 400, -24000), 220, 90)
+
+# AC: C1 / C2 inverter → ACCP (4C × 50 mm²)
+xa = x0 + 2 * INV_W + 900
+for name, xi, ydrop, xin in (("C1", x0 + INV_W / 2, EQ_Y - 700, xa + 200), ("C2", x0 + INV_W + 450 + INV_W / 2, EQ_Y - 850, xa + 350)):
+    pl([(xi, EQ_Y - INV_D), (xi, ydrop), (xin, ydrop), (xin, EQ_Y - ACCP_D)], "PV-CABLE-AC-C1-C2", 40)
+    tagtxt(f"{name} 4C×50 mm² Cu XLPE ≈4 m", (xi - 500, ydrop - 220), 160)
+# AC: C3 ACCP → riser → MLVS (4C × 120 mm² XLPE/SWA)
+c3x = xa + 550
+pl([(c3x, EQ_Y - ACCP_D), (c3x, BUILD), (c3x, BUILD - 800)], "PV-CABLE-AC-C3", 60)
+tagtxt("C3 4C×120 mm² Cu XLPE/SWA → riser → MLVS 250 A PV way (≈80 m TBC)", (c3x + 250, -47000), 220, 90)
+
+# EARTH: array bonding 16 mm² along each table, 35 mm² spine in tray, E1/E2 25 mm², E3 70 mm²
+for ym in table_mid:
+    pl([(xr, ym + 120), (xr + RAIL_LEN, ym + 120), (TRAY_X + 30, ym + 120)], "PV-CABLE-EARTH")
+pl([(TRAY_X + 30, table_mid[0] + 120), (TRAY_X + 30, EQ_Y + 500), (xa + ACCP_W - 100, EQ_Y + 500), (xa + ACCP_W - 100, EQ_Y - ACCP_D)], "PV-CABLE-EARTH")
+tagtxt("ARRAY BONDING 16 mm² Cu per table + 35 mm² spine to ACCP earth bar", (TRAY_X + 700, -24000), 200, 90)
+for name, xi, ydrop, xin in (("E1", x0 + INV_W / 2 + 120, EQ_Y - 760, xa + 260), ("E2", x0 + INV_W + 450 + INV_W / 2 + 120, EQ_Y - 910, xa + 410)):
+    pl([(xi, EQ_Y - INV_D), (xi, ydrop), (xin, ydrop), (xin, EQ_Y - ACCP_D)], "PV-CABLE-EARTH")
+    tagtxt(f"{name} 25 mm² Cu", (xi + 150, ydrop - 200), 140)
+pl([(c3x + 120, EQ_Y - ACCP_D), (c3x + 120, BUILD), (c3x + 120, BUILD - 800)], "PV-CABLE-EARTH")
+tagtxt("E3 70 mm² Cu → MET (LV room)", (c3x + 600, -47000), 200, 90)
+
+# COMMS: RS485 daisy chain INV-01 → INV-02 → ACCP → along C3 to the zero-export controller (LV room)
+yc_ = EQ_Y - INV_D - 1100
+pl([(x0 + 150, EQ_Y - INV_D), (x0 + 150, yc_), (x0 + INV_W + 600, yc_), (x0 + INV_W + 600, EQ_Y - INV_D)], "PV-CABLE-COMMS")
+pl([(x0 + INV_W + 600, yc_), (c3x - 150, yc_), (c3x - 150, BUILD), (c3x - 150, BUILD - 800)], "PV-CABLE-COMMS")
+tagtxt("RS485 / Modbus (STP) → zero-export controller", (c3x - 900, -52000), 200, 90)
 doc.saveas(os.path.join(HERE, "PV_Layout_Enerack_10deg.dxf"))
 
 # ---------------- SVG drawing sheet (plan) ----------------
