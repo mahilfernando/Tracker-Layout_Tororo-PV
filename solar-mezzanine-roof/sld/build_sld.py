@@ -155,7 +155,7 @@ cols = [("Tag", 30, 50), ("From → To", 80, 230), ("Cable", 310, 250), ("Length
 rows = [
     ("S1–S16", "PV strings → inverter DC inputs", "2 × 6 mm² Cu H1Z2Z2-K", "≈ 40 m", "20.1 A (Isc × 1.25)", "Inverter DC isolator + SPD", "≈ 70 A", "≈ 0.6 %", "IEC 62548 string current; 1,500 V DC solar cable"),
     ("C1, C2", "INV-01 / INV-02 → ACCP", "4C × 50 mm² Cu XLPE", "≈ 30 m each", "115.5 A", "MCCB 125 A (ACCP)", "≈ 168 A", "0.74 %", "Ib ≤ In ≤ Iz: 115.5 ≤ 125 ≤ 168 A (hot roof, 2 circuits grouped)"),
-    ("C3", "ACCP → MLVS 250 A PV way", "4C × 120 mm² Cu XLPE/SWA", "≈ 80 m", "231 A", "MCCB 250 A + isolator", "≈ 330 A", "1.57 %", "Ib ≤ In ≤ Iz: 231 ≤ 250 ≤ 330 A; total AC drop 2.3 % (< 3 %); armoured for riser route"),
+    ("C3", "ACCP → MLVS 250 A PV way", "4C × 120 mm² Cu XLPE/SWA", "≈ 80 m", "231 A", "MCCB 250 A + isolator", "≈ 330 A", "1.57 %", "Ib ≤ In ≤ Iz: 231 ≤ 250 ≤ 330 A; total AC drop 2.3 % (&lt; 3 %); armoured for riser route"),
     ("E1, E2", "INV-01 / INV-02 → ACCP earth bar", "25 mm² Cu (green/yellow)", "≈ 30 m each", "–", "–", "–", "–", "IEC 60364-5-54: line > 35 mm² → PE ≥ S/2 = 25 mm²"),
     ("E3", "ACCP earth bar → MET (LV room)", "70 mm² Cu (green/yellow)", "≈ 80 m", "–", "–", "–", "–", "IEC 60364-5-54: 120 / 2 = 60 → next size 70 mm²; armour earthed both ends"),
 ]
