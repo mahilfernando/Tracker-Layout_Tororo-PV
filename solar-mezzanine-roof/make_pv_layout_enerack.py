@@ -49,6 +49,10 @@ LOWER_TOP = P(0, 1350)[1]
 LOWER_LIMIT = P(0, 2818)[1]
 OPT_LIMIT = P(0, 3416)[1]
 OBS = [(P(7614, 801), P(7676, 1273), "OPENING"), (P(6100, 3520), P(6474, 3710), "LIFT CORE")]
+BUILD = P(0, 4002)[1]                           # tower / building face below the roof
+# existing roof ducts/vents read off the satellite image (approximate - verify on site)
+DUCTS = [(3000, -41600, 8100, -44600), (12500, -41600, 16400, -44600), (18800, -41600, 23600, -44600)]
+INV1_MODULES = 152                              # INV-01: 8 strings x 19; INV-02 gets the rest (147)
 
 # ---------------- build table list ----------------
 tables = []   # (name, type, y_top, optional)
@@ -67,7 +71,8 @@ assert y >= LOWER_LIMIT - 1
 doc = ezdxf.new("R2010", setup=True); doc.units = ezdxf.units.MM
 msp = doc.modelspace()
 LAY = {"PV-ROOF-REF": 8, "PV-SETBACK": 1, "PV-MODULE": 5, "PV-RAIL": 4, "PV-FRAME": 3, "PV-FOOT": 6,
-"PV-OBSTRUCTION": 6, "PV-TEXT": 7, "PV-DIM": 2}
+"PV-OBSTRUCTION": 6, "PV-TEXT": 7, "PV-DIM": 2,
+"PV-EQUIPMENT": 1, "PV-CABLE-ROUTE": 30, "PV-EXISTING": 8}
 for n, col in LAY.items(): doc.layers.add(n, color=col)
 doc.layers.get("PV-SETBACK").dxf.linetype = "DASHED"
 hm = MOD_L * c
@@ -84,6 +89,8 @@ def line(x1, y1, x2, y2, layer, svg_cls=None):
     if svg_cls: svg_items.append(("line", svg_cls, (x1, y1, x2, y2)))
 
 counts = {"2P": [0, 0], "1P": [0, 0]}   # [base, optional]
+mod_no = [0]
+table_mid = []
 xr = SET_W - RAIL_OH_START              # rail start x
 for idx, (ty, yt, opt) in enumerate(tables, 1):
     t = TYPES[ty]; counts[ty][1 if opt else 0] += 1
@@ -95,12 +102,13 @@ for idx, (ty, yt, opt) in enumerate(tables, 1):
     # y of a point at slope distance s from the LOW (front) edge; front edge = table bottom (south)
     ybot = yt - t["depth"]
     ys = lambda s: ybot + s * c
-    for r in range(t["rows"]):
+    for r in reversed(range(t["rows"])):          # top row first, so strings run row by row
         yb = ys(r * (MOD_L + GAP))
         for col in range(N_COLS):
             x = SET_W + col * (MOD_W + GAP)
             msp.add_blockref("PV_MOD_620W", (x, yb), dxfattribs={"layer": lm})
-            svg_items.append(("rect", "mod" + sfx, (x, yb, x + MOD_W, yb + hm)))
+            mod_no[0] += 1
+            svg_items.append(("rect", ("mod" if mod_no[0] <= INV1_MODULES else "mod2") + sfx, (x, yb, x + MOD_W, yb + hm)))
     for s in t["rails"]:
         line(xr, ys(s), xr + RAIL_LEN, ys(s), lr, "rail" + sfx)
     yf1 = ys(t["front_off"]); yf2 = yf1 + t["foot_span"]
@@ -109,6 +117,7 @@ for idx, (ty, yt, opt) in enumerate(tables, 1):
         line(xf, yf1, xf, yf2, lf, "frame" + sfx)
         for yy in (yf1, yf2):
             rect(xf - 150, yy - 150, xf + 150, yy + 150, lo, "foot" + sfx)
+    table_mid.append(yt - t["depth"] / 2)
     label = f"T{idx} {ty}x23"
     msp.add_text(label, height=300, dxfattribs={"layer": "PV-TEXT"}).set_placement(
         (xr + RAIL_LEN + 200, yt - t["depth"] / 2), align=TextEntityAlignment.MIDDLE_LEFT)
@@ -116,7 +125,69 @@ for idx, (ty, yt, opt) in enumerate(tables, 1):
 
 # roof, setbacks, obstructions
 rect(0, 0, ROOF_W, UPPER_BOT, "PV-ROOF-REF", "roof")
-rect(0, LOWER_TOP, ROOF_W, LOWER_LIMIT - SET_EDGE, "PV-ROOF-REF", "roof")
+rect(0, LOWER_TOP, ROOF_W, BUILD, "PV-ROOF-REF", "roof")
+line(0, LOWER_LIMIT, ROOF_W, LOWER_LIMIT, "PV-ROOF-REF", "zlim")
+svg_items.append(("text", "zlab", (300, LOWER_LIMIT - 450, "Architect's PV zone limit")))
+svg_items.append(("text", "zlab", (300, BUILD + 450, "Tower / building face – cable riser to LV room (location TBC)")))
+for (x1, y1, x2, y2) in DUCTS:
+    rect(x1, y1, x2, y2, "PV-EXISTING", "duct")
+svg_items.append(("text", "dlab", (3000, -45300, "Existing ducts (approx., verify)")))
+# ---------------- inverter station + ACCP (east end of the equipment strip) ----------------
+EQ_Y = -40100                                   # front (north) face of equipment
+INV_W, INV_D, ACCP_W, ACCP_D = 1050, 400, 800, 300
+x0 = 24300
+eq = [("INV-01", x0, INV_W, INV_D), ("INV-02", x0 + INV_W + 450, INV_W, INV_D), ("ACCP", x0 + 2 * INV_W + 900, ACCP_W, ACCP_D)]
+rect(x0 - 300, EQ_Y + 300, x0 + 2 * INV_W + 900 + ACCP_W + 300, EQ_Y - INV_D - 600, "PV-EQUIPMENT", "canopy")
+rect(x0 - 300, EQ_Y + 1300, x0 + 2 * INV_W + 900 + ACCP_W + 300, EQ_Y + 300, "PV-EQUIPMENT", "clear")
+for name, x, w, dpt in eq:
+    rect(x, EQ_Y, x + w, EQ_Y - dpt, "PV-EQUIPMENT", "acc" if name == "ACCP" else "inv")
+    msp.add_text(name, height=250, dxfattribs={"layer": "PV-TEXT"}).set_placement((x + w / 2, EQ_Y - dpt - 350), align=TextEntityAlignment.MIDDLE_CENTER)
+# callout to the right of the roof
+line(x0 + 2 * INV_W + 900 + ACCP_W + 300, EQ_Y - 300, ROOF_W + 400, EQ_Y - 300, "PV-TEXT", "leader")
+svg_items.append(("text", "elab", (ROOF_W + 500, EQ_Y + 300, "INVERTER STATION")))
+svg_items.append(("text", "elab2", (ROOF_W + 500, EQ_Y - 900, "INV-01 + INV-02 + ACCP")))
+svg_items.append(("text", "elab2", (ROOF_W + 500, EQ_Y - 2000, "see Detail A")))
+# DC cable tray: east corridor between rail ends and the east wall, with a stub to each table
+TRAY_X = 27900
+line(TRAY_X, -1000 - 600, TRAY_X, EQ_Y + 300, "PV-CABLE-ROUTE", "tray")
+for ym in table_mid:
+    line(xr + RAIL_LEN, ym, TRAY_X, ym, "PV-CABLE-ROUTE", "tray")
+svg_items.append(("text", "trlab", (ROOF_W + 500, -15350, "DC cable tray (east corridor)")))
+# C3 route from ACCP to the riser at the building face
+cx3 = x0 + 2 * INV_W + 900 + ACCP_W / 2
+line(cx3, EQ_Y - ACCP_D, cx3, BUILD, "PV-CABLE-ROUTE", "c3")
+line(cx3, -50000, ROOF_W + 400, -50000, "PV-TEXT", "leader")
+svg_items.append(("text", "c3lab", (ROOF_W + 500, -49700, "C3 4C×120 mm² + E3 70 mm²")))
+svg_items.append(("text", "c3lab", (ROOF_W + 500, -50900, "to MLVS via riser")))
+svg_items.append(("text", "c3lab", (ROOF_W + 500, -52100, "(≈ 80 m, route TBC)")))
+# ---------------- Detail A: inverter station, enlarged x3 (drawn in free roof area) ----------------
+DS, DX0, DY0 = 2.2, 12800, -46300            # scale, top-left of the detail frame (plan coords)
+def dp(x, y): return (DX0 + 700 + x * DS, DY0 - 1500 - (y + 1000) * DS)    # detail-local mm -> plan coords
+def drect(x1, y1, x2, y2, cls):
+    a, b = dp(x1, y1), dp(x2, y2); svg_items.append(("rect", cls, (a[0], a[1], b[0], b[1])))
+def dline(x1, y1, x2, y2, cls):
+    a, b = dp(x1, y1), dp(x2, y2); svg_items.append(("line", cls, (a[0], a[1], b[0], b[1])))
+def dtext(x, y, t, cls): a = dp(x, y); svg_items.append(("text", cls, (a[0], a[1], t)))
+FW = 300 + INV_W + 450 + INV_W + 450 + ACCP_W + 300           # frame width 4,100
+svg_items.append(("rect", "dframe", (DX0, DY0, DX0 + 13300, DY0 - 9700)))
+svg_items.append(("text", "dtitle", (DX0 + 300, DY0 - 800, "DETAIL A – INVERTER STATION (enlarged)")))
+drect(0, 0, FW, 1300, "canopy")                                   # canopy / frame outline (y down = south)
+drect(0, -1000, FW, 0, "clear")                                   # 1 m service clearance (north side)
+dtext(80, -700, "1,000 service clearance", "dsmall")
+xs = 300
+for name, w, dd in (("INV-01", INV_W, INV_D), ("INV-02", INV_W, INV_D), ("ACCP", ACCP_W, ACCP_D)):
+    drect(xs, 150, xs + w, 150 + dd, "acc" if name == "ACCP" else "inv")
+    dtext(xs, 150 + dd + 300, name, "dlabel")
+    xs += w + 450
+dtext(0, 1880, "INV 1,050 × 400 · ACCP 800 × 300 mm (typ.)", "dsmall")
+dtext(0, 2170, f"Steel frame + canopy {FW:,} × 1,300 mm", "dsmall")
+dline(300 + INV_W + 225, -400, 300 + INV_W + 225, 150, "tray"); dtext(300 + INV_W + 380, -200, "DC strings in (16)", "dsmallr")
+dline(300 + INV_W, 350, 300 + INV_W + 450, 350, "c3"); dline(300 + 2 * INV_W + 450, 350, 300 + 2 * INV_W + 900, 350, "c3")
+dtext(0, 2460, "C1, C2 (inverters → ACCP) ≈ 3–5 m", "dsmall")
+ax = 300 + 2 * INV_W + 900 + ACCP_W / 2
+xa = 300 + 2 * INV_W + 900
+dline(xa + ACCP_W, 300, xa + ACCP_W + 250, 300, "c3"); dline(xa + ACCP_W + 250, 300, xa + ACCP_W + 250, 1600, "c3")
+dtext(xa + ACCP_W + 130, 1580, "C3 + E3 to LV room", "dsmall-end")
 rect(SET_W, -SET_EDGE, ROOF_W - SET_E, UPPER_BOT + SET_EDGE, "PV-SETBACK", "set")
 rect(SET_W, LOWER_TOP - SET_EDGE, ROOF_W - SET_E, LOWER_LIMIT, "PV-SETBACK", "set")
 for (a, b, name) in OBS:
@@ -144,6 +215,9 @@ notes = [
     f"1P TABLE: 1x23 modules, rails 2 x {RAIL_LEN} mm, 11 frames @2600, feet span 1136, front post 200",
     f"BASE: {counts['2P'][0]} x 2P + {counts['1P'][0]} x 1P = {nb} modules = {kw(nb):.1f} kWp",
     "All tables within the architect's solar zone on D18102-DD-A-104.",
+    "INV-01 (80 kW): T1, T2, T3 + T4 top row + 14 modules = 152 modules, 8 strings x 19",
+    "INV-02 (80 kW): rest of T4 + T5-T7 = 147 modules, 3 x 19 + 5 x 18",
+    "Inverters + ACCP on shaded steel frame in the equipment strip (east end); DC tray along east corridor; C3 to riser TBC.",
     "Foot blocks drawn 300x300 indicative - size/weight by Enerack. Origin 0,0 = inner NW corner of upper roof.",
 ]
 for i, tx in enumerate(notes):
@@ -154,7 +228,7 @@ doc.saveas(os.path.join(HERE, "PV_Layout_Enerack_10deg.dxf"))
 # ---------------- SVG drawing sheet (plan) ----------------
 S = 0.0105                                     # px per mm
 minx, maxx = -3200, ROOF_W + 9800
-miny, maxy = LOWER_LIMIT - 2500, 3800
+miny, maxy = BUILD - 1500, 3800
 W, H = (maxx - minx) * S, (maxy - miny) * S
 tx = lambda x: (x - minx) * S
 ty_ = lambda y: (maxy - y) * S
@@ -168,7 +242,8 @@ for kind, cls, d in svg_items:
         out.append(f'<line class="{cls}" x1="{tx(x1):.2f}" y1="{ty_(y1):.2f}" x2="{tx(x2):.2f}" y2="{ty_(y2):.2f}"/>')
     else:
         x, y, s = d
-        out.append(f'<text class="{cls}" x="{tx(x):.2f}" y="{ty_(y)+3:.2f}">{s}</text>')
+        anchor = ' text-anchor="end"' if cls.endswith("-end") else ""
+        out.append(f'<text class="{cls.replace("-end", "")}" x="{tx(x):.2f}" y="{ty_(y)+3:.2f}"{anchor}>{s}</text>')
 def sdim_h(x1, x2, y, txt):
     return (f'<line class="dim" x1="{tx(x1):.1f}" y1="{ty_(y):.1f}" x2="{tx(x2):.1f}" y2="{ty_(y):.1f}"/>'
             f'<line class="dim" x1="{tx(x1):.1f}" y1="{ty_(y)-4:.1f}" x2="{tx(x1):.1f}" y2="{ty_(y)+4:.1f}"/>'
