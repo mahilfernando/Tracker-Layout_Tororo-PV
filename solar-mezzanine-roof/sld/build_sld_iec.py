@@ -134,7 +134,7 @@ L(BX, 500, 830, 500, "lnh"); spd_v(830, 500, "F1 AC SPD T2 4P")
 YO = 400
 L(BX, YO, 930, YO, "lnh"); switch_disconnector_h(930, YO, "Q3", "4P 400 A roof isolator")
 L(970, YO, 1220, YO, "lnh"); strokes(1090, YO, 4, None)
-tag(1140, YO - 30, "C3"); T(1140, YO + 26, "4C × 120 mm² Cu", "ts", "middle"); T(1140, YO + 39, "XLPE/SWA ≈ 80 m", "ts", "middle")
+tag(1140, YO - 30, "C3"); T(1140, YO + 26, "4C × 240 mm² Cu", "ts", "middle"); T(1140, YO + 39, "XLPE/SWA ≈ 200 m", "ts", "middle")
 # ACCP earth bar
 L(720, 790, 980, 790, "pebar"); T(850, 782, "ACCP EARTH BAR", "tspe", "middle")
 
@@ -150,14 +150,14 @@ L(MB, 250, MB, 270, "lnx")
 L(MB, 270, MB, 760, "busx"); T(MB - 8, 745, "MAIN BUSBAR 400 V 3N~ (≥ 1000 A, confirm)", "tsx", "end")
 # new PV way (heavy)
 L(1220, YO, 1300, YO, "lnh"); breaker_h(1300, YO, "Q5 ACB 1000 A", "Masterpact NW10 H1"); L(1340, YO, MB, YO, "lnh")
-T(1320, YO + 32, "EXISTING – SOLAR INCOMER", "tb", "middle"); T(1320, YO + 46, "400 A rating plug, Ir 280 A", "ts", "middle")
+T(1320, YO + 32, "EXISTING – SOLAR INCOMER", "tb", "middle"); T(1320, YO + 46, "1000 A sensor, Ir set 400 A", "ts", "middle")
 # existing outgoing feeders (light)
 for i, yy in enumerate((520, 590, 660)):
     L(MB, yy, 1540, yy, "lnx"); breaker_h(1540, yy, existing=True); L(1580, yy, 1600, yy, "lnx")
     T(1600, yy + 18, "EXISTING HOTEL LOAD", "tsx", "end")
 # MET + E3
 L(1200, 790, 1300, 790, "pebar"); T(1250, 782, "MET", "tspe", "middle"); earth(1250, 790)
-L(980, 790, 1200, 790, "pe"); tag(1090, 790, "E3"); T(1090, 815, "E3: 70 mm² Cu PE ≈ 80 m", "tspe", "middle")
+L(980, 790, 1200, 790, "pe"); tag(1090, 790, "E3"); T(1090, 815, "E3: 120 mm² Cu PE ≈ 200 m", "tspe", "middle")
 
 
 # ------------------------------------------------------------------ bottom band: legend | schedule | notes + title block
@@ -185,9 +185,9 @@ R(SX + 6, yh, 588, 18, "thead")
 for h, dx in hdr: T(SX + 12 + dx, yh + 13, h, "th")
 rows_ = [("S1–S16", "PV strings → inverters", "2 × 6 mm² Cu H1Z2Z2-K", "≈ 40 m", "DC isolator 32 A + DC SPD T2"),
          ("C1, C2", "INV-01/02 → ACCP Q1/Q2", "4C × 50 mm² Cu XLPE", "≈ 4 m", "MCCB 160 A (Ir 140 A)"),
-         ("C3", "ACCP Q3 → MLVS Q5", "4C × 120 mm² Cu XLPE/SWA", "≈ 80 m", "ACB NW10 H1, Ir 280 A"),
+         ("C3", "ACCP Q3 → MLVS Q5", "4C × 240 mm² Cu XLPE/SWA", "≈ 200 m", "ACB NW10 H1, Ir 400 A"),
          ("E1, E2", "INV-01/02 → ACCP earth bar", "25 mm² Cu (G/Y)", "≈ 4 m", "–"),
-         ("E3", "ACCP earth bar → MET", "70 mm² Cu (G/Y)", "≈ 80 m", "–"),
+         ("E3", "ACCP earth bar → MET", "120 mm² Cu (G/Y)", "≈ 200 m", "–"),
          ("–", "Array bonding / spine", "16 mm² / 35 mm² Cu (G/Y)", "≈ 280 m", "–")]
 for i, row in enumerate(rows_):
     yy = yh + 18 + i * 22
@@ -201,7 +201,7 @@ R(TX, BAND, X1 - TX, Y1 - BAND, "frame2")
 T(TX + 10, BAND + 18, "NOTES", "tb")
 notes = ["1. 299 × 620 Wp = 185.4 kWp DC; 2 × 80 kW = 160 kW AC; DC/AC 1.16.",
          "2. Grid-tied, no battery. DC SPD T2 + DC isolator on every string.",
-         "3. Q5 = existing NW10 H1: 400 A plug, Ir 280 A (else C3 4C × 185 mm²).",
+         "3. C3 200 m: VD ≈ 2.0 % at 232 A. Q5 = existing NW10 H1, Ir 400 A.",
          "4. Final ratings to equipment datasheets and detailed design."]
 for i, n in enumerate(notes): T(TX + 10, BAND + 38 + i * 15, n, "ts")
 tb_y = BAND + 104

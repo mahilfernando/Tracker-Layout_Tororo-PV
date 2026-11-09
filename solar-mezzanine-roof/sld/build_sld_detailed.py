@@ -155,7 +155,7 @@ R(CX + 20, 900, 110, 10, GRN, 1.2, "#e8f6ea"); T(CX + 75, 925, "Earth bar (ACCP)
 # ------------------------------------------------------------------ C3 -> MLVS
 MX = 1150
 ac4((CX + 210, MX + 40), YO)
-T((CX + 210 + MX) / 2, YO + 70, "C3: AC cable 4C × 120 mm² Cu", 8, "middle", "bold"); T((CX + 210 + MX) / 2, YO + 81, "XLPE/SWA ≈ 80 m (via riser)", 8, "middle", "bold")
+T((CX + 210 + MX) / 2, YO + 70, "C3: AC cable 4C × 240 mm² Cu", 8, "middle", "bold"); T((CX + 210 + MX) / 2, YO + 81, "XLPE/SWA ≈ 200 m (via riser)", 8, "middle", "bold")
 R(MX, 120, 230, 850, BLK, 1.3, dash="7 4")
 T(MX + 8, 138, "MAIN LV SWITCHBOARD (MLVS)", 9, "start", "bold")
 T(MX + 8, 151, "LV room · existing · 400 V 3N~", 8, "start")
@@ -165,7 +165,7 @@ T(MB + 34, 905, "Main busbar ≥ 1000 A (existing)", 8.5, "start", "bold", -90)
 mccb4(MX + 62, YO, label="Q5 ACB 4P 1000 A")
 T(MX + 62, YO + 42, "Masterpact NW10 H1", 7.5, "middle", "bold")
 T(MX + 62, YO + 53, "(existing) – solar incomer", 7.5, "middle")
-T(MX + 62, YO + 64, "Ir set 280 A (see note 10)", 7.5, "middle")
+T(MX + 62, YO + 64, "Ir set 400 A (see note 10)", 7.5, "middle")
 for j, c in enumerate((RED, YEL, BLU, BLK)):
     L(MX + 40, YO + j * 7, MX + 71, YO + j * 7, c, 1.4); L(MX + 71, YO + j * 7, MB + j * 6, YO + j * 7, c, 1.4)
 # incomer from UEDCL
@@ -195,7 +195,7 @@ PL([(IX + 10, INV[1]["iy1"]), (IX + 10, EY)], GRN, 1.1)
 PL([(CX + 75, 910), (CX + 75, EY)], GRN, 1.4)
 T(270, EY - 6, "1C × 16 mm² Cu (G/Y) – frame & structure bonding", 8, "middle", color=GRN)
 T(IX + 90, EY - 6, "1C × 25 mm² Cu (G/Y) – inverter earth", 8, "start", color=GRN)
-T(CX + 230, EY - 6, "1C × 70 mm² Cu (G/Y) – ACCP to MET", 8, "start", color=GRN)
+T(CX + 230, EY - 6, "1C × 120 mm² Cu (G/Y) ≈ 200 m – ACCP to MET", 8, "start", color=GRN)
 
 # ------------------------------------------------------------------ general notes / specifications
 NX, NW = 1400, 250
@@ -208,12 +208,12 @@ notes = [
  ("2. Strings", "INV-01: 8 × 19 = 152 (94.24 kWp); INV-02: 3 × 19 + 5 × 18 = 147 (91.14 kWp). Max string Voc ≈ 955 V (15 °C) < 1100 V"),
  ("3. Inverters", "2 × Sigenergy Sigen PV 80M1, 80 kW, 400 V 3N~; max AC current 133.7 A; 2 strings per MPPT (max 40 A/MPPT)"),
  ("4. DC cables", "1C × 6 mm² Cu H1Z2Z2-K, 1.5 kV DC, IEC 62930 / EN 50618, UV resistant"),
- ("5. AC cables", "C1, C2: 4C × 50 mm² Cu XLPE; C3: 4C × 120 mm² Cu XLPE/SWA, 0.6/1 kV, IEC 60502-1; VD < 2 %"),
- ("6. Earthing cables", "16 / 25 / 70 mm² Cu G/Y, 450/750 V, IEC 60364-5-54"),
+ ("5. AC cables", "C1, C2: 4C × 50 mm² Cu XLPE; C3: 4C × 240 mm² Cu XLPE/SWA ≈ 200 m, 0.6/1 kV, IEC 60502-1; VD ≈ 2.0 % at 232 A"),
+ ("6. Earthing cables", "16 / 25 / 120 mm² Cu G/Y, 450/750 V, IEC 60364-5-54"),
  ("7. DC SPD (per string)", "Type 2, Ucpv 1100 V DC, In 20 kA, Imax 40 kA, Up ≤ 4.0 kV, IEC 61643-31"),
  ("8. DC isolator (per string)", "2-pole, 1200 V DC, 32 A, DC-PV2, IEC 60947-3, IP66 enclosure"),
  ("9. AC SPD (ACCP)", "Type 2, 4P (3P+N), Uc 320 Vac, In 20 kA, Imax 40 kA, Up ≤ 1.5 kV, IEC 61643-11"),
- ("10. AC protection", "Inverter MCCB 4P 160 A (Ir 140 A); ACCP Q1/Q2 MCCB 4P 160 A (Ir 140 A); Q3 switch-disconnector 4P 400 A. Q5 = existing Masterpact NW10 H1 ACB used as solar incomer: fit 400 A sensor/rating plug and set Ir 280 A to protect C3 (4C × 120 mm²). If the 1000 A sensor is kept (min Ir 400 A), upsize C3 to 4C × 185 mm²."),
+ ("10. AC protection", "Inverter MCCB 4P 160 A (Ir 140 A); ACCP Q1/Q2 MCCB 4P 160 A (Ir 140 A); Q3 switch-disconnector 4P 400 A. Q5 = existing Masterpact NW10 H1 ACB used as solar incomer, 1000 A sensor set at Ir 400 A (minimum); C3 4C × 240 mm² is rated above 400 A installed."),
  ("11. Solar system", "PV capacity 185.38 kWp DC; inverter capacity 2 × 80 kW = 160 kW AC; DC/AC 1.16"),
  ("12.", "Cable lengths indicative; confirm on site. Verify MLVS spare way, fault level and busbar rating before installation."),
 ]
