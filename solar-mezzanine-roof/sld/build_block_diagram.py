@@ -66,12 +66,9 @@ arrow(xs[3] + BW, my, xs[4] - 6, my, "Electricity")
 # grid below main switchboard
 box(xs[3], 420, BW, 180, "Utility Grid (UEDCL)", ["supplies the rest", "of the hotel's power"], "#f4f6f9", "#5b6673", pylon)
 arrow(xs[3] + BW / 2, 420, xs[3] + BW / 2, Y + BH + 6, "Grid power", lx=xs[3] + BW / 2 + 70, ly=395)
-# zero-export controller
-box(xs[1], 420, BW + 320, 180, "Zero-Export Controller & Monitoring", ["measures the hotel's grid use and keeps solar output", "below the load – no power is sent back to the grid"], "#fff6e5", "#c27a00", controller)
-arrow(xs[3] - 6, 510, xs[1] + BW + 326, 510, None, dashed=True)
-arrow(xs[1] + 80, 420, xs[1] + 80, Y + BH + 6, "controls", dashed=True, lx=xs[1] + 128, ly=395)
-g.append(f'<text x="{(xs[1] + BW + 326 + xs[3]) / 2}" y="494" class="al" text-anchor="middle">measures</text>')
-
+# energy monitoring (data logger + meter) – monitoring only, no export control
+box(xs[1], 420, BW + 320, 180, "Energy Monitoring", ["data logger + energy meter", "remote monitoring of solar output and savings"], "#fff6e5", "#c27a00", controller)
+arrow(xs[1] + 80, Y + BH + 6, xs[1] + 80, 420, "monitors", dashed=True, lx=xs[1] + 128, ly=395)
 CSS = """
 .blk text { font-family: Arial, Helvetica, sans-serif; fill: #1b2430; }
 .blk .h { font-size: 28px; font-weight: 700; fill: #14365d; }

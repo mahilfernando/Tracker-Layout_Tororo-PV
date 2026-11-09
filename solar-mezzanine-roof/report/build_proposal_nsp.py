@@ -5,7 +5,7 @@ import os, json, base64
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-fin = json.load(open(os.path.join(HERE, "proposal_fin.json")))
+fin = json.load(open(os.path.join(HERE, "proposal_fin_v2.json")))   # new workings: Total Project Value USD 102,789
 mon = json.load(open(os.path.join(HERE, "monthly.json")))
 tou = json.load(open(os.path.join(HERE, "tou.json")))
 
@@ -80,19 +80,19 @@ pages.append(f'''<section class="page cover">{stripes("stripe big")}
 <div class="cv-photo" style="background-image:url({HOTEL})"></div>
 <div class="cv-kicker">TECHNICAL &amp; COMMERCIAL PROPOSAL</div>
 <div class="cv-title">185.4 kWp Rooftop<br/>Solar PV System</div>
-<div class="cv-sub">299 × 620 Wp solar panels &nbsp;|&nbsp; 2 × 80 kW grid-tied inverters &nbsp;|&nbsp; zero export, no battery</div>
-<div class="cv-box"><div><span>PREPARED FOR</span><b>Kampala Marriott Hotel</b><p>Mezzanine roof, Kampala, Uganda<br/>0°18'11.34"N, 32°35'13.76"E</p></div>
+<div class="cv-sub">299 × 620 Wp solar panels &nbsp;|&nbsp; 2 × 80 kW grid-tied inverters</div>
+<div class="cv-box"><div><span>PREPARED FOR</span><b>Kampala Marriott Hotel</b><p>Mezzanine roof, Kampala, Uganda</p></div>
 <div><span>PREPARED BY</span><b>NileSun Power Ltd</b><p>Contact: Mahil Fernando<br/>Tel: +256 708669574 &nbsp;|&nbsp; +94 773 55 96 82<br/>Email: sales@nilesunpower.com<br/>Ref: {REF} &nbsp;|&nbsp; {DATE}</p></div></div>
 <div class="cv-valid">Valid until {VALID} &nbsp;|&nbsp; Clean Energy - Brighter Tomorrow</div>
 {stripes("stripe big bottom")}</section>''')
 
 # ---------------- page 2: summary ----------------
 page(2, "TECHNICAL &amp; COMMERCIAL PROPOSAL", f'''
-<h1>{TITLE}</h1><div class="sub">Kampala Marriott Hotel – mezzanine roof &nbsp;|&nbsp; 299 × 620 Wp panels &nbsp;|&nbsp; 2 × 80 kW inverters</div>
+<h1>{TITLE}</h1>
 {H("Quote &amp; Client Details")}
 {tbl([["Quote No.", REF, "Date", DATE, "Valid Until", VALID],
-      ["Client Name", "Kampala Marriott Hotel", "Contact No.", "", "Client Email", ""],
-      ["Site Address", "Kampala Marriott Hotel, mezzanine roof, Kampala", "Supply Type", "Three-phase 400 V, UEDCL, main LV switchboard", "VAT TIN No.", "__________"]],
+      ["Client Name", "Kampala Marriott Hotel", "Contact No.", "Mr. Jagath<br/>+256 791 811805", "Client Email", ""],
+      ["Site Address", "Kampala Marriott Hotel, mezzanine roof, Kampala", "Supply Type", "Three-phase 400 V, UEDCL, main LV switchboard", "VAT TIN No.", ""]],
      head=False, cls="kv6", widths=[12, 22, 11, 22, 11, 22])}
 {cards([("185.4 kWp", "Solar array capacity"), ("160 kW", "Inverters (2 × 80 kW)"), ("299 nos", "620 Wp solar panels"), (usd(capex), "Turnkey price excl. VAT"),
         (f"{gen1/365:,.0f} kWh", "Avg. daily generation"), (f"{gen1/1000:,.1f} MWh", "Est. annual generation"), (usd(y1), "Savings in year 1"), (f"{pb:.1f} years", "Payback period")])}
@@ -102,53 +102,48 @@ page(2, "TECHNICAL &amp; COMMERCIAL PROPOSAL", f'''
 <b>299 × 620 W N-type bifacial solar panels</b> on a ballasted aluminium structure at 10° tilt, with
 <b>two 80 kW three-phase string inverters</b> connected to the hotel's main LV switchboard.</p>
 <p>The array generates about <b>{gen1:,.0f} kWh per year</b> (approx. {gen1/365:,.0f} kWh/day). The hotel uses about 1,000,000 kWh
-per month, so every solar kWh is used on site (zero export) and directly reduces grid purchases. At USD {tar:.3f}/kWh this saves about
+per month, so every solar kWh is used on site and directly reduces grid purchases. At USD {tar:.3f}/kWh this saves about
 <b>{usd(y1)} in the first year</b>. The turnkey price is <b>{usd(capex)}</b> (excl. VAT), paid back in about <b>{pb:.1f} years</b>, with an IRR of
 <b>{irr*100:.1f} %</b> (Sections 12 and 14).</p>
 {H("Key Benefits")}
 <ul class="dots"><li>Lower bills: solar energy covers part of the hotel's daytime load at USD {lcoe:.3f}/kWh versus USD {tar:.3f}/kWh from the grid.</li>
-<li>Fast payback ({pb:.1f} years) and {usd(net25)} net savings over 25 years.</li>
-<li>No roof penetrations: ballasted structure within the architect's solar zone (drawing D18102-DD-A-104).</li>
-<li>Zero-export control: no power is fed back to the UEDCL grid; no battery needed.</li>
+<li>Fast payback ({pb:.1f} years) and {usd(sav25)} savings over 25 years.</li>
 <li>Long life: Astronergy N-type bifacial panels (15-year product, 30-year power warranty); remote monitoring of generation and savings.</li></ul>''')
 
 # ---------------- page 3: equipment, array, generation ----------------
 mk = [r["kwh"] for r in mon["rows"]]
-s, Y, pl, cw = bars(mk, [r["m"] for r in mon["rows"]], h=150, ymax=30000, ylab="kWh / month")
+s, Y, pl, cw = bars(mk, [r["m"] for r in mon["rows"]], h=108, ymax=30000, ylab="kWh / month")
 for i, v in enumerate(mk):
     s.append(f'<text x="{pl+i*cw+cw*.5:.1f}" y="{Y(v)-5:.1f}" class="vl" text-anchor="middle">{v/1000:.1f}k</text>')
-genchart = f'<svg viewBox="0 0 680 150" class="chart">{"".join(s)}</svg>'
+genchart = f'<svg viewBox="0 0 680 108" class="chart">{"".join(s)}</svg>'
 page(3, "SYSTEM DESIGN", f'''
 {H("2. Equipment Schedule (Bill of Materials)")}
 {tbl([["#", "Item", "Specification", "Qty", "UoM"],
       ["1", "Solar panels", "Astronergy ASTRO N7 CHSM66RN(DG)/F-BH 620 Wp N-type TOPCon bifacial, 2382 × 1134 × 30 mm (Annex 4)", "299", "pcs"],
       ["2", "String inverters", "Sigenergy Sigen PV 80M1, 80 kW three-phase, 1100 V DC, with monitoring (Annex 3)", "2", "pcs"],
       ["3", "Mounting structure", "Enerack ballasted aluminium system, 10° tilt, 6 × 2P + 1 × 1P tables, no roof penetration (Annex 5)", "1", "system"],
-      ["4", "DC protection", "DC switch-disconnectors 1000 V 32 A (1 per string), surge protection", "16", "pcs"],
-      ["5", "AC combiner panel", "250 A, MCCBs 2 × 125 A + 250 A outgoing, AC surge protection, roof isolator", "1", "set"],
-      ["6", "Grid connection", "New 250 A MCCB way on the existing main LV switchboard", "1", "set"],
-      ["7", "Cabling", "Solar cable 6 mm², AC 4C × 50 mm² and 4C × 120 mm² XLPE/SWA, cable tray", "1", "lot"],
-      ["8", "Monitoring & control", "Smart data logger, energy meter + CTs, zero-export control", "1", "set"],
+      ["4", "DC protection", "DC isolator units (2-pole 1000 V 32 A) + DC SPD Type II – 1 each per string", "16+16", "pcs"],
+      ["5", "AC combiner panel", "MCCBs 2 × 160 A (inverter incomers), 400 A roof isolator, AC SPD Type II", "1", "set"],
+      ["6", "Grid connection", "Connection to the existing Masterpact NW10 H1 solar incomer on the main LV switchboard", "1", "set"],
+      ["7", "Cabling", "Solar cable 6 mm², AC 4C × 50 mm² and 4C × 240 mm² Cu XLPE/SWA, cable tray", "1", "lot"],
+      ["8", "Monitoring & control", "Smart data logger, energy meter, remote monitoring", "1", "set"],
       ["9", "Earthing", "Array bonding, connection to building earth and lightning protection", "1", "set"]],
      widths=[4, 18, 62, 7, 9])}
 {H("3. Solar Array &amp; Inverters")}
 <div class="two">{tbl([["Solar array", "Value"], ["Panels", "299 × 620 W = 185.4 kWp"], ["Arrangement", "7 tables: 6 × 2P×23, 1 × 1P×23 (portrait)"],
                        ["DC / AC ratio", "185.4 kWp / 160 kW = 1.16"], ["Location / tilt", "Flat concrete mezzanine roof, 10°"], ["Panel area", "approx. 808 m² (299 panels)"]], widths=[42, 58])}
 {tbl([["Inverters", "Value"], ["INV-01", "152 panels = 94.2 kWp, 8 strings × 19"], ["INV-02", "147 panels = 91.1 kWp, 3 × 19 + 5 × 18"],
-      ["AC output", "2 × 80 kW, 400 V 3N~"], ["Connection", "AC combiner → MLVS (≈ 80 m)"], ["Export", "Zero export (meter + CTs)"]], widths=[38, 62])}</div>
+      ["AC output", "2 × 80 kW, 400 V 3N~"], ["Connection", "AC combiner → MLVS via riser"]], widths=[38, 62])}</div>
 {H("4. Estimated Energy Generation")}
-<p class="small">Based on long-term average irradiation for Kampala and a system performance of about 80 %. Annual total: <b>{gen1:,.0f} kWh</b>
-(specific yield ≈ 1,480 kWh/kWp).</p>{genchart}''')
+<p class="small">Kampala long-term irradiation, performance ≈ 80 %. Annual total <b>{gen1:,.0f} kWh</b> (≈ 1,480 kWh/kWp).</p>{genchart}''')
 
 # ---------------- page 4: plan + site ----------------
 page(4, "PLAN VIEWS", f'''
 {H("5. Design Solar Top Installation (Roof Plan)")}
-<p class="small">The 299 panels are placed only inside the architect's solar zone on the mezzanine roof (drawing D18102-DD-A-104), on 7 Enerack
+<p class="small">The 299 panels are placed on the mezzanine roof on 7 Enerack
 ballast tables at 10° tilt with 800 mm service aisles. INV-01 feeds tables T1–T4 (part), INV-02 feeds T4 (part)–T7. The inverter station and AC
 combiner panel sit at the south-east corner; the AC cable runs to the main LV switchboard via the building riser.</p>
-<div class="fig"><img src="{PLAN}" style="max-height:100mm"/></div>
-{H("6. Site Location")}
-<div class="fig"><img src="{SITE}" style="max-height:58mm"/><div class="cap">Proposed solar installation – Kampala Marriott Hotel, mezzanine roof (0°18'11.34"N, 32°35'13.76"E)</div></div>''')
+<div class="fig"><img src="{PLAN}" style="max-height:178mm"/><div class="cap">Proposed solar installation – Kampala Marriott Hotel, mezzanine roof (0°18'11.34"N, 32°35'13.76"E). Full drawing in Annex 2.</div></div>''')
 
 # ---------------- page 5: energy use / TOU ----------------
 bands = tou["bands"]; ph = tou["pv_h"]
@@ -163,7 +158,7 @@ page(5, "LOAD ASSESSMENT", f'''
 {tbl([["Item", "Value", "Check", "Result"],
       ["Hotel annual consumption", "≈ 12,000,000 kWh", "Solar share of consumption", f"{share*100:.1f} %"],
       ["Solar generation, year 1", f"{gen1:,.0f} kWh", "Peak solar output", "≈ 97 kW (midday average)"],
-      ["Hotel daytime demand", "far above solar output", "Energy exported", "0 kWh (zero export)"],
+      ["Hotel daytime demand", "far above solar output", "Energy exported", "0 kWh (all used on site)"],
       ["Grid tariff (avoided)", f"USD {tar:.3f}/kWh, +2 %/yr", "Every solar kWh used?", "Yes – offsets grid purchase"]], widths=[27, 23, 27, 23])}
 {H("8. Solar Generation by Time-of-Use Band")}
 <p class="small">Average daily solar output by hour. Almost all generation falls in the shoulder period (06:00–18:00), when the hotel's
@@ -171,7 +166,8 @@ air-conditioning, kitchen and laundry loads are high.</p>{hourly}
 {tbl([["TOU band", "Hours", "Hotel consumption (kWh/yr)", "Solar energy (kWh/yr)", "Share of solar", "Reduction of band purchase"]] +
      [[b["band"], b["hours"], f"{b['load']:,.0f}", f"{b['pv']:,.0f}", f"{b['pv_share']*100:.1f} %", f"{b['red']*100:.1f} %"] for b in bands] +
      [["<b>Total</b>", "", f"<b>{tou['total']['load']:,.0f}</b>", f"<b>{tou['total']['pv']:,.0f}</b>", "<b>100 %</b>", f"<b>{share*100:.1f} %</b>"]],
-     widths=[14, 15, 20, 18, 14, 19])}''')
+     widths=[14, 15, 20, 18, 14, 19])}
+<p class="small">*Hotel consumption is assumed at 1,000,000 kWh per month (12,000,000 kWh per year), to be confirmed from recent utility bills.</p>''')
 
 # ---------------- page 6: connection diagram, schedule, warranty ----------------
 def blk(x, y, w, h, t, s_, c):
@@ -179,9 +175,9 @@ def blk(x, y, w, h, t, s_, c):
             f'<text x="{x+w/2}" y="{y+h/2-2}" class="bt" text-anchor="middle">{t}</text><text x="{x+w/2}" y="{y+h/2+11}" class="bs" text-anchor="middle">{s_}</text>')
 d = [blk(40, 20, 130, 44, "PV ARRAY 1", "152 × 620 W = 94.2 kWp", NAVY), blk(40, 150, 130, 44, "PV ARRAY 2", "147 × 620 W = 91.1 kWp", "#2c7a6b"),
      blk(240, 20, 130, 44, "INVERTER 1", "80 kW three-phase", "#2f5fc4"), blk(240, 150, 130, 44, "INVERTER 2", "80 kW three-phase", "#2f5fc4"),
-     blk(430, 78, 120, 58, "AC COMBINER", "250 A, MCCBs, SPD", "#555"), blk(600, 78, 120, 58, "MAIN LV SWITCHBOARD", "new 250 A way", "#555"),
+     blk(430, 78, 120, 58, "AC COMBINER", "MCCBs, SPD, isolator", "#555"), blk(600, 78, 120, 58, "MAIN LV SWITCHBOARD", "NW10 H1 solar incomer", "#555"),
      blk(600, 6, 120, 44, "UEDCL GRID", "three-phase + meter", "#555"), blk(600, 170, 120, 44, "HOTEL LOADS", "≈ 1 GWh / month", GRN),
-     blk(430, 170, 120, 44, "ZERO-EXPORT", "meter + CTs, logger", "#7b4fa0")]
+     blk(430, 170, 120, 44, "ENERGY MONITORING", "data logger + meter", "#7b4fa0")]
 for yy in (42, 172):
     d.append(f'<line x1="170" y1="{yy}" x2="240" y2="{yy}" stroke="{ORG}" stroke-width="2.5"/><rect x="198" y="{yy-7}" width="14" height="14" fill="#b07a10"/>')
 d += [f'<polyline points="370,42 400,42 400,98 430,98" fill="none" stroke="{NAVY}" stroke-width="2"/>',
@@ -190,29 +186,28 @@ d += [f'<polyline points="370,42 400,42 400,98 430,98" fill="none" stroke="{NAVY
       f'<line x1="660" y1="50" x2="660" y2="78" stroke="{NAVY}" stroke-width="2"/>', f'<line x1="660" y1="136" x2="660" y2="170" stroke="{NAVY}" stroke-width="2"/>',
       f'<polyline points="600,192 550,192" fill="none" stroke="#7b4fa0" stroke-width="1.6" stroke-dasharray="5 4"/>',
       f'<polyline points="490,170 490,150 300,150 300,194" fill="none" stroke="#7b4fa0" stroke-width="1.6" stroke-dasharray="5 4"/>',
-      '<text x="205" y="80" class="bs2" text-anchor="middle">DC isolators</text><text x="575" y="101" class="bs2" text-anchor="middle">C3 ≈ 80 m</text>',
-      '<text x="395" y="146" class="bs2" text-anchor="middle">export limit</text>']
-diag = f'<div class="diag"><svg viewBox="0 0 740 220">{"".join(d)}</svg><div class="cap">All frames, structures and enclosures are earthed; surge protection on the DC and AC sides. Full single-line diagram in Annex 1.</div></div>'
+      '<text x="205" y="80" class="bs2" text-anchor="middle">DC isolator + SPD</text><text x="575" y="101" class="bs2" text-anchor="middle">C3</text>']
+diag = f'<div class="diag"><svg viewBox="0 0 740 220">{"".join(d)}</svg></div>'
 page(6, "ELECTRICAL DESIGN", f'''
 {H("9. System Connection Diagram")}{diag}
 {H("10. Implementation Schedule")}
 {tbl([["Phase", "Activity", "Duration"],
-      ["1. Site survey &amp; design", "Roof and LV switchboard survey, detailed design, structural sign-off, approvals", "Weeks 1–3"],
+      ["1. Site survey &amp; design", "Roof and LV switchboard survey, detailed design, approvals", "Weeks 1–3"],
       ["2. Procurement", "Ordering, shipping (Mombasa), customs clearing, delivery to site", "Weeks 2–10"],
       ["3. Installation", "Ballast structure, panels, inverters, AC combiner, cabling &amp; earthing", "Weeks 10–13"],
-      ["4. Commissioning", "Testing, zero-export setting, monitoring set-up, grid synchronisation", "Weeks 13–14"],
+      ["4. Commissioning", "Testing, monitoring set-up, grid synchronisation", "Weeks 13–14"],
       ["5. Training &amp; handover", "Operator training, as-built drawings and O&amp;M manual", "Week 14"]], widths=[24, 60, 16])}
 {H("11. Warranty &amp; After-Sales Support")}
 <div class="two">{tbl([["Component", "Warranty"], ["Solar panels", "15 yrs product / 30 yrs linear power"], ["Inverters", "5 years (extendable)"],
-                       ["Mounting structure", "10 years"], ["Installation workmanship", "2 years"]], widths=[48, 52])}
+                       ["Mounting structure", "10 years"], ["Installation workmanship", "2 years"]], widths=[48, 52])}<div></div></div>
 <p class="small">Installed to IEC solar installation standards and Uganda Electricity Regulatory Authority requirements. After handover we provide
 remote monitoring support, a free 6-month check-up visit and optional annual maintenance (panel cleaning, connection checks, inverter
-software updates, performance report).</p></div>''')
+software updates, performance report).</p>''')
 
 # ---------------- page 7: financial analysis ----------------
-s, Y, pl, cw = bars(cum, [str(i) if i % 5 == 0 or i == 7 else None for i in range(26)], h=190, neg=True, ymax=520000,
+s, Y, pl, cw = bars(cum, [str(i) if i % 5 == 0 or i == 6 else None for i in range(26)], h=190, neg=True, ymax=520000,
                     colors=[("#c0392b" if v < 0 else GRN) for v in cum], fmt=lambda v: f"{v/1000:,.0f}k", ylab="USD")
-for i in (0, 7, 12, 25):
+for i in (0, 6, 12, 25):
     s.append(f'<text x="{pl+i*cw+cw*.5:.1f}" y="{(Y(cum[i])+13) if cum[i] < 0 else (Y(cum[i])-5):.1f}" class="vl" text-anchor="middle">{cum[i]/1000:+,.0f}k</text>')
 cfchart = f'<svg viewBox="0 0 680 190" class="chart">{"".join(s)}</svg>'
 yrs = [0, 1, 3, 5, 6, 7, 10, 12, 15, 20, 25]
@@ -224,18 +219,18 @@ for y_ in yrs:
 page(7, "FINANCIAL ANALYSIS", f'''
 {H("12. Financial Analysis &amp; Cash Flow")}
 <div class="two">{tbl([["Assumption", "Value"], ["Turnkey investment (excl. VAT)", usd(capex)], ["Avoided tariff, year 1", f"USD {tar:.3f}/kWh"],
-                       ["Tariff escalation", "2 % per year"], ["Degradation", "≈ 0.4 % per year"], ["Inverter replacement", "USD 9,600 in year 12"],
+                       ["Tariff escalation", "2 % per year"], ["Degradation", "≈ 0.4 % per year"],
                        ["O&amp;M cost / discount rate", "none assumed / 10 %"]], widths=[56, 44])}
 {tbl([["Result", "Value"], ["Year-1 savings", usd(y1)], ["Simple payback", f"{pb:.1f} years"], ["IRR (25 years)", f"{irr*100:.1f} %"],
-      ["NPV @ 10 %", usd(npv)], ["LCOE (solar energy cost)", f"USD {lcoe:.3f}/kWh"], ["25-year net savings", usd(net25)]], widths=[56, 44])}</div>
-<p class="small"><b>Cumulative cash flow (USD)</b> – the investment is recovered during year 7.</p>{cfchart}
+      ["NPV @ 10 %", usd(npv)], ["LCOE (solar energy cost)", f"USD {lcoe:.3f}/kWh"], ["25-year savings", usd(sav25)]], widths=[56, 44])}</div>
+<p class="small"><b>Cumulative cash flow (USD)</b> – the investment is recovered during year {int(pb)+1} ({pb:.1f} years).</p>{cfchart}
 {tbl(cfrows, cls="num", widths=[8, 19, 16, 17, 20, 20])}
-<p class="small">Year 12 includes the USD 9,600 inverter replacement. Values in brackets are negative (investment not yet recovered).</p>''')
+<p class="small">No O&amp;M or inverter-replacement cost is included. Values in brackets are negative (investment not yet recovered).</p>''')
 
 # ---------------- page 8: quotation + financial summary ----------------
 items = [("PV modules – Astronergy ASTRO N7 620 Wp bifacial N-type TOPCon", "299", "nos"), ("String inverters – Sigenergy Sigen PV 80M1, 80 kW, 1100 V", "2", "nos"),
          ("Ballasted aluminium mounting structure, 10° tilt", "1", "lot"), ("DC system – PV cable, connectors, string isolators, cable tray", "1", "lot"),
-         ("AC system – AC combiner panel, MCCBs, cabling to main LV switchboard", "1", "lot"), ("Smart data logger, remote monitoring &amp; zero-export control", "1", "set"),
+         ("AC system – AC combiner panel, MCCBs, cabling to main LV switchboard", "1", "lot"), ("Smart data logger, energy meter &amp; remote monitoring", "1", "set"),
          ("Earthing &amp; lightning protection integration", "1", "lot"), ("Installation, testing &amp; commissioning", "1", "lot"),
          ("Transport, logistics &amp; customs clearing to site", "1", "lot")]
 qrows = "".join(f"<tr><td>{i}</td><td>{d_}</td><td>{q}</td><td>{u}</td>" + (f'<td rowspan="9" class="lump">{usd(capex)}</td>' if i == 1 else "") + "</tr>"
@@ -248,22 +243,22 @@ page(8, "QUOTATION", f'''
 <table class="t q"><colgroup><col style="width:5%"/><col style="width:58%"/><col style="width:8%"/><col style="width:8%"/><col style="width:21%"/></colgroup>
 <tr><th>#</th><th>Scope of supply &amp; works</th><th>Qty</th><th>Unit</th><th>Price (USD)</th></tr>{qrows}
 <tr class="tot"><td></td><td>TOTAL TURNKEY EPC PRICE (excluding VAT and other applicable taxes)</td><td></td><td></td><td>{usd(capex)}</td></tr></table>
-<p class="small">Equivalent to USD {capex/185400:.2f} per Wp. Amount in words: One hundred twenty-one thousand one hundred fifteen US Dollars only.</p>
-{tbl([["Payment terms", "30 % advance with PO · 60 % on delivery of main equipment to site · 10 % on commissioning"],
+<p class="small">Equivalent to USD {capex/185400:.2f} per Wp. Amount in words: One hundred two thousand seven hundred eighty-nine US Dollars only.</p>
+{tbl([["Payment terms", "75 % advance with PO · 25 % on commissioning"],
       ["Delivery", "Equipment 8–10 weeks from PO and advance; installation &amp; commissioning ≈ 4 weeks after delivery"],
       ["Taxes", "VAT, withholding tax and statutory levies excluded – charged as applicable"],
       ["Exclusions", "Roof strengthening / waterproofing, battery storage, utility and permit fees, works not listed above"],
-      ["Client to provide", "Roof access, spare 250 A way on the main LV switchboard, power &amp; water during installation"]], head=False, cls="kv", widths=[20, 80])}
+      ["Client to provide", "Roof access, connection to the existing NW10 H1 solar incomer on the main LV switchboard, power &amp; water during installation"]], head=False, cls="kv", widths=[20, 80])}
 ''')
 
 # ---------------- page 9: tariff sensitivity + annex index ----------------
 page(9, "FINANCIAL SUMMARY", f'''
 {H("14. Financial Summary &amp; Payback")}
 {cards([(usd(capex), "Total investment (excl. VAT)"), (usd(y1), "Savings in year 1"), (f"{pb:.1f} years", "Payback period"), (f"{irr*100:.1f} %", "IRR (25 years)"),
-        (usd(sav25), "25-year savings"), (usd(net25), "25-year net savings"), (f"{net25/capex:.1f} x", "Net savings / investment"), (usd(npv), "NPV @ 10 %")])}
+        (usd(sav25), "25-year savings"), (usd(cum[25]), "25-year net gain after investment"), (f"{sav25/capex:.1f} x", "Savings / investment"), (usd(npv), "NPV @ 10 %")])}
 {H("15. Tariff Sensitivity")}
 {tbl([["Avoided tariff (USD/kWh)", "Year-1 savings (USD)", "Payback (years)", "IRR", "NPV @ 10 % (USD)"]] +
-     [[f"{t:.2f}", f"{s1:,.0f}", f"{p:.1f}", f"{i*100:.1f} %", f"{n:,.0f}"] for t, s1, p, i, n in sens], cls="num hl3", widths=[24, 20, 18, 16, 22])}
+     [[f"{t:.2f}", f"{s1:,.0f}", f"{p:.1f}", f"{i*100:.1f} %", f"{n:,.0f}"] for t, s1, p, i, n in sens if t <= 0.10], cls="num hl3", widths=[24, 20, 18, 16, 22])}
 <p class="small">The project remains attractive over a wide tariff range. The break-even tariff (NPV = 0 at 10 %) is about
 <b>USD {fin['breakeven']:.4f}/kWh</b> – roughly {round((1-fin['breakeven']/0.07)*100)} % below today's tariff.</p>
 {H("Annexes")}
@@ -279,8 +274,7 @@ page(9, "FINANCIAL SUMMARY", f'''
 <li>Site survey: roof condition, LV switchboard, cable route and inverter location.</li>
 <li>Confirmation of the tariff from recent utility bills and structural review of the roof.</li>
 <li>Purchase order and advance payment – project start.</li></ol>
-<p class="thanks">Thank you for considering NileSun Power Ltd. Clean Energy - Brighter Tomorrow.<br/>
-Contact: Mahil Fernando &nbsp;|&nbsp; +256 708669574 &nbsp;|&nbsp; +94 773 55 96 82 &nbsp;|&nbsp; sales@nilesunpower.com</p>''')
+<p class="thanks">Thank you for considering NileSun Power Ltd. Contact: Mahil Fernando &nbsp;|&nbsp; +256 708669574 &nbsp;|&nbsp; sales@nilesunpower.com</p>''')
 
 CSS = f"""
 @page {{ size:A4; margin:0 }} * {{ box-sizing:border-box }}
@@ -293,7 +287,7 @@ body {{ margin:0; font-family:Arial,Helvetica,sans-serif; color:{INK}; font-size
 .content {{ padding:3mm 18mm 0 }}
 .ftr {{ position:absolute; bottom:8mm; left:18mm; right:18mm; border-top:1px solid {LINE}; padding-top:2mm; display:flex; justify-content:space-between; color:{MUT}; font-size:7.6pt }}
 h1 {{ color:{NAVY}; font-size:19pt; margin:3mm 0 1mm }} .sub {{ color:{MUT}; font-size:10.5pt; margin-bottom:2mm }}
-h2 {{ color:{NAVY}; font-size:12.5pt; margin:5mm 0 3mm; display:flex; align-items:center; gap:3mm }} h2 i {{ width:2.4mm; height:6.5mm; background:{ORG} }}
+h2 {{ color:{NAVY}; font-size:12.5pt; margin:4mm 0 2.5mm; display:flex; align-items:center; gap:3mm }} h2 i {{ width:2.4mm; height:6.5mm; background:{ORG} }}
 p {{ line-height:1.45; margin:0 0 2.5mm }} p.small {{ font-size:8.8pt }}
 .t {{ width:100%; border-collapse:collapse; table-layout:fixed; margin-bottom:2mm }} .t th,.t td {{ border:1px solid {LINE}; padding:1.2mm 2mm; vertical-align:middle; line-height:1.3 }}
 .t th {{ background:{CARD}; color:#1a2a4a; text-align:left; font-weight:700 }}
@@ -301,8 +295,8 @@ p {{ line-height:1.45; margin:0 0 2.5mm }} p.small {{ font-size:8.8pt }}
 .t.num td {{ text-align:right }} .t.num td:first-child {{ text-align:center }} .t.hl3 tr:nth-child(4) td {{ background:#fff3dc; font-weight:700 }}
 .t.q td:nth-child(1),.t.q td:nth-child(3),.t.q td:nth-child(4) {{ text-align:center }} .t.q td.lump {{ text-align:center; font-size:15pt; font-weight:800; color:{NAVY} }}
 .t.q tr.tot td {{ background:#e6f2e6; font-weight:800 }} .t.q tr.tot td:last-child {{ text-align:center; color:{NAVY} }}
-.cards {{ display:grid; grid-template-columns:repeat(4,1fr); gap:4mm; margin:4mm 0 }}
-.card {{ background:{CARD}; border-top:2.2mm solid; border-radius:0 0 3mm 3mm; text-align:center; padding:4mm 2mm 3.5mm }}
+.cards {{ display:grid; grid-template-columns:repeat(4,1fr); gap:3.5mm; margin:3mm 0 }}
+.card {{ background:{CARD}; border-top:2.2mm solid; border-radius:0 0 3mm 3mm; text-align:center; padding:3mm 2mm 2.6mm }}
 .card b {{ display:block; color:{NAVY}; font-size:14.5pt }} .card span {{ display:block; color:{MUT}; font-size:8pt; margin-top:1.8mm }}
 ul.dots {{ padding-left:0; list-style:none; margin:0 }} ul.dots li {{ position:relative; padding-left:5mm; margin-bottom:1.6mm; line-height:1.4 }}
 ul.dots li:before {{ content:''; position:absolute; left:0; top:1.3mm; width:2.4mm; height:2.4mm; border-radius:50%; background:{GRN} }}
@@ -313,8 +307,8 @@ ul.dots li:before {{ content:''; position:absolute; left:0; top:1.3mm; width:2.4
 .bt {{ font-size:9px; font-weight:700; fill:#fff }} .bs {{ font-size:7.5px; fill:#e8edf5 }} .bs2 {{ font-size:7.5px; fill:{MUT} }}
 .sign {{ display:grid; grid-template-columns:1fr 1fr; gap:6mm; margin-top:3mm }} .sign div {{ border:1px solid {LINE}; height:22mm; padding:2.5mm 3mm; display:flex; flex-direction:column; justify-content:space-between }}
 .sign span {{ color:{MUT}; font-size:8pt }}
-ol.steps {{ margin:0; padding-left:5mm; line-height:1.6 }}
-.thanks {{ margin-top:8mm; text-align:center; color:{NAVY}; font-style:italic; line-height:1.7 }}
+ol.steps {{ margin:0; padding-left:5mm; line-height:1.4 }}
+.thanks {{ margin-top:3mm; text-align:center; color:{NAVY}; font-style:italic; font-size:8.5pt }}
 .cover {{ text-align:center }} .cv-logo img {{ height:40mm; margin-top:8mm }}
 .cv-photo {{ height:92mm; margin:5mm 18mm 0; background-size:cover; background-position:center 35%; border-radius:3mm }}
 .cv-kicker {{ color:{ORG}; font-weight:700; font-size:10.5pt; margin-top:7mm }}

@@ -55,7 +55,7 @@ merge(r, "C", "F", "Nile Sun Power Limited\nKampala, Uganda", font(bold=True, si
       Alignment(horizontal="right", vertical="center", wrap_text=True), 60, border=False); r += 1
 merge(r, "A", "F", "Commercial Proposal & Quotation – Rooftop Solar PV System", font(bold=True, size=16, color=NAVY),
       None, Alignment(horizontal="center", vertical="center"), 34); r += 1
-merge(r, "A", "F", "Turnkey EPC supply, installation and commissioning · 185.4 kWp grid-tied · zero export · no battery",
+merge(r, "A", "F", "Turnkey EPC supply, installation and commissioning · 185.4 kWp grid-tied · no battery",
       font(italic=True, size=9, color="5B6673"), None, Alignment(horizontal="center", vertical="center"), 16, border=False); r += 1
 kv("Quotation No.:", "NSP-261105-KMH", "Date:", "05-11-2026")
 kv("Revision:", "A", "Valid until:", "05-12-2026 (30 days)")
@@ -63,16 +63,15 @@ kv("Revision:", "A", "Valid until:", "05-12-2026 (30 days)")
 # ---------------- 1. project ----------------
 section("1. Project Details")
 kv("Project name:", "Kampala Marriott Hotel – 185.4 kWp Rooftop Solar PV (mezzanine roof)")
-kv("System:", "Grid-tied solar PV, self-consumption, zero-export control, no battery storage")
+kv("System:", "Grid-tied solar PV, self-consumption, no battery storage")
 kv("Location:", "Kampala, Uganda · 0°18'11.34\"N, 32°35'13.76\"E · Ref. drawing D18102-DD-A-104")
 
 # ---------------- 2. client / supplier ----------------
 section("2. Client & Supplier Details")
 kv("Client:", "Kampala Marriott Hotel", "Supplier:", "Nile Sun Power Limited", h=26)
 kv("Address:", "Kampala, Uganda", "Address:", "Kampala, Uganda", h=18)
-kv("Contact:", "", "Contact:", "Mahil Fernando", fill_value=None)
-kv("Mobile / Email:", "", "Mobile / Email:", "+94 773 55 96 82 · mahil@windforce.lk", h=28)
-for rr in (r - 2, r - 1): ws[f"C{rr}"].fill = PatternFill("solid", fgColor=YEL)
+kv("Contact:", "Mr. Jagath", "Contact:", "Mahil Fernando", fill_value=None)
+kv("Mobile / Email:", "+256 791 811805", "Mobile / Email:", "+94 773 55 96 82 · mahil@windforce.lk", h=28)
 
 # ---------------- 3. quotation ----------------
 section("3. Quotation (Turnkey EPC)")
@@ -86,7 +85,7 @@ items = [("PV modules – Astronergy ASTRO N7 620 Wp bifacial N-type TOPCon", "2
          ("Ballasted aluminium mounting structure, 10° tilt", "1", "lot"),
          ("DC system – PV cable, connectors, string isolators, cable tray", "1", "lot"),
          ("AC system – AC combiner panel, MCCBs, cabling to main LV switchboard", "1", "lot"),
-         ("Smart data logger, remote monitoring & zero-export control", "1", "set"),
+         ("Smart data logger, energy meter & remote monitoring", "1", "set"),
          ("Earthing & lightning protection integration", "1", "lot"),
          ("Installation, testing & commissioning", "1", "lot"),
          ("Transport, logistics & customs clearing to site", "1", "lot")]
@@ -100,21 +99,21 @@ for i, (d, q, u) in enumerate(items, start=1):
     ws.row_dimensions[r].height = 16
     r += 1
 ws.merge_cells(f"F{first}:F{r-1}")
-c = ws[f"F{first}"]; c.value = 121115; c.number_format = '"USD "#,##0'
+c = ws[f"F{first}"]; c.value = 102789; c.number_format = '"USD "#,##0'
 c.font = font(bold=True, size=16, color=ACC); c.alignment = Alignment(horizontal="center", vertical="center")
 for rr in range(first, r): ws[f"F{rr}"].border = BOX
 merge(r, "A", "E", "TOTAL TURNKEY EPC PRICE (excluding VAT and other applicable taxes)", font(bold=True, size=10),
       BAND, Alignment(horizontal="right", vertical="center", indent=1), 20)
-ws[f"F{r}"] = 121115; ws[f"F{r}"].number_format = '"USD "#,##0'; ws[f"F{r}"].font = font(bold=True, size=11, color=NAVY)
+ws[f"F{r}"] = 102789; ws[f"F{r}"].number_format = '"USD "#,##0'; ws[f"F{r}"].font = font(bold=True, size=11, color=NAVY)
 ws[f"F{r}"].fill = PatternFill("solid", fgColor=BAND); ws[f"F{r}"].border = BOX; ws[f"F{r}"].alignment = Alignment(horizontal="center", vertical="center")
 r += 1
-merge(r, "A", "F", "Equivalent to USD 0.65 per Wp · Amount in words: One hundred twenty-one thousand one hundred fifteen US Dollars only.",
+merge(r, "A", "F", "Equivalent to USD 0.55 per Wp · Amount in words: One hundred two thousand seven hundred eighty-nine US Dollars only.",
       font(italic=True, size=8.5, color="5B6673"), None, None, 15); r += 1
 
 # ---------------- 5. commercial terms ----------------
 section("4. Payment & Commercial Terms")
 kv("Price basis:", "Turnkey EPC, delivered, installed and commissioned at site, Kampala. Currency: USD.")
-kv("Payment terms:", "30 % advance with purchase order · 60 % on delivery of main equipment to site · 10 % on commissioning", h=26)
+kv("Payment terms:", "75 % advance with purchase order · 25 % on commissioning", h=18)
 kv("Taxes:", "Prices exclude VAT, withholding tax and any other statutory levies, which shall be charged as applicable.", h=26)
 
 # ---------------- 6. delivery ----------------
@@ -130,7 +129,7 @@ kv("Mounting structure:", "10 years", "Workmanship:", "2 years from commissionin
 section("7. Notes & Exclusions")
 notes = ["1. Final quantities are subject to detailed engineering and site survey; price will be adjusted for any change in scope.",
          "2. Excluded: roof structural strengthening or waterproofing works, battery storage, utility/permit fees, and works not listed above.",
-         "3. Client to provide roof access, a spare 250 A way on the main LV switchboard, and power/water during installation.",
+         "3. Client to provide roof access, connection to the existing Masterpact NW10 H1 solar incomer on the main LV switchboard, and power/water during installation.",
          "4. Energy and savings estimates are given in the accompanying proposal and are indicative only."]
 for n in notes:
     merge(r, "A", "F", n, font(size=8.5), None, Alignment(vertical="center", wrap_text=True), 18); r += 1
