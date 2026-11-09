@@ -1,5 +1,5 @@
 """Detailed string-level SLD (contractor style): every string with DC SPD + DC isolator, inverters, AC combiner,
-MLVS, UEDCL supply, zero-export metering, earthing, general notes/specs and title block.
+MLVS, UEDCL supply, earthing, general notes/specs and title block.
 Run: python3 build_sld_detailed.py && node sld_detailed_pdf.js  -> PV_SLD_Detailed.svg / .pdf / .png
 Equipment per supplied data sheets: Astronergy ASTRO N7 CHSM66RN(DG)/F-BH 620 W; Sigenergy Sigen PV 80M1.
 """
@@ -70,7 +70,7 @@ def earth(x, y):
 # ------------------------------------------------------------------ frames
 R(10, 10, W - 20, H - 20, BLK, 2.2, "#fff")
 R(30, 30, W - 60, H - 60, BLK, 1.2)
-T(50, 58, "SINGLE LINE DIAGRAM – 185.4 kWp GRID-TIED ROOFTOP SOLAR PV SYSTEM (ZERO EXPORT)", 15, weight="bold")
+T(50, 58, "SINGLE LINE DIAGRAM – 185.4 kWp GRID-TIED ROOFTOP SOLAR PV SYSTEM", 15, weight="bold")
 T(50, 76, "Kampala Marriott Hotel – mezzanine roof  ·  299 × 620 Wp (Astronergy ASTRO N7)  ·  2 × 80 kW (Sigenergy Sigen PV 80M1)  ·  400 V 3N~ 50 Hz", 10, color="#333")
 
 # ------------------------------------------------------------------ PV arrays + DC side
@@ -177,27 +177,11 @@ T(MB - 16, 208, "UEDCL meter", 8, "end")
 ac4v(MB, 90, 190, 6)
 add(f'<circle cx="{MB+9}" cy="82" r="10" fill="#fff" stroke="#000" stroke-width="1.2"/>'); T(MB + 9, 86, "~", 11, "middle")
 T(MB - 8, 78, "UEDCL utility supply", 9, "end", "bold"); T(MB - 8, 90, "11 kV / 400 V transformer (existing)", 7.5, "end")
-# CTs + zero-export meter
-for j in range(3):
-    add(f'<circle cx="{MB + j*6}" cy="240" r="5" fill="none" stroke="{GRY}" stroke-width="1"/>')
-R(MX + 6, 226, 60, 28, "#7b4fa0", 1.3, "#f4eefa"); T(MX + 36, 244, "Smart meter", 7.5, "middle", "bold", color="#7b4fa0")
-L(MX + 66, 240, MB - 6, 240, "#7b4fa0", 1, "4 3")
-T(MX + 36, 268, "CTs 3 × 1500/5 A on incomer", 7.5, "middle", color="#7b4fa0")
-T(MX + 36, 279, "(zero-export control)", 7.5, "middle", color="#7b4fa0")
 # existing feeders
 for k, yy in enumerate((560, 640, 720, 800)):
     for j, c in enumerate((RED, YEL, BLU, BLK)): L(MB + j * 6, yy + j * 5, MX + 230, yy + j * 5, GRY, 1)
     R(MB + 40, yy - 6, 14, 26, GRY, 1, "#fff"); L(MB + 42, yy + 12, MB + 52, yy, GRY, 1)
 T(MB + 30, 538, "Existing feeders", 8, "start", color=GRY); T(MB + 30, 549, "to hotel loads", 8, "start", color=GRY)
-
-# communication (EMS / logger)
-R(CX + 30, 1000, 150, 40, "#7b4fa0", 1.3, "#f4eefa")
-T(CX + 105, 1016, "Sigen data logger / EMS", 8.5, "middle", "bold", color="#7b4fa0")
-T(CX + 105, 1030, "export limit = 0 kW, monitoring", 7.5, "middle", color="#7b4fa0")
-PL([(MX + 44, 254), (MX + 100, 254), (MX + 100, 1020), (CX + 180, 1020)], "#7b4fa0", 1, "4 3")
-PL([(CX + 30, 1020), (IX + IW / 2, 1020), (IX + IW / 2, INV[1]["iy1"])], "#7b4fa0", 1, "4 3")
-PL([(IX + IW + 12, 1020), (IX + IW + 12, INV[0]["iy1"] - 30), (IX + IW, INV[0]["iy1"] - 30)], "#7b4fa0", 1, "4 3")
-T(IX + IW + 18, 1012, "RS485 / Ethernet (STP 2 × 2 × 0.5 mm²)", 7.5, "start", color="#7b4fa0")
 
 # ------------------------------------------------------------------ earthing
 EY = 1110
@@ -219,7 +203,7 @@ R(NX, 40, NW, 760, BLK, 1.4, "#fff", 10)
 T(NX + NW / 2, 60, "General Notes", 12, "middle", "bold")
 L(NX + 10, 68, NX + NW - 10, 68)
 notes = [
- ("", "This diagram shows the electrical schematic of the 185.4 kWp grid-tied solar PV system (zero export, no battery)."),
+ ("", "This diagram shows the electrical schematic of the 185.4 kWp grid-tied solar PV system (no battery)."),
  ("1. PV modules", "Astronergy ASTRO N7 CHSM66RN(DG)/F-BH, 620 Wp bifacial; Voc 49.04 V, Isc 16.11 A, Vmp 41.56 V, Imp 14.92 A"),
  ("2. Strings", "INV-01: 8 × 19 = 152 (94.24 kWp); INV-02: 3 × 19 + 5 × 18 = 147 (91.14 kWp). Max string Voc ≈ 955 V (15 °C) < 1100 V"),
  ("3. Inverters", "2 × Sigenergy Sigen PV 80M1, 80 kW, 400 V 3N~; max AC current 133.7 A; 2 strings per MPPT (max 40 A/MPPT)"),
@@ -230,9 +214,8 @@ notes = [
  ("8. DC isolator (per string)", "2-pole, 1200 V DC, 32 A, DC-PV2, IEC 60947-3, IP66 enclosure"),
  ("9. AC SPD (ACCP)", "Type 2, 4P (3P+N), Uc 320 Vac, In 20 kA, Imax 40 kA, Up ≤ 1.5 kV, IEC 61643-11"),
  ("10. AC protection", "Inverter MCCB 4P 160 A (Ir 140 A); ACCP Q1/Q2 MCCB 4P 160 A (Ir 140 A); Q3 switch-disconnector 4P 400 A. Q5 = existing Masterpact NW10 H1 ACB used as solar incomer: fit 400 A sensor/rating plug and set Ir 280 A to protect C3 (4C × 120 mm²). If the 1000 A sensor is kept (min Ir 400 A), upsize C3 to 4C × 185 mm²."),
- ("11. Zero export", "Smart meter + 3 CTs on MLVS incomer → Sigen EMS limits inverter output to keep export = 0"),
- ("12. Solar system", "PV capacity 185.38 kWp DC; inverter capacity 2 × 80 kW = 160 kW AC; DC/AC 1.16"),
- ("13.", "Cable lengths indicative; confirm on site. Verify MLVS spare way, fault level and busbar rating before installation."),
+ ("11. Solar system", "PV capacity 185.38 kWp DC; inverter capacity 2 × 80 kW = 160 kW AC; DC/AC 1.16"),
+ ("12.", "Cable lengths indicative; confirm on site. Verify MLVS spare way, fault level and busbar rating before installation."),
 ]
 y = 84
 import textwrap
@@ -245,7 +228,7 @@ for head, body in notes:
 # legend
 LY = y + 6
 T(NX + 10, LY, "Legend", 9, weight="bold")
-legend = [(RED, "DC + / L1"), (BLU, "DC − / L3"), (YEL, "L2"), (BLK, "N"), (GRN, "Earth (PE)"), ("#7b4fa0", "Comms / CT signal")]
+legend = [(RED, "DC + / L1"), (BLU, "DC − / L3"), (YEL, "L2"), (BLK, "N"), (GRN, "Earth (PE)")]
 for i, (c, t) in enumerate(legend):
     yy = LY + 14 + (i // 2) * 14; xx = NX + 10 + (i % 2) * 120
     L(xx, yy - 3, xx + 26, yy - 3, c, 2, "4 3" if c == "#7b4fa0" else None); T(xx + 32, yy, t, 8)
