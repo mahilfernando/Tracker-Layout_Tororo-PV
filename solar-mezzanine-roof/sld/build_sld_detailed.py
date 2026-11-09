@@ -147,8 +147,8 @@ earth(CX + 27, ys + 62)
 # outgoing
 YO = 400
 for j, c in enumerate((RED, YEL, BLU, BLK)): L(BUS + j * 6, YO + j * 7, CX + 210, YO + j * 7, c, 1.4)
-mccb4(BUS + 60, YO, label="Q3 MCCB 4P 400 A")
-T(BUS + 60, YO + 42, "25 kA · Ir 280 A", 7.5, "middle")
+mccb4(BUS + 60, YO, label="Q3 Switch-disc. 4P 400 A")
+T(BUS + 60, YO + 42, "roof isolator (AC-23)", 7.5, "middle")
 # earth bar
 R(CX + 20, 900, 110, 10, GRN, 1.2, "#e8f6ea"); T(CX + 75, 925, "Earth bar (ACCP)", 8, "middle", color=GRN)
 
@@ -162,14 +162,16 @@ T(MX + 8, 151, "LV room · existing · 400 V 3N~", 8, "start")
 MB = MX + 125                                   # main busbar
 ac4v(MB, 300, 900, 6)
 T(MB + 34, 905, "Main busbar ≥ 1000 A (existing)", 8.5, "start", "bold", -90)
-mccb4(MX + 62, YO, label="Q5 MCCB 4P 400 A")
-T(MX + 62, YO + 42, "new way · 25 kA · Ir 280 A", 7.5, "middle")
+mccb4(MX + 62, YO, label="Q5 ACB 4P 1000 A")
+T(MX + 62, YO + 42, "Masterpact NW10 H1", 7.5, "middle", "bold")
+T(MX + 62, YO + 53, "(existing) – solar incomer", 7.5, "middle")
+T(MX + 62, YO + 64, "Ir set 280 A (see note 10)", 7.5, "middle")
 for j, c in enumerate((RED, YEL, BLU, BLK)):
     L(MX + 40, YO + j * 7, MX + 71, YO + j * 7, c, 1.4); L(MX + 71, YO + j * 7, MB + j * 6, YO + j * 7, c, 1.4)
 # incomer from UEDCL
 ac4v(MB, 60 + 120, 300, 6)
 mccb4(MB, 290, 6, vertical=True)
-T(MB - 14, 288, "Q0 ACB 4P 1000 A", 8, "end", "bold"); T(MB - 14, 299, "Masterpact NW10 H1 (existing)", 7.5, "end")
+T(MB - 14, 288, "Q0 main incomer", 8, "end", "bold"); T(MB - 14, 299, "(existing, grid)", 7.5, "end")
 R(MB - 10, 190, 38, 30, BLK, 1.2, "#fff"); T(MB + 9, 210, "kWh", 9, "middle", "bold")
 T(MB - 16, 208, "UEDCL meter", 8, "end")
 ac4v(MB, 90, 190, 6)
@@ -227,7 +229,7 @@ notes = [
  ("7. DC SPD (per string)", "Type 2, Ucpv 1100 V DC, In 20 kA, Imax 40 kA, Up ≤ 4.0 kV, IEC 61643-31"),
  ("8. DC isolator (per string)", "2-pole, 1200 V DC, 32 A, DC-PV2, IEC 60947-3, IP66 enclosure"),
  ("9. AC SPD (ACCP)", "Type 2, 4P (3P+N), Uc 320 Vac, In 20 kA, Imax 40 kA, Up ≤ 1.5 kV, IEC 61643-11"),
- ("10. AC protection", "Inverter MCCB 4P 160 A (Ir 140 A) 25 kA; ACCP Q1/Q2 MCCB 4P 160 A; Q3 & Q5 MCCB 4P 400 A (Ir 280 A) 25 kA"),
+ ("10. AC protection", "Inverter MCCB 4P 160 A (Ir 140 A); ACCP Q1/Q2 MCCB 4P 160 A (Ir 140 A); Q3 switch-disconnector 4P 400 A. Q5 = existing Masterpact NW10 H1 ACB used as solar incomer: fit 400 A sensor/rating plug and set Ir 280 A to protect C3 (4C × 120 mm²). If the 1000 A sensor is kept (min Ir 400 A), upsize C3 to 4C × 185 mm²."),
  ("11. Zero export", "Smart meter + 3 CTs on MLVS incomer → Sigen EMS limits inverter output to keep export = 0"),
  ("12. Solar system", "PV capacity 185.38 kWp DC; inverter capacity 2 × 80 kW = 160 kW AC; DC/AC 1.16"),
  ("13.", "Cable lengths indicative; confirm on site. Verify MLVS spare way, fault level and busbar rating before installation."),
