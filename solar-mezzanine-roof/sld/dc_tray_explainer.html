@@ -1,0 +1,102 @@
+<!doctype html><html><head><meta charset="utf-8"><title>DC Cable Tray</title>
+<style>body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif}svg{display:block}
+text{fill:#1b2430}.h{font-size:22px;font-weight:700;fill:#14365d}.s{font-size:13px}.b{font-size:13px;font-weight:700}.sm{font-size:11.5px;fill:#4a5561}
+.tab{fill:#dfe7f5;stroke:#1f4fb5;stroke-width:1.2}.tab2{fill:#dcf2e8;stroke:#1b8f63;stroke-width:1.2}
+.tray{fill:#f6d5d1;stroke:#c0392b;stroke-width:2}.pos{stroke:#d62020;stroke-width:1.6;fill:none}.neg{stroke:#111;stroke-width:1.6;fill:none}
+.steel{fill:#c9d0d8;stroke:#5b6673;stroke-width:2}.cov{fill:#9aa4ae;stroke:#5b6673;stroke-width:2}.rail{fill:#b9c3cf;stroke:#5b6673;stroke-width:1.2}
+.mod{fill:#2a4f9e;stroke:#0f2a5c;stroke-width:1.5}.dim{stroke:#6b7682;stroke-width:1}</style></head><body>
+<svg viewBox="0 0 1400 1010" width="1400" height="1010">
+<rect width="1400" height="1010" fill="#fff"/>
+<text x="30" y="40" class="h">DC cable tray – HDG perforated 100 mm with UV cover (Kampala Marriott rooftop PV)</text>
+<text x="30" y="64" class="s">Carries the 16 string cables (+ red / − black, 6 mm²) from the end of each table to the DC isolator units at the inverter station.</text>
+
+<!-- ============ ① PLAN ROUTE ============ -->
+<text x="30" y="102" class="b">① ROUTE ON THE ROOF (plan) – tray only along the east corridor + short stubs</text>
+<g transform="translate(40,120)">
+  <rect x="0" y="0" width="560" height="50" class="tab"/><text x="10" y="30" class="s">T1  2P × 23</text>
+  <rect x="0" y="70" width="560" height="50" class="tab"/><text x="10" y="100" class="s">T2  2P × 23</text>
+  <rect x="0" y="140" width="560" height="26" class="tab"/><text x="10" y="158" class="s">T3  1P × 23</text>
+  <rect x="0" y="190" width="560" height="50" class="tab2"/><text x="10" y="220" class="s">T4  2P × 23</text>
+  <rect x="0" y="260" width="560" height="50" class="tab2"/><text x="10" y="290" class="s">T5</text>
+  <rect x="0" y="330" width="560" height="50" class="tab2"/><text x="10" y="360" class="s">T6</text>
+  <rect x="0" y="400" width="560" height="50" class="tab2"/><text x="10" y="430" class="s">T7</text>
+  <!-- cables under panels along rails (dotted) -->
+  <g stroke-dasharray="4 3">
+    <path d="M 120 32 L 560 32" class="pos"/><path d="M 120 38 L 560 38" class="neg"/>
+    <path d="M 120 242 L 560 242" class="pos" opacity="0"/>
+  </g>
+  <text x="130" y="58" class="sm">string cables clipped under the rail (no tray inside the table)</text>
+  <!-- stubs -->
+  <g>
+    <rect x="560" y="22" width="40" height="12" class="tray"/><rect x="560" y="92" width="40" height="12" class="tray"/>
+    <rect x="560" y="148" width="40" height="12" class="tray"/><rect x="560" y="212" width="40" height="12" class="tray"/>
+    <rect x="560" y="282" width="40" height="12" class="tray"/><rect x="560" y="352" width="40" height="12" class="tray"/>
+    <rect x="560" y="422" width="40" height="12" class="tray"/>
+  </g>
+  <!-- main tray east corridor -->
+  <rect x="600" y="10" width="16" height="520" class="tray"/>
+  <!-- along station -->
+  <rect x="300" y="520" width="316" height="14" class="tray"/>
+  <rect x="300" y="534" width="14" height="30" class="tray"/><rect x="430" y="534" width="14" height="30" class="tray"/>
+  <!-- station -->
+  <rect x="280" y="564" width="380" height="46" fill="#fff" stroke="#14365d" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <rect x="292" y="574" width="30" height="16" fill="#6b7682"/><rect x="328" y="574" width="30" height="16" fill="#d0202a"/><rect x="364" y="574" width="56" height="24" fill="#14365d"/>
+  <rect x="424" y="574" width="30" height="16" fill="#6b7682"/><rect x="460" y="574" width="30" height="16" fill="#d0202a"/><rect x="496" y="574" width="56" height="24" fill="#14365d"/>
+  <rect x="590" y="574" width="44" height="18" fill="#c27a00"/>
+  <text x="290" y="628" class="sm">DCI-01 · DCS-01 · INV-01 · DCI-02 · DCS-02 · INV-02 · ACCP</text>
+  <!-- labels -->
+  <line x1="616" y1="250" x2="690" y2="250" class="dim"/><text x="695" y="246" class="b" style="fill:#c0392b">Main tray – east corridor ≈ 38 m</text>
+  <text x="695" y="262" class="sm">runs between the rail ends and the east wall</text>
+  <line x1="580" y1="98" x2="690" y2="130" class="dim"/><text x="695" y="128" class="b" style="fill:#c0392b">Stub at each table end ≈ 1–3 m (7 nos)</text>
+  <text x="695" y="144" class="sm">cables leave the table here and drop into the main tray</text>
+  <line x1="460" y1="527" x2="690" y2="480" class="dim"/><text x="695" y="478" class="b" style="fill:#c0392b">Run along the station + drops ≈ 6 m</text>
+  <text x="695" y="494" class="sm">into DC isolator units DCI-01 / DCI-02</text>
+  <text x="695" y="540" class="b">Total on layout ≈ 124 m → order ≈ 130 m</text>
+  <text x="695" y="556" class="sm">(+5 % for bends, tees, risers, joints)</text>
+</g>
+
+<!-- ============ ② CROSS SECTION ============ -->
+<text x="980" y="102" class="b">② TRAY CROSS-SECTION (≈ actual size × 3)</text>
+<g transform="translate(1020,150)">
+  <!-- cover -->
+  <path d="M -10 0 L 310 0 L 310 14 L 300 14 L 300 6 L 0 6 L 0 14 L -10 14 Z" class="cov"/>
+  <text x="0" y="-10" class="sm">UV cover (lid) – keeps sun &amp; foot traffic off the cables</text>
+  <!-- tray U -->
+  <path d="M 0 20 L 0 170 L 300 170 L 300 20 L 292 20 L 292 162 L 8 162 L 8 20 Z" class="steel"/>
+  <g fill="#fff"><circle cx="50" cy="166" r="3"/><circle cx="100" cy="166" r="3"/><circle cx="150" cy="166" r="3"/><circle cx="200" cy="166" r="3"/><circle cx="250" cy="166" r="3"/></g>
+  <!-- cables -->
+  <g>
+    <circle cx="30" cy="147" r="13" fill="#d62020"/><circle cx="58" cy="147" r="13" fill="#111"/><circle cx="86" cy="147" r="13" fill="#d62020"/><circle cx="114" cy="147" r="13" fill="#111"/>
+    <circle cx="142" cy="147" r="13" fill="#d62020"/><circle cx="170" cy="147" r="13" fill="#111"/><circle cx="198" cy="147" r="13" fill="#d62020"/><circle cx="226" cy="147" r="13" fill="#111"/>
+    <circle cx="30" cy="121" r="13" fill="#d62020"/><circle cx="58" cy="121" r="13" fill="#111"/><circle cx="86" cy="121" r="13" fill="#d62020"/><circle cx="114" cy="121" r="13" fill="#111"/>
+    <circle cx="142" cy="121" r="13" fill="#d62020"/><circle cx="170" cy="121" r="13" fill="#111"/>
+    <circle cx="268" cy="152" r="9" fill="#1c9a35"/>
+  </g>
+  <text x="0" y="200" class="sm">perforated base – rain drains, cables stay cooler</text>
+  <line x1="0" y1="225" x2="300" y2="225" class="dim"/><text x="120" y="242" class="b">100 mm</text>
+  <line x1="318" y1="20" x2="318" y2="170" class="dim"/><text x="324" y="100" class="b">50</text>
+  <text x="0" y="270" class="s">● red = DC + &nbsp; ● black = DC − (6 mm² H1Z2Z2-K)</text>
+  <text x="0" y="288" class="s">● green = earth conductor (35 mm² spine)</text>
+  <text x="0" y="314" class="sm">Up to 32 string cables (16 strings × 2) ≈ 20 % fill –</text>
+  <text x="0" y="330" class="sm">room for the earth conductor and spares.</text>
+  <text x="0" y="346" class="sm">Tray fixed on rubber / concrete roof blocks every ≈ 1.5 m</text>
+  <text x="0" y="362" class="sm">(no drilling into the roof membrane).</text>
+</g>
+
+<!-- ============ ③ SIDE VIEW TABLE END ============ -->
+<text x="30" y="790" class="b">③ TABLE END (side view) – cables come out under the rail and drop into the tray</text>
+<g transform="translate(40,800)">
+  <rect x="0" y="150" width="620" height="12" fill="#d9dde2"/><text x="560" y="180" class="sm">roof slab</text>
+  <g transform="rotate(-10 60 110)">
+    <rect x="20" y="100" width="380" height="10" class="rail"/>
+    <rect x="25" y="74" width="370" height="24" class="mod"/>
+    <path d="M 30 116 L 395 116" class="pos"/><path d="M 30 121 L 395 121" class="neg"/>
+  </g>
+  <rect x="80" y="125" width="40" height="25" fill="#9a9a9a"/><rect x="340" y="88" width="6" height="62" fill="#c9d0d8" stroke="#5b6673"/>
+  <path d="M 393 52 C 430 60 440 110 470 130" class="pos"/><path d="M 393 57 C 425 66 436 112 470 135" class="neg"/>
+  <rect x="460" y="122" width="150" height="18" class="tray"/><rect x="456" y="116" width="158" height="6" class="cov"/>
+  <rect x="480" y="140" width="40" height="10" fill="#555"/><rect x="560" y="140" width="40" height="10" fill="#555"/>
+  <text x="620" y="128" class="b" style="fill:#c0392b">DC tray + UV cover</text><text x="620" y="144" class="sm">on roof support blocks</text>
+  <text x="460" y="40" class="sm">cables clipped under the rail with</text><text x="460" y="55" class="sm">UV cable ties / stainless clips</text>
+</g>
+</svg></body></html>
