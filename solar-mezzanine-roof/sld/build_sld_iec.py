@@ -101,15 +101,15 @@ R(1170, 95, 450, 735, "enclx"); T(1180, 112, "=MLVS  MAIN LV SWITCHBOARD, LV ROO
 def inverter_chain(y, inv, arr, strings, kwp, mods):
     pv_array(95, y - 23)
     T(95, y + 52, f"PV ARRAY {arr}", "tb"); T(95, y + 66, f"{mods} × 620 Wp = {kwp} kWp", "ts"); T(95, y + 80, strings, "ts")
-    L(165, y, 230, y, "dc"); strokes(196, y, 2, "2 × 6 mm²")
-    dc_switch_h(230, y); L(270, y, 330, y, "dc")
-    T(250, y - 42, "8 × DC switch-disc.", "ts", "middle"); T(250, y - 29, "1000 V, 32 A (1/string)", "ts", "middle")
-    T(252, y + 22, "8 × (2 × 6 mm² H1Z2Z2-K)", "ts", "middle"); T(252, y + 35, "≈ 40 m, in tray", "ts", "middle")
+    L(165, y, 230, y, "dc"); strokes(196, y, 2, "8 × (2 × 6 mm²)")
+    dc_switch_h(230, y); L(270, y, 330, y, "dc"); spd_v(300, y, "")
+    T(262, y - 55, "8 × DC switch-disc. 1200 V 32 A", "ts", "middle"); T(262, y - 42, "8 × DC SPD T2, Ucpv 1100 V", "ts", "middle")
+    T(262, y - 29, "(1 each per string)", "ts", "middle")
     # inverter (DC/AC)
     R(330, y - 45, 100, 90, "boxh"); L(330, y + 45, 430, y - 45, "ln")
     T(345, y - 20, "=", "sym"); T(405, y + 32, "~", "sym")
     T(380, y - 55, f"={inv}", "tb", "middle")
-    T(380, y + 62, "80 kW, 400 V 3N~", "ts", "middle"); T(380, y + 75, "MPPT ≥ 8, 1100 V DC", "ts", "middle")
+    T(380, y + 62, "Sigen PV 80M1, 80 kW 3N~", "ts", "middle"); T(380, y + 75, "1100 V DC, 2 strings/MPPT", "ts", "middle")
     T(380, y + 88, "integral DC switch + SPD T2", "ts", "middle")
     return y
 
@@ -122,20 +122,18 @@ BX = 880                                    # ACCP busbar x
 for y, c, e in ((Y_I1, "C1", "E1"), (Y_I2, "C2", "E2")):
     L(430, y, 760, y, "lnh"); strokes(520, y, 4, "3N~")
     tag(600, y, c); T(445, y + 19, "4C × 50 mm² Cu XLPE ≈ 4 m", "ts")
-    breaker_h(760, y, "Q1" if c == "C1" else "Q2", "MCCB 125 A 3P")
+    breaker_h(760, y, "Q1" if c == "C1" else "Q2", "MCCB 4P 160 A, Ir 140 A")
     L(800, y, BX, y, "lnh")
     # PE
     L(430, y + 30, 455, y + 30, "pe"); L(455, y + 30, 690, y + 30, "pe"); T(470, y + 44, f"{e}: 25 mm² Cu PE", "tspe")
 L(690, Y_I1 + 30, 690, 790, "pe"); L(690, Y_I2 + 30, 690, 790, "pe")
 
 # ACCP busbar + SPD + outgoing
-L(BX, 200, BX, 680, "bus"); T(BX + 8, 196, "400 V 3N~ 250 A", "ts")
-L(BX, 500, 830, 500, "lnh"); spd_v(830, 500, "F1 SPD T2")
+L(BX, 200, BX, 680, "bus"); T(BX + 8, 196, "400 V 3N~ 400 A", "ts")
+L(BX, 500, 830, 500, "lnh"); spd_v(830, 500, "F1 AC SPD T2 4P")
 YO = 400
-L(BX, YO, 905, YO, "lnh"); breaker_h(905, YO, "Q3", "MCCB 250 A 3P"); L(945, YO, 975, YO, "lnh")
-L(975, YO, 1030, YO, "lnh")
-switch_disconnector_h(1030, YO, "Q4", "250 A roof isolator")
-L(1070, YO, 1220, YO, "lnh"); strokes(1090, YO, 4, None)
+L(BX, YO, 930, YO, "lnh"); switch_disconnector_h(930, YO, "Q3", "4P 400 A roof isolator")
+L(970, YO, 1220, YO, "lnh"); strokes(1090, YO, 4, None)
 tag(1140, YO - 30, "C3"); T(1140, YO + 26, "4C × 120 mm² Cu", "ts", "middle"); T(1140, YO + 39, "XLPE/SWA ≈ 80 m", "ts", "middle")
 # ACCP earth bar
 L(720, 790, 980, 790, "pebar"); T(850, 782, "ACCP EARTH BAR", "tspe", "middle")
@@ -145,15 +143,14 @@ MB = 1480
 transformer_v(MB, 60 + 6)
 T(MB - 22, 64, "EXISTING TRANSFORMER / UEDCL SUPPLY", "tsx", "end")
 L(MB, 100, MB, 160, "lnx")
-ct_v(MB, 170, "T1 CTs 1000/5 A cl. 0.5")
 L(MB, 179, MB, 210, "lnx")
-meter(MB + 70, 195); L(MB + 9, 170, MB + 52, 190, "thin"); T(MB + 70, 222, "P1 kWh METER", "tsx", "middle")
-breaker_v(MB, 210, "Q0 ACB 1000 A, 65 kA", "Masterpact NW10 H1", existing=True)
+meter(MB + 70, 195); L(MB + 9, 170, MB + 52, 190, "thin"); T(MB + 70, 222, "P1 UEDCL kWh METER", "tsx", "middle")
+breaker_v(MB, 210, "Q0 MAIN INCOMER", "(existing, grid)", existing=True)
 L(MB, 250, MB, 270, "lnx")
 L(MB, 270, MB, 760, "busx"); T(MB - 8, 745, "MAIN BUSBAR 400 V 3N~ (≥ 1000 A, confirm)", "tsx", "end")
 # new PV way (heavy)
-L(1220, YO, 1300, YO, "lnh"); breaker_h(1300, YO, "Q5", "MCCB 250 A, Icu ≥ 65 kA"); L(1340, YO, MB, YO, "lnh")
-T(1320, YO + 32, "NEW PV WAY", "tb", "middle")
+L(1220, YO, 1300, YO, "lnh"); breaker_h(1300, YO, "Q5 ACB 1000 A", "Masterpact NW10 H1"); L(1340, YO, MB, YO, "lnh")
+T(1320, YO + 32, "EXISTING – SOLAR INCOMER", "tb", "middle"); T(1320, YO + 46, "400 A rating plug, Ir 280 A", "ts", "middle")
 # existing outgoing feeders (light)
 for i, yy in enumerate((520, 590, 660)):
     L(MB, yy, 1540, yy, "lnx"); breaker_h(1540, yy, existing=True); L(1580, yy, 1600, yy, "lnx")
@@ -162,12 +159,6 @@ for i, yy in enumerate((520, 590, 660)):
 L(1200, 790, 1300, 790, "pebar"); T(1250, 782, "MET", "tspe", "middle"); earth(1250, 790)
 L(980, 790, 1200, 790, "pe"); tag(1090, 790, "E3"); T(1090, 815, "E3: 70 mm² Cu PE ≈ 80 m", "tspe", "middle")
 
-# ------------------------------------------------------------------ zero-export controller & comms
-R(1200, 830, 200, 40, "box"); T(1300, 846, "A1 ZERO-EXPORT CONTROLLER", "tb", "middle"); T(1300, 861, "+ data logger (LV room)", "ts", "middle")
-PL([(MB + 9, 172), (1625, 172), (1625, 850), (1400, 850)], "comm"); T(1619, 470, "CT SIGNALS TO A1", "ts", "middle", -90)
-PL([(1200, 850), (560, 850), (560, Y_I2 + 20), (430, Y_I2 + 20)], "comm")
-PL([(560, Y_I2 + 20), (560, Y_I1 + 20), (430, Y_I1 + 20)], "comm")
-T(880, 845, "RS485 / MODBUS (STP) – ACTIVE POWER LIMIT", "ts", "middle")
 
 # ------------------------------------------------------------------ bottom band: legend | schedule | notes + title block
 # symbol legend
@@ -181,10 +172,9 @@ leg(lambda x, y: (R(x + 6, y - 11, 28, 24, "boxh"), L(x + 6, y + 13, x + 34, y -
 leg(lambda x, y: breaker_h(x, y), "Circuit breaker (MCCB / ACB)")
 leg(lambda x, y: switch_disconnector_h(x, y), "Switch-disconnector (isolator)")
 leg(lambda x, y: (L(x, y - 10, x, y + 12, "lnh"), R(x + 12, y - 10, 12, 20, "boxh"), L(x + 18, y - 6, x + 18, y + 6, "thin")), "Surge protective device (SPD)")
-leg(lambda x, y: (L(x, y, x + 40, y, "lnx"), C(x + 20, y, 8, "lnx")), "Current transformer (CT)")
 leg(lambda x, y: earth(x + 20, y - 10), "Earth / main earthing terminal")
 leg(lambda x, y: (L(x, y, x + 40, y, "lnh"), strokes(x + 12, y, 4)), "Heavy = new, light = existing; strokes = conductors")
-leg(lambda x, y: (L(x, y - 6, x + 40, y - 6, "dc"), L(x, y + 4, x + 40, y + 4, "pe"), L(x, y + 12, x + 40, y + 12, "comm")), "DC   ·   PE conductor   ·   control / comms")
+leg(lambda x, y: (L(x, y - 4, x + 40, y - 4, "dc"), L(x, y + 8, x + 40, y + 8, "pe")), "DC conductor   ·   PE conductor")
 
 # cable schedule
 SX = X0 + 420
@@ -193,13 +183,12 @@ hdr = [("TAG", 0), ("FROM → TO", 52), ("CABLE", 230), ("LENGTH", 400), ("PROTE
 yh = BAND + 30
 R(SX + 6, yh, 588, 18, "thead")
 for h, dx in hdr: T(SX + 12 + dx, yh + 13, h, "th")
-rows_ = [("S1–S16", "PV strings → inverters", "2 × 6 mm² Cu H1Z2Z2-K", "≈ 40 m", "DC switch-disc. 32 A"),
-         ("C1, C2", "INV-01/02 → ACCP Q1/Q2", "4C × 50 mm² Cu XLPE", "≈ 4 m", "MCCB 125 A"),
-         ("C3", "ACCP Q4 → MLVS Q5", "4C × 120 mm² Cu XLPE/SWA", "≈ 80 m", "MCCB 250 A"),
+rows_ = [("S1–S16", "PV strings → inverters", "2 × 6 mm² Cu H1Z2Z2-K", "≈ 40 m", "DC isolator 32 A + DC SPD T2"),
+         ("C1, C2", "INV-01/02 → ACCP Q1/Q2", "4C × 50 mm² Cu XLPE", "≈ 4 m", "MCCB 160 A (Ir 140 A)"),
+         ("C3", "ACCP Q3 → MLVS Q5", "4C × 120 mm² Cu XLPE/SWA", "≈ 80 m", "ACB NW10 H1, Ir 280 A"),
          ("E1, E2", "INV-01/02 → ACCP earth bar", "25 mm² Cu (G/Y)", "≈ 4 m", "–"),
          ("E3", "ACCP earth bar → MET", "70 mm² Cu (G/Y)", "≈ 80 m", "–"),
-         ("–", "Array bonding / spine", "16 mm² / 35 mm² Cu (G/Y)", "≈ 280 m", "–"),
-         ("W1", "INV-01 → INV-02 → A1", "RS485 STP 2 × 2 × 0.5 mm²", "≈ 90 m", "–")]
+         ("–", "Array bonding / spine", "16 mm² / 35 mm² Cu (G/Y)", "≈ 280 m", "–")]
 for i, row in enumerate(rows_):
     yy = yh + 18 + i * 22
     R(SX + 6, yy, 588, 22, "trow")
@@ -211,8 +200,8 @@ TX = SX + 600
 R(TX, BAND, X1 - TX, Y1 - BAND, "frame2")
 T(TX + 10, BAND + 18, "NOTES", "tb")
 notes = ["1. 299 × 620 Wp = 185.4 kWp DC; 2 × 80 kW = 160 kW AC; DC/AC 1.16.",
-         "2. Grid-tied, zero export, no battery. A1 limits output via CTs T1.",
-         "3. New works heavy; existing MLVS equipment light (to be verified).",
+         "2. Grid-tied, no battery. DC SPD T2 + DC isolator on every string.",
+         "3. Q5 = existing NW10 H1: 400 A plug, Ir 280 A (else C3 4C × 185 mm²).",
          "4. Final ratings to equipment datasheets and detailed design."]
 for i, n in enumerate(notes): T(TX + 10, BAND + 38 + i * 15, n, "ts")
 tb_y = BAND + 104
@@ -220,8 +209,8 @@ L(TX, tb_y, X1, tb_y, "frame2")
 cells = [("CLIENT", "Kampala Marriott Hotel", TX, tb_y, 300, 34),
          ("PROJECT", "Kampala Marriott – Rooftop PV 185.4 kWp", TX + 300, tb_y, X1 - TX - 300, 34),
          ("TITLE", "SINGLE-LINE DIAGRAM – PV SYSTEM & GRID CONNECTION", TX, tb_y + 34, X1 - TX, 40),
-         ("DRAWING No.", "PV-SLD-D18102-004", TX, tb_y + 74, 200, 34), ("REV", "A", TX + 200, tb_y + 74, 60, 34),
-         ("SCALE / SIZE", "NTS / A3", TX + 260, tb_y + 74, 120, 34), ("DATE", "05.11.2026", TX + 380, tb_y + 74, X1 - TX - 380, 34),
+         ("DRAWING No.", "PV-SLD-D18102-004", TX, tb_y + 74, 200, 34), ("REV", "B", TX + 200, tb_y + 74, 60, 34),
+         ("SCALE / SIZE", "NTS / A3", TX + 260, tb_y + 74, 120, 34), ("DATE", "09.11.2026", TX + 380, tb_y + 74, X1 - TX - 380, 34),
          ("DRAWN", "", TX, tb_y + 108, 200, Y1 - tb_y - 108), ("CHECKED", "", TX + 200, tb_y + 108, 180, Y1 - tb_y - 108),
          ("APPROVED", "", TX + 380, tb_y + 108, X1 - TX - 380, Y1 - tb_y - 108)]
 for lab, val, x, y, w, h in cells:
