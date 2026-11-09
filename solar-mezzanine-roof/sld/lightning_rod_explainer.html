@@ -1,0 +1,96 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Air Termination Rods</title>
+<style>body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif}svg{display:block}
+text{fill:#1b2430}.h{font-size:22px;font-weight:700;fill:#14365d}.s{font-size:13px}.b{font-size:13px;font-weight:700}.sm{font-size:11.5px;fill:#4a5561}
+.rod{stroke:#b07a10;stroke-width:4}.cond{stroke:#b07a10;stroke-width:2.5;fill:none}.base{fill:#a8a8a8;stroke:#555;stroke-width:1.5}
+.mod{fill:#2a4f9e;stroke:#0f2a5c;stroke-width:1.2}.bld{fill:#eef2f6;stroke:#5b6673;stroke-width:1.5}
+.sph{fill:none;stroke:#7b4fa0;stroke-width:2;stroke-dasharray:8 5}.prot{fill:#efe6f7;stroke:none}.dim{stroke:#6b7682;stroke-width:1}.tab{fill:#dfe7f5;stroke:#1f4fb5;stroke-width:1.2}
+.box{fill:none;stroke:#c9d0d8;stroke-width:1}</style></head><body>
+<svg viewBox="0 0 1400 960" width="1400" height="960">
+<rect width="1400" height="960" fill="#fff"/>
+<text x="30" y="40" class="h">Air-termination rods (lightning rods) – Kampala Marriott rooftop PV</text>
+<text x="30" y="64" class="s">A 1 m rod on a concrete base stands higher than the panels, so lightning strikes the rod and the current goes to earth through the building's lightning protection system (LPS).</text>
+
+<!-- ① ROD DETAIL -->
+<rect x="20" y="85" width="440" height="430" class="box"/>
+<text x="35" y="110" class="b">① ONE ROD (side view)</text>
+<g transform="translate(60,130)">
+  <rect x="-20" y="300" width="400" height="14" fill="#d9dde2"/><text x="320" y="332" class="sm">roof slab</text>
+  <path d="M 40 300 L 60 266 L 140 266 L 160 300 Z" class="base"/>
+  <line x1="100" y1="266" x2="100" y2="50" class="rod"/><polygon points="93,54 107,54 100,34" fill="#b07a10"/>
+  <text x="114" y="46" class="sm">rod Ø16 mm aluminium / copper</text>
+  <line x1="175" y1="50" x2="175" y2="266" class="dim"/><line x1="168" y1="50" x2="182" y2="50" class="dim"/><line x1="168" y1="266" x2="182" y2="266" class="dim"/>
+  <text x="183" y="162" class="b">1.0 m</text>
+  <text x="-10" y="350" class="sm">concrete base ≈ 15–25 kg, free-standing (no drilling)</text>
+  <path d="M 100 270 L 100 288 L -15 288" class="cond"/>
+  <text x="-10" y="370" class="sm">down-conductor Ø8 mm Al or 50 mm² Cu → existing building LPS</text>
+  <!-- panel for comparison -->
+  <g transform="translate(240,262) rotate(-10)"><rect x="0" y="-10" width="120" height="10" class="mod"/></g>
+  <line x1="250" y1="262" x2="250" y2="300" stroke="#888" stroke-width="2"/><line x1="350" y1="245" x2="350" y2="300" stroke="#888" stroke-width="2"/>
+  <text x="240" y="220" class="sm">PV panel, top ≈ 0.6–1.4 m</text>
+  <text x="240" y="236" class="sm">→ rod tip is higher</text>
+</g>
+
+<!-- ② PLAN -->
+<rect x="480" y="85" width="900" height="430" class="box"/>
+<text x="495" y="110" class="b">② PLAN – about 6 rods around the array; their protection cones cover all 7 tables</text>
+<g transform="translate(560,160)">
+  <rect x="0" y="0" width="360" height="34" class="tab"/><rect x="0" y="46" width="360" height="34" class="tab"/><rect x="0" y="92" width="360" height="18" class="tab"/>
+  <rect x="0" y="130" width="360" height="34" class="tab"/><rect x="0" y="176" width="360" height="34" class="tab"/><rect x="0" y="222" width="360" height="34" class="tab"/><rect x="0" y="268" width="360" height="34" class="tab"/>
+  <text x="150" y="155" class="sm">7 PV tables</text>
+  <path d="M -30 -22 L 390 -22 L 390 324 L -30 324 Z" class="cond"/>
+  <g fill="#e0a020" stroke="#7a5200"><circle cx="-30" cy="-22" r="9"/><circle cx="390" cy="-22" r="9"/><circle cx="-30" cy="151" r="9"/><circle cx="390" cy="151" r="9"/><circle cx="-30" cy="324" r="9"/><circle cx="390" cy="324" r="9"/></g>
+  <line x1="-30" y1="200" x2="0" y2="200" class="dim"/><line x1="-30" y1="194" x2="-30" y2="206" class="dim"/><line x1="0" y1="194" x2="0" y2="206" class="dim"/>
+  <text x="-62" y="222" class="sm">≥ 0.5–1 m</text>
+</g>
+<g transform="translate(1000,150)">
+  <circle cx="8" cy="0" r="9" fill="#e0a020" stroke="#7a5200"/><text x="26" y="5" class="b">rod + concrete base (6 nos)</text>
+  <text x="26" y="22" class="sm">4 corners + 2 mid-sides</text>
+  <line x1="0" y1="50" x2="18" y2="50" class="cond"/><text x="26" y="55" class="b" style="fill:#b07a10">conductor linking the rods</text>
+  <text x="26" y="72" class="sm">→ connected to the building LPS</text>
+  <text x="0" y="120" class="b">Separation distance</text>
+  <text x="0" y="138" class="sm">Keep rods and their conductors 0.5–1 m</text>
+  <text x="0" y="154" class="sm">from panels, frames and DC cables</text>
+  <text x="0" y="170" class="sm">(IEC 62305), so lightning current does</text>
+  <text x="0" y="186" class="sm">not jump into the PV system.</text>
+  <text x="0" y="230" class="b">Cost in BOQ: 6 × USD 80 = USD 480</text>
+  <text x="0" y="248" class="sm">only if the array is outside the</text>
+  <text x="0" y="264" class="sm">existing LPS protection zone (see ③)</text>
+</g>
+
+<!-- ③ ELEVATION -->
+<rect x="20" y="530" width="1360" height="410" class="box"/>
+<text x="35" y="555" class="b">③ WHY THEY MAY NOT BE NEEDED – the taller hotel tower's LPS may already protect the array (rolling-sphere check)</text>
+<g transform="translate(60,600)">
+  <!-- protected zone (under the sphere arc, between arc and tower) -->
+  <path d="M 820 20 A 300 300 0 0 1 520.7 300 L 820 300 Z" class="prot"/>
+  <rect x="-20" y="300" width="1280" height="10" fill="#d9dde2"/>
+  <rect x="820" y="20" width="200" height="280" class="bld"/>
+  <line x1="826" y1="20" x2="826" y2="2" class="rod"/><line x1="1014" y1="20" x2="1014" y2="2" class="rod"/>
+  <text x="868" y="150" class="b">HOTEL TOWER</text><text x="850" y="168" class="sm">much taller than the</text><text x="850" y="183" class="sm">mezzanine, has its own LPS</text>
+  <rect x="200" y="200" width="620" height="100" class="bld"/><text x="220" y="270" class="sm">mezzanine block</text>
+  <g transform="translate(300,192) rotate(-10)"><rect x="0" y="-8" width="80" height="8" class="mod"/></g>
+  <g transform="translate(420,192) rotate(-10)"><rect x="0" y="-8" width="80" height="8" class="mod"/></g>
+  <g transform="translate(540,192) rotate(-10)"><rect x="0" y="-8" width="80" height="8" class="mod"/></g>
+  <g transform="translate(660,192) rotate(-10)"><rect x="0" y="-8" width="80" height="8" class="mod"/></g>
+  <text x="420" y="150" class="sm">PV array on the mezzanine roof</text>
+  <path d="M 820 20 A 300 300 0 0 1 520.7 300" class="sph"/>
+  <circle cx="520.7" cy="0" r="3" fill="#7b4fa0"/>
+  <line x1="520.7" y1="0" x2="820" y2="20" stroke="#7b4fa0" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="560" y="-6" class="sm" style="fill:#7b4fa0">r = 45 m (LPS Class III)</text>
+  <text x="20" y="40" class="b" style="fill:#7b4fa0">Rolling sphere</text>
+  <text x="20" y="58" class="sm">An imaginary 45 m ball is rolled against the tower.</text>
+  <text x="20" y="74" class="sm">Everything UNDER the curve (shaded) is already protected.</text>
+  <text x="20" y="98" class="sm">● Panels inside the shaded zone → no rods needed there</text>
+  <text x="20" y="114" class="sm">● Panels outside it → add rods (as in ②)</text>
+  <!-- legend / check -->
+  <rect x="1060" y="40" width="22" height="14" class="prot" stroke="#7b4fa0"/><text x="1090" y="52" class="sm">protected by the tower LPS</text>
+  <rect x="1060" y="70" width="22" height="8" fill="#2a4f9e"/><text x="1090" y="79" class="sm">PV panels</text>
+  <text x="1060" y="130" class="b">To decide:</text>
+  <text x="1060" y="148" class="sm">get the tower height, its distance</text>
+  <text x="1060" y="164" class="sm">from the array and the hotel's LPS</text>
+  <text x="1060" y="180" class="sm">drawing → check every table.</text>
+  <text x="1060" y="204" class="sm">All inside → delete rods (save USD 480)</text>
+  <text x="1060" y="220" class="sm">and only bond the array to the LPS.</text>
+  <text x="1060" y="270" class="sm" style="font-style:italic">Sketch not to scale.</text>
+</g>
+</svg></body></html>
