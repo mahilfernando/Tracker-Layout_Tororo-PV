@@ -66,6 +66,9 @@ td.r {{ text-align:right; }}
 .plan .mod2 {{ fill:#dcf2e8; stroke:#1b8f63; stroke-width:0.5; }}
 .plan .inv {{ fill:#14365d; stroke:#14365d; }}
 .plan .acc {{ fill:#c27a00; stroke:#c27a00; }}
+.plan .dci {{ fill:#6b7682; stroke:#1b2430; stroke-width:0.4; }}
+.plan .dcs {{ fill:#d0202a; stroke:#1b2430; stroke-width:0.4; }}
+.plan .eqtag {{ font-size:4.6px; font-weight:700; fill:#1b2430; text-anchor:middle; }}
 .plan .canopy {{ fill:none; stroke:#14365d; stroke-width:0.8; stroke-dasharray:4 2; }}
 .plan .clear {{ fill:#eef2f6; stroke:#9aa4ae; stroke-width:0.5; stroke-dasharray:2 2; }}
 .plan .tray {{ stroke:#c0392b; stroke-width:1.6; stroke-dasharray:6 3; }}
@@ -129,7 +132,7 @@ td.r {{ text-align:right; }}
   </table>
  </div>
  <div class="box legend"><h4>LEGEND</h4>
-  <div><span style="border-color:#1f4fb5;width:4mm"></span>INV-01 modules &nbsp; <span style="border-color:#1b8f63;width:4mm"></span>INV-02 modules &nbsp; <b style="color:#14365d">■</b> Inverter &nbsp; <b style="color:#c27a00">■</b> ACCP</div>
+  <div><span style="border-color:#1f4fb5;width:4mm"></span>INV-01 modules &nbsp; <span style="border-color:#1b8f63;width:4mm"></span>INV-02 modules &nbsp; <b style="color:#14365d">■</b> Inverter &nbsp; <b style="color:#c27a00">■</b> ACCP &nbsp; <b style="color:#6b7682">■</b> DC isolator unit &nbsp; <b style="color:#d0202a">■</b> DC SPD unit</div>
   <div><span style="border-color:#c0392b;border-top-style:dashed"></span>DC cable tray &nbsp; <span style="border-color:#1b2430;border-top-style:dashed"></span>C3 + E3 to LV room &nbsp; <span style="border-color:#a100a1;border-top-style:dotted"></span>Existing ducts</div>
   <div><span style="border-color:#00a3b4"></span>Rail &nbsp; <span style="border-color:#1f8a3a"></span>Frame / post &nbsp; ■ Foot block (300 × 300 indicative)</div>
   <div><span style="border-color:#d0202a;border-top-style:dashed"></span>Setback line &nbsp; <span style="border-color:#a100a1"></span>Obstruction</div>
@@ -140,8 +143,8 @@ td.r {{ text-align:right; }}
   <tr><td colspan="2" class="big">ROOFTOP SOLAR PV LAYOUT</td></tr>
   <tr><td>Project</td><td>Marriott Hotel – Mezzanine Roof</td></tr>
   <tr><td>Client</td><td>Kampala Marriott Hotel</td></tr>
-  <tr><td>Drawing No.</td><td>PV-LAY-D18102-002 &nbsp; Rev B</td></tr>
-  <tr><td>Date / Scale</td><td>4 November 2026 · NTS (A3)</td></tr>
+  <tr><td>Drawing No.</td><td>PV-LAY-D18102-002 &nbsp; Rev C</td></tr>
+  <tr><td>Date / Scale</td><td>9 November 2026 · NTS (A3)</td></tr>
  </table></div>
 </div></div></body></html>"""
 open(os.path.join(HERE, "PV_Layout_Enerack_10deg.html"), "w").write(html)

@@ -140,62 +140,51 @@ svg_items.append(("text", "zlab", (300, BUILD + 450, "Tower / building face – 
 for (x1, y1, x2, y2) in DUCTS:
     rect(x1, y1, x2, y2, "PV-EXISTING", "duct")
 svg_items.append(("text", "dlab", (3000, -45300, "Existing ducts (approx., verify)")))
-# ---------------- inverter station + ACCP (east end of the equipment strip) ----------------
+# ---------------- inverter station: DC isolator units, DC SPD units, inverters, ACCP ----------------
 EQ_Y = -40100                                   # front (north) face of equipment
 INV_W, INV_D, ACCP_W, ACCP_D = 1050, 400, 800, 300
-x0 = 24300
-eq = [("INV-01", x0, INV_W, INV_D), ("INV-02", x0 + INV_W + 450, INV_W, INV_D), ("ACCP", x0 + 2 * INV_W + 900, ACCP_W, ACCP_D)]
-rect(x0 - 300, EQ_Y + 300, x0 + 2 * INV_W + 900 + ACCP_W + 300, EQ_Y - INV_D - 600, "PV-EQUIPMENT", "canopy")
-rect(x0 - 300, EQ_Y + 1300, x0 + 2 * INV_W + 900 + ACCP_W + 300, EQ_Y + 300, "PV-EQUIPMENT", "clear")
-for name, x, w, dpt in eq:
-    rect(x, EQ_Y, x + w, EQ_Y - dpt, "PV-EQUIPMENT", "acc" if name == "ACCP" else "inv")
-    msp.add_text(name, height=250, dxfattribs={"layer": "PV-TEXT"}).set_placement((x + w / 2, EQ_Y - dpt - 350), align=TextEntityAlignment.MIDDLE_CENTER)
+DCU_W, DCU_D, GAPU = 500, 250, 150              # DC isolator unit / DC SPD unit (wall boxes on the frame)
+STATION_E = 28400
+x_acc = STATION_E - ACCP_W
+x_inv2 = x_acc - 450 - INV_W
+x_dcs2 = x_inv2 - GAPU - DCU_W
+x_dci2 = x_dcs2 - GAPU - DCU_W
+x_inv1 = x_dci2 - 300 - INV_W
+x_dcs1 = x_inv1 - GAPU - DCU_W
+x_dci1 = x_dcs1 - GAPU - DCU_W
+x0 = x_inv1
+eq = [("DCI-01", x_dci1, DCU_W, DCU_D, "dci"), ("DCS-01", x_dcs1, DCU_W, DCU_D, "dcs"), ("INV-01", x_inv1, INV_W, INV_D, "inv"),
+      ("DCI-02", x_dci2, DCU_W, DCU_D, "dci"), ("DCS-02", x_dcs2, DCU_W, DCU_D, "dcs"), ("INV-02", x_inv2, INV_W, INV_D, "inv"),
+      ("ACCP", x_acc, ACCP_W, ACCP_D, "acc")]
+rect(x_dci1 - 300, EQ_Y + 300, STATION_E + 300, EQ_Y - INV_D - 600, "PV-EQUIPMENT", "canopy")
+rect(x_dci1 - 300, EQ_Y + 1300, STATION_E + 300, EQ_Y + 300, "PV-EQUIPMENT", "clear")
+for name, x, w, dpt, cls in eq:
+    rect(x, EQ_Y, x + w, EQ_Y - dpt, "PV-EQUIPMENT", cls)
+    msp.add_text(name, height=160, dxfattribs={"layer": "PV-TEXT"}).set_placement((x + w / 2, EQ_Y - dpt - 250), align=TextEntityAlignment.MIDDLE_CENTER)
+    svg_items.append(("text", "eqtag", (x + w / 2, EQ_Y - dpt - 150, name)))
 # callout to the right of the roof
-line(x0 + 2 * INV_W + 900 + ACCP_W + 300, EQ_Y - 300, ROOF_W + 400, EQ_Y - 300, "PV-TEXT", "leader")
-svg_items.append(("text", "elab", (ROOF_W + 500, EQ_Y + 300, "INVERTER STATION")))
-svg_items.append(("text", "elab2", (ROOF_W + 500, EQ_Y - 900, "INV-01 + INV-02 + ACCP")))
-svg_items.append(("text", "elab2", (ROOF_W + 500, EQ_Y - 2000, "see Detail A")))
-# DC cable tray: east corridor between rail ends and the east wall, with a stub to each table
+line(STATION_E + 300, EQ_Y - 300, ROOF_W + 400, EQ_Y - 300, "PV-TEXT", "leader")
+svg_items.append(("text", "elab", (ROOF_W + 500, EQ_Y + 300, "INVERTER STATION (steel frame + canopy)")))
+svg_items.append(("text", "elab2", (ROOF_W + 500, EQ_Y - 900, "DCI-01/02 DC isolator units (8 × 2P 1200 V 32 A each)")))
+svg_items.append(("text", "elab2", (ROOF_W + 500, EQ_Y - 2000, "DCS-01/02 DC SPD units (8 × Type 2, 1100 V each)")))
+svg_items.append(("text", "elab2", (ROOF_W + 500, EQ_Y - 3100, "INV-01/02 Sigen PV 80M1 80 kW · ACCP 400 A")))
+# DC cable tray: east corridor between rail ends and the east wall, stubs to each table, run along the station
 TRAY_X = 27900
-line(TRAY_X, -1000 - 600, TRAY_X, EQ_Y + 300, "PV-CABLE-TRAY", "tray")
+TRAY_Y = EQ_Y + 800
+line(TRAY_X, -1000 - 600, TRAY_X, TRAY_Y, "PV-CABLE-TRAY", "tray")
+line(TRAY_X, TRAY_Y, x_dci1 + DCU_W / 2, TRAY_Y, "PV-CABLE-TRAY", "tray")
+for xx in (x_dci1 + DCU_W / 2, x_dci2 + DCU_W / 2):
+    line(xx, TRAY_Y, xx, EQ_Y, "PV-CABLE-TRAY", "tray")
 for ym in table_mid:
     line(xr + RAIL_LEN, ym, TRAY_X, ym, "PV-CABLE-TRAY", "tray")
 svg_items.append(("text", "trlab", (ROOF_W + 500, -15350, "DC cable tray (east corridor)")))
 # C3 route from ACCP to the riser at the building face
-cx3 = x0 + 2 * INV_W + 900 + ACCP_W / 2
+cx3 = x_acc + ACCP_W / 2
 svg_items.append(("line", "c3", (cx3, EQ_Y - ACCP_D, cx3, BUILD)))      # sheet only; DXF gets the real cables below
 line(cx3, -50000, ROOF_W + 400, -50000, "PV-TEXT", "leader")
-svg_items.append(("text", "c3lab", (ROOF_W + 500, -49700, "C3 4C×120 mm² + E3 70 mm²")))
+svg_items.append(("text", "c3lab", (ROOF_W + 500, -49700, "C3 4C×240 mm² + E3 120 mm²")))
 svg_items.append(("text", "c3lab", (ROOF_W + 500, -50900, "to MLVS via riser")))
-svg_items.append(("text", "c3lab", (ROOF_W + 500, -52100, "(≈ 80 m, route TBC)")))
-# ---------------- Detail A: inverter station, enlarged x3 (drawn in free roof area) ----------------
-DS, DX0, DY0 = 2.2, 12800, -46300            # scale, top-left of the detail frame (plan coords)
-def dp(x, y): return (DX0 + 700 + x * DS, DY0 - 1500 - (y + 1000) * DS)    # detail-local mm -> plan coords
-def drect(x1, y1, x2, y2, cls):
-    a, b = dp(x1, y1), dp(x2, y2); svg_items.append(("rect", cls, (a[0], a[1], b[0], b[1])))
-def dline(x1, y1, x2, y2, cls):
-    a, b = dp(x1, y1), dp(x2, y2); svg_items.append(("line", cls, (a[0], a[1], b[0], b[1])))
-def dtext(x, y, t, cls): a = dp(x, y); svg_items.append(("text", cls, (a[0], a[1], t)))
-FW = 300 + INV_W + 450 + INV_W + 450 + ACCP_W + 300           # frame width 4,100
-svg_items.append(("rect", "dframe", (DX0, DY0, DX0 + 13300, DY0 - 9700)))
-svg_items.append(("text", "dtitle", (DX0 + 300, DY0 - 800, "DETAIL A – INVERTER STATION (enlarged)")))
-drect(0, 0, FW, 1300, "canopy")                                   # canopy / frame outline (y down = south)
-drect(0, -1000, FW, 0, "clear")                                   # 1 m service clearance (north side)
-dtext(80, -700, "1,000 service clearance", "dsmall")
-xs = 300
-for name, w, dd in (("INV-01", INV_W, INV_D), ("INV-02", INV_W, INV_D), ("ACCP", ACCP_W, ACCP_D)):
-    drect(xs, 150, xs + w, 150 + dd, "acc" if name == "ACCP" else "inv")
-    dtext(xs, 150 + dd + 300, name, "dlabel")
-    xs += w + 450
-dtext(0, 1880, "INV 1,050 × 400 · ACCP 800 × 300 mm (typ.)", "dsmall")
-dtext(0, 2170, f"Steel frame + canopy {FW:,} × 1,300 mm", "dsmall")
-dline(300 + INV_W + 225, -400, 300 + INV_W + 225, 150, "tray"); dtext(300 + INV_W + 380, -200, "DC strings in (16)", "dsmallr")
-dline(300 + INV_W, 350, 300 + INV_W + 450, 350, "c3"); dline(300 + 2 * INV_W + 450, 350, 300 + 2 * INV_W + 900, 350, "c3")
-dtext(0, 2460, "C1, C2 (inverters → ACCP) ≈ 3–5 m", "dsmall")
-ax = 300 + 2 * INV_W + 900 + ACCP_W / 2
-xa = 300 + 2 * INV_W + 900
-dline(xa + ACCP_W, 300, xa + ACCP_W + 250, 300, "c3"); dline(xa + ACCP_W + 250, 300, xa + ACCP_W + 250, 1600, "c3")
-dtext(xa + ACCP_W + 130, 1580, "C3 + E3 to LV room", "dsmall-end")
+svg_items.append(("text", "c3lab", (ROOF_W + 500, -52100, "(≈ 200 m, route TBC)")))
 rect(SET_W, -SET_EDGE, ROOF_W - SET_E, UPPER_BOT + SET_EDGE, "PV-SETBACK", "set")
 rect(SET_W, LOWER_TOP - SET_EDGE, ROOF_W - SET_E, LOWER_LIMIT, "PV-SETBACK", "set")
 for (a, b, name) in OBS:
@@ -225,7 +214,7 @@ notes = [
     "All tables within the architect's solar zone on D18102-DD-A-104.",
     "INV-01 (80 kW): T1, T2, T3 + T4 top row + 14 modules = 152 modules, 8 strings x 19",
     "INV-02 (80 kW): rest of T4 + T5-T7 = 147 modules, 3 x 19 + 5 x 18",
-    "Inverters + ACCP on shaded steel frame in the equipment strip (east end); DC tray along east corridor; C3 to riser TBC.",
+    "DC isolator units, DC SPD units, inverters + ACCP on shaded steel frame (equipment strip, east end); DC tray along east corridor; C3 to riser TBC.",
     "Foot blocks drawn 300x300 indicative - size/weight by Enerack. Origin 0,0 = inner NW corner of upper roof.",
 ]
 for i, tx in enumerate(notes):
@@ -248,7 +237,7 @@ tagtxt("CABLE TRAY 100 mm HDG + UV cover", (TRAY_X + 200, -30000), 220, 90)
 sizes = [19] * 8 + [19] * 3 + [18] * 5
 inv_of = ["INV-01"] * 8 + ["INV-02"] * 8
 assert sum(sizes) == len(mod_centres) == 299
-inv_x = {"INV-01": x0, "INV-02": x0 + INV_W + 450}
+inv_x = {"INV-01": x_dci1, "INV-02": x_dci2}
 term_no = {"INV-01": 0, "INV-02": 0}
 k = 0; hr_no = 0
 for si, n in enumerate(sizes):
@@ -262,39 +251,37 @@ for si, n in enumerate(sizes):
     for end, pol in ((seg[0], "+"), (seg[-1], "−")):
         off = 30 + hr_no * 22; hr_no += 1
         tx_ = TRAY_X - 40 + (off % 80)
-        xi = inv_x[inv] + 80 + term_no[inv] * 56; term_no[inv] += 1
+        xi = inv_x[inv] + 20 + term_no[inv] * 28; term_no[inv] += 1
         yrun = end[1] - 300 - (hr_no % 4) * 40           # along the rail under the modules
         pts = [(end[0], end[1]), (end[0], yrun), (tx_, yrun), (tx_, EQ_Y + 600 + (hr_no % 16) * 15),
                (xi, EQ_Y + 600 + (hr_no % 16) * 15), (xi, EQ_Y)]
         pl(pts, "PV-CABLE-DC-HOMERUN")
+for xu, xi_ in ((x_dci1, x_inv1), (x_dci2, x_inv2)):
+    pl([(xu + DCU_W, EQ_Y - 120), (x_dcs1 if xu == x_dci1 else x_dcs2, EQ_Y - 120)], "PV-CABLE-DC-HOMERUN")
+    pl([((x_dcs1 if xu == x_dci1 else x_dcs2) + DCU_W, EQ_Y - 120), (xi_, EQ_Y - 120)], "PV-CABLE-DC-HOMERUN")
 tagtxt("DC HOME RUNS: 16 strings × (+/−) 6 mm² Cu H1Z2Z2-K in tray", (TRAY_X + 400, -24000), 220, 90)
 
 # AC: C1 / C2 inverter → ACCP (4C × 50 mm²)
-xa = x0 + 2 * INV_W + 900
-for name, xi, ydrop, xin in (("C1", x0 + INV_W / 2, EQ_Y - 700, xa + 200), ("C2", x0 + INV_W + 450 + INV_W / 2, EQ_Y - 850, xa + 350)):
+xa = x_acc
+for name, xi, ydrop, xin in (("C1", x_inv1 + INV_W / 2, EQ_Y - 700, xa + 200), ("C2", x_inv2 + INV_W / 2, EQ_Y - 850, xa + 350)):
     pl([(xi, EQ_Y - INV_D), (xi, ydrop), (xin, ydrop), (xin, EQ_Y - ACCP_D)], "PV-CABLE-AC-C1-C2", 40)
     tagtxt(f"{name} 4C×50 mm² Cu XLPE ≈4 m", (xi - 500, ydrop - 220), 160)
 # AC: C3 ACCP → riser → MLVS (4C × 120 mm² XLPE/SWA)
 c3x = xa + 550
 pl([(c3x, EQ_Y - ACCP_D), (c3x, BUILD), (c3x, BUILD - 800)], "PV-CABLE-AC-C3", 60)
-tagtxt("C3 4C×120 mm² Cu XLPE/SWA → riser → MLVS 250 A PV way (≈80 m TBC)", (c3x + 250, -47000), 220, 90)
+tagtxt("C3 4C×240 mm² Cu XLPE/SWA → riser → MLVS Q5 NW10 H1 solar incomer (≈200 m TBC)", (c3x + 250, -47000), 220, 90)
 
 # EARTH: array bonding 16 mm² along each table, 35 mm² spine in tray, E1/E2 25 mm², E3 70 mm²
 for ym in table_mid:
     pl([(xr, ym + 120), (xr + RAIL_LEN, ym + 120), (TRAY_X + 30, ym + 120)], "PV-CABLE-EARTH")
 pl([(TRAY_X + 30, table_mid[0] + 120), (TRAY_X + 30, EQ_Y + 500), (xa + ACCP_W - 100, EQ_Y + 500), (xa + ACCP_W - 100, EQ_Y - ACCP_D)], "PV-CABLE-EARTH")
 tagtxt("ARRAY BONDING 16 mm² Cu per table + 35 mm² spine to ACCP earth bar", (TRAY_X + 700, -24000), 200, 90)
-for name, xi, ydrop, xin in (("E1", x0 + INV_W / 2 + 120, EQ_Y - 760, xa + 260), ("E2", x0 + INV_W + 450 + INV_W / 2 + 120, EQ_Y - 910, xa + 410)):
+for name, xi, ydrop, xin in (("E1", x_inv1 + INV_W / 2 + 120, EQ_Y - 760, xa + 260), ("E2", x_inv2 + INV_W / 2 + 120, EQ_Y - 910, xa + 410)):
     pl([(xi, EQ_Y - INV_D), (xi, ydrop), (xin, ydrop), (xin, EQ_Y - ACCP_D)], "PV-CABLE-EARTH")
     tagtxt(f"{name} 25 mm² Cu", (xi + 150, ydrop - 200), 140)
 pl([(c3x + 120, EQ_Y - ACCP_D), (c3x + 120, BUILD), (c3x + 120, BUILD - 800)], "PV-CABLE-EARTH")
-tagtxt("E3 70 mm² Cu → MET (LV room)", (c3x + 600, -47000), 200, 90)
+tagtxt("E3 120 mm² Cu → MET (LV room)", (c3x + 600, -47000), 200, 90)
 
-# COMMS: RS485 daisy chain INV-01 → INV-02 → ACCP → along C3 to the zero-export controller (LV room)
-yc_ = EQ_Y - INV_D - 1100
-pl([(x0 + 150, EQ_Y - INV_D), (x0 + 150, yc_), (x0 + INV_W + 600, yc_), (x0 + INV_W + 600, EQ_Y - INV_D)], "PV-CABLE-COMMS")
-pl([(x0 + INV_W + 600, yc_), (c3x - 150, yc_), (c3x - 150, BUILD), (c3x - 150, BUILD - 800)], "PV-CABLE-COMMS")
-tagtxt("RS485 / Modbus (STP) → zero-export controller", (c3x - 900, -52000), 200, 90)
 doc.saveas(os.path.join(HERE, "PV_Layout_Enerack_10deg.dxf"))
 
 # ---------------- SVG drawing sheet (plan) ----------------
@@ -314,6 +301,8 @@ for kind, cls, d in svg_items:
         out.append(f'<line class="{cls}" x1="{tx(x1):.2f}" y1="{ty_(y1):.2f}" x2="{tx(x2):.2f}" y2="{ty_(y2):.2f}"/>')
     else:
         x, y, s = d
+        if cls == "eqtag":
+            out.append(f'<text class="eqtag" transform="translate({tx(x)+1.6:.2f},{ty_(y):.2f}) rotate(-90)" style="text-anchor:end">{s}</text>'); continue
         anchor = ' text-anchor="end"' if cls.endswith("-end") else ""
         out.append(f'<text class="{cls.replace("-end", "")}" x="{tx(x):.2f}" y="{ty_(y)+3:.2f}"{anchor}>{s}</text>')
 def sdim_h(x1, x2, y, txt):
