@@ -5,7 +5,7 @@ import os, json, base64
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-fin = json.load(open(os.path.join(HERE, "proposal_fin_v2.json")))   # new workings: Total Project Value USD 102,789
+fin = json.load(open(os.path.join(HERE, "proposal_fin_v3.json")))   # PVsyst P50 generation, Total Project Value USD 102,789
 mon = json.load(open(os.path.join(HERE, "monthly.json")))
 tou = json.load(open(os.path.join(HERE, "tou.json")))
 
@@ -111,7 +111,7 @@ per month, so every solar kWh is used on site and directly reduces grid purchase
 <li>Long life: Astronergy N-type bifacial panels (15-year product, 30-year power warranty); remote monitoring of generation and savings.</li></ul>''')
 
 # ---------------- page 3: equipment, array, generation ----------------
-mk = [r["kwh"] for r in mon["rows"]]
+mk = fin["pvsyst_monthly"]   # PVsyst E_Grid, P50
 s, Y, pl, cw = bars(mk, [r["m"] for r in mon["rows"]], h=108, ymax=30000, ylab="kWh / month")
 for i, v in enumerate(mk):
     s.append(f'<text x="{pl+i*cw+cw*.5:.1f}" y="{Y(v)-5:.1f}" class="vl" text-anchor="middle">{v/1000:.1f}k</text>')
@@ -135,7 +135,7 @@ page(3, "SYSTEM DESIGN", f'''
 {tbl([["Inverters", "Value"], ["INV-01", "152 panels = 94.2 kWp, 8 strings × 19"], ["INV-02", "147 panels = 91.1 kWp, 3 × 19 + 5 × 18"],
       ["AC output", "2 × 80 kW, 400 V 3N~"], ["Connection", "AC combiner → MLVS via riser"]], widths=[38, 62])}</div>
 {H("4. Estimated Energy Generation")}
-<p class="small">Kampala long-term irradiation, performance ≈ 80 %. Annual total <b>{gen1:,.0f} kWh</b> (≈ 1,480 kWh/kWp).</p>{genchart}''')
+<p class="small">PVsyst V8.1.8 simulation (P50, Meteonorm 9.0, PR 85.4 %, Annex 7). Annual total <b>{gen1:,.0f} kWh</b> (≈ {gen1/185.38:,.0f} kWh/kWp).</p>{genchart}''')
 
 # ---------------- page 4: plan + site ----------------
 page(4, "PLAN VIEWS", f'''
@@ -146,7 +146,8 @@ combiner panel sit at the south-east corner; the AC cable runs to the main LV sw
 <div class="fig"><img src="{PLAN}" style="max-height:178mm"/><div class="cap">Proposed solar installation – Kampala Marriott Hotel, mezzanine roof (0°18'11.34"N, 32°35'13.76"E). Full drawing in Annex 2.</div></div>''')
 
 # ---------------- page 5: energy use / TOU ----------------
-bands = tou["bands"]; ph = tou["pv_h"]
+tr = fin["tou_rows"]; ph = fin["hourly"]
+bands = [dict(band=k, hours=h, load=tr[k][1]*1000, pv=tr[k][2]*1000, pv_share=tr[k][3], red=tr[k][5]) for k, h in (("Off-peak", "00:00–06:00"), ("Shoulder", "06:00–18:00"), ("Peak", "18:00–24:00"))]
 s, Y, pl, cw = bars(ph, [f"{h:02d}" if h % 2 == 0 else None for h in range(24)], h=210, ylab="kW (average)",
                     colors=[NAVY if (h < 6 or h >= 18) else (ORG if h % 2 == 0 else ORG2) for h in range(24)], fmt=lambda v: f"{v:.0f}")
 hourly = f'<svg viewBox="0 0 680 210" class="chart">{"".join(s)}</svg>'
@@ -157,7 +158,7 @@ page(5, "LOAD ASSESSMENT", f'''
 <b>{share*100:.1f} %</b> of this, so all solar output is consumed on site even on low-occupancy days – no export and no battery are needed.</p>
 {tbl([["Item", "Value", "Check", "Result"],
       ["Hotel annual consumption", "≈ 12,000,000 kWh", "Solar share of consumption", f"{share*100:.1f} %"],
-      ["Solar generation, year 1", f"{gen1:,.0f} kWh", "Peak solar output", "≈ 97 kW (midday average)"],
+      ["Solar generation, year 1", f"{gen1:,.0f} kWh", "Peak solar output", f"≈ {max(ph):.0f} kW (midday average)"],
       ["Hotel daytime demand", "far above solar output", "Energy exported", "0 kWh (all used on site)"],
       ["Grid tariff (avoided)", f"USD {tar:.3f}/kWh, +2 %/yr", "Every solar kWh used?", "Yes – offsets grid purchase"]], widths=[27, 23, 27, 23])}
 {H("8. Solar Generation by Time-of-Use Band")}
@@ -165,7 +166,7 @@ page(5, "LOAD ASSESSMENT", f'''
 air-conditioning, kitchen and laundry loads are high.</p>{hourly}
 {tbl([["TOU band", "Hours", "Hotel consumption (kWh/yr)", "Solar energy (kWh/yr)", "Share of solar", "Reduction of band purchase"]] +
      [[b["band"], b["hours"], f"{b['load']:,.0f}", f"{b['pv']:,.0f}", f"{b['pv_share']*100:.1f} %", f"{b['red']*100:.1f} %"] for b in bands] +
-     [["<b>Total</b>", "", f"<b>{tou['total']['load']:,.0f}</b>", f"<b>{tou['total']['pv']:,.0f}</b>", "<b>100 %</b>", f"<b>{share*100:.1f} %</b>"]],
+     [["<b>Total</b>", "", f"<b>{tr['Total'][1]*1000:,.0f}</b>", f"<b>{tr['Total'][2]*1000:,.0f}</b>", "<b>100 %</b>", f"<b>{share*100:.1f} %</b>"]],
      widths=[14, 15, 20, 18, 14, 19])}
 <p class="small">*Hotel consumption is assumed at 1,000,000 kWh per month (12,000,000 kWh per year), to be confirmed from recent utility bills.</p>''')
 
@@ -268,7 +269,8 @@ page(9, "FINANCIAL SUMMARY", f'''
       ["Annex 3", "Data sheet – Sigenergy Sigen PV inverter (80 kW)", "12–13"],
       ["Annex 4", "Data sheet – Astronergy ASTRO N7 620 W bifacial solar module", "14–15"],
       ["Annex 5", "PV structural drawing – Enerack ballast system", "16–17"],
-      ["Annex 6", "Quotation – 185.4 kWp rooftop solar PV (one page)", "18"]], widths=[14, 74, 12])}
+      ["Annex 6", "Quotation – 185.4 kWp rooftop solar PV (one page)", "18"],
+      ["Annex 7", "PVsyst simulation report – P50 energy yield (V8.1.8, VC0)", "19–25"]], cls="tight", widths=[14, 74, 12])}
 {H("Next Steps")}
 <ol class="steps"><li>Review of this proposal and clarification meeting with the hotel's engineering team.</li>
 <li>Site survey: roof condition, LV switchboard, cable route and inverter location.</li>
@@ -291,6 +293,7 @@ h2 {{ color:{NAVY}; font-size:12.5pt; margin:4mm 0 2.5mm; display:flex; align-it
 p {{ line-height:1.45; margin:0 0 2.5mm }} p.small {{ font-size:8.8pt }}
 .t {{ width:100%; border-collapse:collapse; table-layout:fixed; margin-bottom:2mm }} .t th,.t td {{ border:1px solid {LINE}; padding:1.2mm 2mm; vertical-align:middle; line-height:1.3 }}
 .t th {{ background:{CARD}; color:#1a2a4a; text-align:left; font-weight:700 }}
+.t.tight th,.t.tight td {{ padding:0.7mm 2mm; font-size:8.6pt }}
 .t.kv6 td:nth-child(odd) {{ background:{CARD} }} .t.kv td:first-child {{ background:{CARD}; font-weight:700 }}
 .t.num td {{ text-align:right }} .t.num td:first-child {{ text-align:center }} .t.hl3 tr:nth-child(4) td {{ background:#fff3dc; font-weight:700 }}
 .t.q td:nth-child(1),.t.q td:nth-child(3),.t.q td:nth-child(4) {{ text-align:center }} .t.q td.lump {{ text-align:center; font-size:15pt; font-weight:800; color:{NAVY} }}

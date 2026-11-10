@@ -11,7 +11,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 src = sys.argv[1]
 annexes = [("1", "Single-line diagram", "1.Single_Line_Diagram.pdf"), ("2", "Solar PV layout", "2.Solar_PV_Layout.pdf"),
            ("3", "Inverter data sheet", "3.Data_Sheet_of_Inverter.pdf"), ("4", "Solar module data sheet", "4.Data_Sheet_of_Solar_Module.pdf"),
-           ("5", "PV structural drawing", "5.PV_Stuctrural_Drawing.pdf"), ("6", "Quotation", os.path.join(HERE, "Kampala_Marriott_PV_Quotation.pdf"))]
+           ("5", "PV structural drawing", "5.PV_Stuctrural_Drawing.pdf"), ("6", "Quotation", os.path.join(HERE, "Kampala_Marriott_PV_Quotation.pdf")),
+           ("7", "PVsyst simulation report", os.path.join(HERE, "PVsyst_Report_Kampala_Marriott_Hotel_185kWp_VC0.pdf"))]
 
 def stamp(w, h, label, pg):
     buf = io.BytesIO(); c = canvas.Canvas(buf, pagesize=(w, h))
