@@ -125,7 +125,7 @@ page(3, "SYSTEM DESIGN", f'''
       ["4", "DC protection", "DC isolator units (2-pole 1000 V 32 A) + DC SPD Type II – 1 each per string", "16+16", "pcs"],
       ["5", "AC combiner panel", "MCCBs 2 × 160 A (inverter incomers), 400 A roof isolator, AC SPD Type II", "1", "set"],
       ["6", "Grid connection", "Connection to the existing Masterpact NW10 H1 solar incomer on the main LV switchboard", "1", "set"],
-      ["7", "Cabling", "Solar cable 6 mm², AC 4C × 50 mm² and 4C × 240 mm² Cu XLPE/SWA, cable tray", "1", "lot"],
+      ["7", "Cabling", "Solar cable 4 mm², AC 4C × 50 mm² and 4C × 240 mm² Cu XLPE/SWA, cable tray", "1", "lot"],
       ["8", "Monitoring & control", "Smart data logger, energy meter, remote monitoring", "1", "set"],
       ["9", "Earthing", "Array bonding, connection to building earth and lightning protection", "1", "set"]],
      widths=[4, 18, 62, 7, 9])}
@@ -149,7 +149,7 @@ combiner panel sit at the south-east corner; the AC cable runs to the main LV sw
 tr = fin["tou_rows"]; ph = fin["hourly"]
 bands = [dict(band=k, hours=h, load=tr[k][1]*1000, pv=tr[k][2]*1000, pv_share=tr[k][3], red=tr[k][5]) for k, h in (("Off-peak", "00:00–06:00"), ("Shoulder", "06:00–18:00"), ("Peak", "18:00–24:00"))]
 s, Y, pl, cw = bars(ph, [f"{h:02d}" if h % 2 == 0 else None for h in range(24)], h=210, ylab="kW (average)",
-                    colors=[NAVY if (h < 6 or h >= 18) else (ORG if h % 2 == 0 else ORG2) for h in range(24)], fmt=lambda v: f"{v:.0f}")
+                    colors=[NAVY if (h < 6 or h >= 19) else (ORG if h % 2 == 0 else ORG2) for h in range(24)], fmt=lambda v: f"{v:.0f}")
 hourly = f'<svg viewBox="0 0 680 210" class="chart">{"".join(s)}</svg>'
 share = gen1 / 12_000_000
 page(5, "LOAD ASSESSMENT", f'''
@@ -162,8 +162,8 @@ page(5, "LOAD ASSESSMENT", f'''
       ["Hotel daytime demand", "far above solar output", "Energy exported", "0 kWh (all used on site)"],
       ["Grid tariff (avoided)", f"USD {tar:.3f}/kWh, +2 %/yr", "Every solar kWh used?", "Yes – offsets grid purchase"]], widths=[27, 23, 27, 23])}
 {H("8. Solar Generation by Time-of-Use Band")}
-<p class="small">Average daily solar output by hour. Almost all generation falls in the shoulder period (06:00–18:00), when the hotel's
-air-conditioning, kitchen and laundry loads are high.</p>{hourly}
+<p class="small">Average daily solar output by hour. All solar generation is counted in the shoulder period (06:00–18:00), when the hotel's
+air-conditioning, kitchen and laundry loads are high; no solar energy is assigned to the peak band.</p>{hourly}
 {tbl([["TOU band", "Hours", "Hotel consumption (kWh/yr)", "Solar energy (kWh/yr)", "Share of solar", "Reduction of band purchase"]] +
      [[b["band"], b["hours"], f"{b['load']:,.0f}", f"{b['pv']:,.0f}", f"{b['pv_share']*100:.1f} %", f"{b['red']*100:.1f} %"] for b in bands] +
      [["<b>Total</b>", "", f"<b>{tr['Total'][1]*1000:,.0f}</b>", f"<b>{tr['Total'][2]*1000:,.0f}</b>", "<b>100 %</b>", f"<b>{share*100:.1f} %</b>"]],
