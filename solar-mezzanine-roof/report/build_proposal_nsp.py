@@ -5,7 +5,7 @@ import os, json, base64
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-fin = json.load(open(os.path.join(HERE, "proposal_fin_v4.json")))   # PVsyst P50 + UEDCL bill Oct 2026 tariffs
+fin = json.load(open(os.path.join(HERE, "proposal_fin_v5.json")))   # PVsyst P50 + UEDCL bill Oct 2026 tariffs
 mon = json.load(open(os.path.join(HERE, "monthly.json")))
 tou = json.load(open(os.path.join(HERE, "tou.json")))
 
@@ -102,8 +102,8 @@ page(2, "TECHNICAL &amp; COMMERCIAL PROPOSAL", f'''
 <b>299 × 620 W N-type bifacial solar panels</b> on a ballasted aluminium structure at 10° tilt, with
 <b>two 80 kW three-phase string inverters</b> connected to the hotel's main LV switchboard.</p>
 <p>The array generates about <b>{gen1:,.0f} kWh per year</b> (approx. {gen1/365:,.0f} kWh/day). The hotel used 981,901 kWh
-in October 2026 (UEDCL bill), so every solar kWh is used on site and directly reduces grid purchases. At the shoulder tariff net of the
-40 % energy rebate (UGX 214/kWh ≈ USD {tar:.3f}/kWh) this saves about
+in October 2026 (UEDCL bill), so every solar kWh is used on site and directly reduces grid purchases. At the UEDCL shoulder
+tariff of UGX 357/kWh (≈ USD {tar+1e-9:.4f}/kWh at UGX 4,000/USD) this saves about
 <b>{usd(y1)} in the first year</b>. The turnkey price is <b>{usd(capex)}</b> (excl. VAT), paid back in about <b>{pb:.1f} years</b>, with an IRR of
 <b>{irr*100:.1f} %</b> (Sections 12 and 14).</p>
 {H("Key Benefits")}
@@ -162,7 +162,7 @@ page(5, "LOAD ASSESSMENT", f'''
       ["Hotel annual consumption", f"{fin['bill']['annual']:,.0f} kWh", "Solar share of consumption", f"{share*100:.1f} %"],
       ["Solar generation, year 1", f"{gen1:,.0f} kWh", "Peak solar output", f"≈ {max(ph):.0f} kW (midday average)"],
       ["Hotel daytime demand", "far above solar output", "Energy exported", "0 kWh (all used on site)"],
-      ["Grid tariff (avoided)", f"USD {tar:.4f}/kWh (UGX 214, net), +2 %/yr", "Every solar kWh used?", "Yes – offsets grid purchase"]], widths=[27, 23, 27, 23])}
+      ["Grid tariff (avoided)", f"USD {tar+1e-9:.4f}/kWh (UGX 357), +2 %/yr", "Every solar kWh used?", "Yes – offsets grid purchase"]], widths=[27, 23, 27, 23])}
 {H("8. Solar Generation by Time-of-Use Band")}
 <p class="small">Average daily solar output by hour. All solar generation is counted in the shoulder period (06:00–18:00), when the hotel's
 air-conditioning, kitchen and laundry loads are high; no solar energy is assigned to the peak band.</p>{hourly}
@@ -170,8 +170,8 @@ air-conditioning, kitchen and laundry loads are high; no solar energy is assigne
      [[b["band"], b["hours"], f"{b['load']:,.0f}", f"{b['pv']:,.0f}", f"{b['pv_share']*100:.1f} %", f"{b['red']*100:.1f} %"] for b in bands] +
      [["<b>Total</b>", "", f"<b>{tr['Total'][1]*1000:,.0f}</b>", f"<b>{tr['Total'][2]*1000:,.0f}</b>", "<b>100 %</b>", f"<b>{share*100:.1f} %</b>"]],
      widths=[14, 15, 20, 18, 14, 19])}
-<p class="small">*Consumption and tariffs from the UEDCL bill for October 2026 (tariff 30.2 Large Consumers); annual = October × 12. Rates are net of the
-40 % energy rebate and exclude VAT; the solar system does not reduce the maximum-demand charge.</p>''')
+<p class="small">*Consumption and tariffs from the UEDCL bill for October 2026 (tariff 30.2 Large Consumers); annual = October × 12. Rates are as billed
+(peak 428.8, shoulder 357.0, off-peak 286.5 UGX/kWh) at UGX 4,000/USD, excluding VAT; solar does not reduce the maximum-demand charge.</p>''')
 
 # ---------------- page 6: connection diagram, schedule, warranty ----------------
 def blk(x, y, w, h, t, s_, c):
@@ -209,7 +209,7 @@ remote monitoring support, a free 6-month check-up visit and optional annual mai
 software updates, performance report).</p>''')
 
 # ---------------- page 7: financial analysis ----------------
-s, Y, pl, cw = bars(cum, [str(i) if i % 5 == 0 or i == 6 else None for i in range(26)], h=190, neg=True, ymax=520000,
+s, Y, pl, cw = bars(cum, [str(i) if i % 5 == 0 or i == 6 else None for i in range(26)], h=190, neg=True, ymax=max(cum)*1.15,
                     colors=[("#c0392b" if v < 0 else GRN) for v in cum], fmt=lambda v: f"{v/1000:,.0f}k", ylab="USD")
 for i in (0, 6, 12, 25):
     s.append(f'<text x="{pl+i*cw+cw*.5:.1f}" y="{(Y(cum[i])+13) if cum[i] < 0 else (Y(cum[i])-5):.1f}" class="vl" text-anchor="middle">{cum[i]/1000:+,.0f}k</text>')
@@ -222,7 +222,7 @@ for y_ in yrs:
     cfrows.append([str(y_), f"{g:,.0f}", f"{t:.3f}", f"{g*t:,.0f}", f"{fin['cf'][y_]:,.0f}", f"({-c:,.0f})" if c < 0 else f"{c:,.0f}"])
 page(7, "FINANCIAL ANALYSIS", f'''
 {H("12. Financial Analysis &amp; Cash Flow")}
-<div class="two">{tbl([["Assumption", "Value"], ["Turnkey investment (excl. VAT)", usd(capex)], ["Avoided tariff, year 1", f"USD {tar:.4f}/kWh (shoulder, net)"],
+<div class="two">{tbl([["Assumption", "Value"], ["Turnkey investment (excl. VAT)", usd(capex)], ["Avoided tariff, year 1", f"USD {tar+1e-9:.4f}/kWh (shoulder)"],
                        ["Tariff escalation", "2 % per year"], ["Degradation", "≈ 0.4 % per year"],
                        ["O&amp;M cost / discount rate", "none assumed / 10 %"]], widths=[56, 44])}
 {tbl([["Result", "Value"], ["Year-1 savings", usd(y1)], ["Simple payback", f"{pb:.1f} years"], ["IRR (25 years)", f"{irr*100:.1f} %"],
@@ -262,9 +262,9 @@ page(9, "FINANCIAL SUMMARY", f'''
         (usd(sav25), "25-year savings"), (usd(cum[25]), "25-year net gain after investment"), (f"{sav25/capex:.1f} x", "Savings / investment"), (usd(npv), "NPV @ 10 %")])}
 {H("15. Tariff Sensitivity")}
 {tbl([["Avoided tariff (USD/kWh)", "Year-1 savings (USD)", "Payback (years)", "IRR", "NPV @ 10 % (USD)"]] +
-     [[(f"{t:.4f} (base)" if abs(t-tar) < 1e-9 else f"{t:.4f}" if t not in (0.04, 0.06, 0.07, 0.10) else f"{t:.2f}"), f"{s1:,.0f}", f"{p:.1f}", f"{i*100:.1f} %", f"{n:,.0f}"] for t, s1, p, i, n in sens if t <= 0.10], cls="num hl3 tight", widths=[24, 20, 18, 16, 22])}
+     [[(f"{t+1e-9:.4f} (base)" if abs(t-tar) < 1e-9 else f"{t:.4f}" if t not in (0.04, 0.06, 0.07, 0.10, 0.12) else f"{t:.2f}"), f"{s1:,.0f}", f"{p:.1f}", f"{i*100:.1f} %", f"{n:,.0f}"] for t, s1, p, i, n in sens], cls="num hl3 tight", widths=[24, 20, 18, 16, 22])}
 <p class="small">The project remains attractive over a wide tariff range. The break-even tariff (NPV = 0 at 10 %) is about
-<b>USD {fin['breakeven']:.4f}/kWh</b> – roughly {round((1-fin['breakeven']/tar)*100)} % below today's net shoulder tariff. Rows: VAT not recoverable = USD 0.0633; 40 % rebate ends = USD 0.0811.</p>
+<b>USD {fin['breakeven']:.4f}/kWh</b> – roughly {round((1-fin['breakeven']/tar)*100)} % below today's shoulder tariff. Other rows: with the 40 % energy rebate = USD {fin['scen']['rebate']:.4f}; VAT not recoverable = USD {fin['scen']['novat']:.4f}.</p>
 {H("Annexes")}
 {tbl([["Annex", "Title", "Page"],
       ["Annex 1", "Single-line diagram – PV system &amp; grid connection", "10"],
@@ -298,7 +298,7 @@ p {{ line-height:1.45; margin:0 0 2.5mm }} p.small {{ font-size:8.8pt }}
 .t th {{ background:{CARD}; color:#1a2a4a; text-align:left; font-weight:700 }}
 .t.tight th,.t.tight td {{ padding:0.7mm 2mm; font-size:8.6pt }}
 .t.kv6 td:nth-child(odd) {{ background:{CARD} }} .t.kv td:first-child {{ background:{CARD}; font-weight:700 }}
-.t.num td {{ text-align:right }} .t.num td:first-child {{ text-align:center }} .t.hl3 tr:nth-child(3) td {{ background:#fff3dc; font-weight:700 }}
+.t.num td {{ text-align:right }} .t.num td:first-child {{ text-align:center }} .t.hl3 tr:nth-child(4) td {{ background:#fff3dc; font-weight:700 }}
 .t.q td:nth-child(1),.t.q td:nth-child(3),.t.q td:nth-child(4) {{ text-align:center }} .t.q td.lump {{ text-align:center; font-size:15pt; font-weight:800; color:{NAVY} }}
 .t.q tr.tot td {{ background:#e6f2e6; font-weight:800 }} .t.q tr.tot td:last-child {{ text-align:center; color:{NAVY} }}
 .cards {{ display:grid; grid-template-columns:repeat(4,1fr); gap:3.5mm; margin:3mm 0 }}
