@@ -5,7 +5,7 @@ import os, json, base64
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-fin = json.load(open(os.path.join(HERE, "proposal_fin_v5.json")))   # PVsyst P50 + UEDCL bill Oct 2026 tariffs
+fin = json.load(open(os.path.join(HERE, "proposal_fin_v6.json")))   # PVsyst P50 + UEDCL bill Oct 2026 tariffs
 mon = json.load(open(os.path.join(HERE, "monthly.json")))
 tou = json.load(open(os.path.join(HERE, "tou.json")))
 
@@ -103,7 +103,7 @@ page(2, "TECHNICAL &amp; COMMERCIAL PROPOSAL", f'''
 <b>two 80 kW three-phase string inverters</b> connected to the hotel's main LV switchboard.</p>
 <p>The array generates about <b>{gen1:,.0f} kWh per year</b> (approx. {gen1/365:,.0f} kWh/day). The hotel used 981,901 kWh
 in October 2026 (UEDCL bill), so every solar kWh is used on site and directly reduces grid purchases. At the UEDCL shoulder
-tariff of UGX 357/kWh (≈ USD {tar+1e-9:.4f}/kWh at UGX 4,000/USD) this saves about
+tariff of UGX 357/kWh (≈ USD {tar+1e-9:.4f}/kWh at UGX 4,100/USD) this saves about
 <b>{usd(y1)} in the first year</b>. The turnkey price is <b>{usd(capex)}</b> (excl. VAT), paid back in about <b>{pb:.1f} years</b>, with an IRR of
 <b>{irr*100:.1f} %</b> (Sections 12 and 14).</p>
 {H("Key Benefits")}
@@ -171,7 +171,7 @@ air-conditioning, kitchen and laundry loads are high; no solar energy is assigne
      [["<b>Total</b>", "", f"<b>{tr['Total'][1]*1000:,.0f}</b>", f"<b>{tr['Total'][2]*1000:,.0f}</b>", "<b>100 %</b>", f"<b>{share*100:.1f} %</b>"]],
      widths=[14, 15, 20, 18, 14, 19])}
 <p class="small">*Consumption and tariffs from the UEDCL bill for October 2026 (tariff 30.2 Large Consumers); annual = October × 12. Rates are as billed
-(peak 428.8, shoulder 357.0, off-peak 286.5 UGX/kWh) at UGX 4,000/USD, excluding VAT; solar does not reduce the maximum-demand charge.</p>''')
+(peak 428.8, shoulder 357.0, off-peak 286.5 UGX/kWh) at UGX 4,100/USD, excluding VAT; solar does not reduce the maximum-demand charge.</p>''')
 
 # ---------------- page 6: connection diagram, schedule, warranty ----------------
 def blk(x, y, w, h, t, s_, c):
