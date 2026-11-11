@@ -182,9 +182,9 @@ svg_items.append(("text", "trlab", (ROOF_W + 500, -15350, "DC cable tray (east c
 cx3 = x_acc + ACCP_W / 2
 svg_items.append(("line", "c3", (cx3, EQ_Y - ACCP_D, cx3, BUILD)))      # sheet only; DXF gets the real cables below
 line(cx3, -50000, ROOF_W + 400, -50000, "PV-TEXT", "leader")
-svg_items.append(("text", "c3lab", (ROOF_W + 500, -49700, "C3 4C×240 mm² + E3 120 mm²")))
+svg_items.append(("text", "c3lab", (ROOF_W + 500, -49700, "C3 4C×240 mm² Al XLPE/SWA")))
 svg_items.append(("text", "c3lab", (ROOF_W + 500, -50900, "to MLVS via riser")))
-svg_items.append(("text", "c3lab", (ROOF_W + 500, -52100, "(≈ 200 m, route TBC)")))
+svg_items.append(("text", "c3lab", (ROOF_W + 500, -52100, "(≈ 200 m, armour = PE, route TBC)")))
 rect(SET_W, -SET_EDGE, ROOF_W - SET_E, UPPER_BOT + SET_EDGE, "PV-SETBACK", "set")
 rect(SET_W, LOWER_TOP - SET_EDGE, ROOF_W - SET_E, LOWER_LIMIT, "PV-SETBACK", "set")
 for (a, b, name) in OBS:
@@ -259,7 +259,7 @@ for si, n in enumerate(sizes):
 for xu, xi_ in ((x_dci1, x_inv1), (x_dci2, x_inv2)):
     pl([(xu + DCU_W, EQ_Y - 120), (x_dcs1 if xu == x_dci1 else x_dcs2, EQ_Y - 120)], "PV-CABLE-DC-HOMERUN")
     pl([((x_dcs1 if xu == x_dci1 else x_dcs2) + DCU_W, EQ_Y - 120), (xi_, EQ_Y - 120)], "PV-CABLE-DC-HOMERUN")
-tagtxt("DC HOME RUNS: 16 strings × (+/−) 6 mm² Cu H1Z2Z2-K in tray", (TRAY_X + 400, -24000), 220, 90)
+tagtxt("DC HOME RUNS: 16 strings × (+/−) 4 mm² Cu H1Z2Z2-K in tray", (TRAY_X + 400, -24000), 220, 90)
 
 # AC: C1 / C2 inverter → ACCP (4C × 50 mm²)
 xa = x_acc
@@ -269,7 +269,7 @@ for name, xi, ydrop, xin in (("C1", x_inv1 + INV_W / 2, EQ_Y - 700, xa + 200), (
 # AC: C3 ACCP → riser → MLVS (4C × 120 mm² XLPE/SWA)
 c3x = xa + 550
 pl([(c3x, EQ_Y - ACCP_D), (c3x, BUILD), (c3x, BUILD - 800)], "PV-CABLE-AC-C3", 60)
-tagtxt("C3 4C×240 mm² Cu XLPE/SWA → riser → MLVS Q5 NW10 H1 solar incomer (≈200 m TBC)", (c3x + 250, -47000), 220, 90)
+tagtxt("C3 4C×240 mm² Al XLPE/SWA → riser → MLVS Q5 NW10 H1 solar incomer (≈200 m TBC)", (c3x + 250, -47000), 220, 90)
 
 # EARTH: array bonding 16 mm² along each table, 35 mm² spine in tray, E1/E2 25 mm², E3 70 mm²
 for ym in table_mid:
@@ -280,7 +280,7 @@ for name, xi, ydrop, xin in (("E1", x_inv1 + INV_W / 2 + 120, EQ_Y - 760, xa + 2
     pl([(xi, EQ_Y - INV_D), (xi, ydrop), (xin, ydrop), (xin, EQ_Y - ACCP_D)], "PV-CABLE-EARTH")
     tagtxt(f"{name} 25 mm² Cu", (xi + 150, ydrop - 200), 140)
 pl([(c3x + 120, EQ_Y - ACCP_D), (c3x + 120, BUILD), (c3x + 120, BUILD - 800)], "PV-CABLE-EARTH")
-tagtxt("E3 120 mm² Cu → MET (LV room)", (c3x + 600, -47000), 200, 90)
+tagtxt("E3 = C3 SWA armour → MET (LV room)", (c3x + 600, -47000), 200, 90)
 
 doc.saveas(os.path.join(HERE, "PV_Layout_Enerack_10deg.dxf"))
 

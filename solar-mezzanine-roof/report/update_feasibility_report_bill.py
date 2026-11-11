@@ -6,7 +6,7 @@ from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-F = json.load(open(os.path.join(HERE, "proposal_fin_v6.json")))
+F = json.load(open(os.path.join(HERE, "proposal_fin_v7.json")))
 d = docx.Document(sys.argv[1])
 B, T, tar = F["bill"], F["tou_rows"], F["tar"]
 capex, gen, cf, cum = F["capex"], F["gen"], F["cf"], F["cum"]

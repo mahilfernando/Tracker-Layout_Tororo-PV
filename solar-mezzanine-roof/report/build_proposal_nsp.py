@@ -5,7 +5,7 @@ import os, json, base64
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-fin = json.load(open(os.path.join(HERE, "proposal_fin_v6.json")))   # PVsyst P50 + UEDCL bill Oct 2026 tariffs
+fin = json.load(open(os.path.join(HERE, "proposal_fin_v7.json")))   # PVsyst P50 + UEDCL bill Oct 2026 tariffs
 mon = json.load(open(os.path.join(HERE, "monthly.json")))
 tou = json.load(open(os.path.join(HERE, "tou.json")))
 
@@ -126,7 +126,7 @@ page(3, "SYSTEM DESIGN", f'''
       ["4", "DC protection", "DC isolator units (2-pole 1000 V 32 A) + DC SPD Type II – 1 each per string", "16+16", "pcs"],
       ["5", "AC combiner panel", "MCCBs 2 × 160 A (inverter incomers), 400 A roof isolator, AC SPD Type II", "1", "set"],
       ["6", "Grid connection", "Connection to the existing Masterpact NW10 H1 solar incomer on the main LV switchboard", "1", "set"],
-      ["7", "Cabling", "Solar cable 4 mm², AC 4C × 50 mm² and 4C × 240 mm² Cu XLPE/SWA, cable tray", "1", "lot"],
+      ["7", "Cabling", "Solar cable 4 mm², AC 4C × 50 mm² and 4C × 240 mm² Al XLPE/SWA, cable tray", "1", "lot"],
       ["8", "Monitoring & control", "Smart data logger, energy meter, remote monitoring", "1", "set"],
       ["9", "Earthing", "Array bonding, connection to building earth and lightning protection", "1", "set"]],
      widths=[4, 18, 62, 7, 9])}
@@ -247,7 +247,7 @@ page(8, "QUOTATION", f'''
 <table class="t q"><colgroup><col style="width:5%"/><col style="width:58%"/><col style="width:8%"/><col style="width:8%"/><col style="width:21%"/></colgroup>
 <tr><th>#</th><th>Scope of supply &amp; works</th><th>Qty</th><th>Unit</th><th>Price (USD)</th></tr>{qrows}
 <tr class="tot"><td></td><td>TOTAL TURNKEY EPC PRICE (excluding VAT and other applicable taxes)</td><td></td><td></td><td>{usd(capex)}</td></tr></table>
-<p class="small">Equivalent to USD {capex/185400:.2f} per Wp. Amount in words: One hundred two thousand seven hundred eighty-nine US Dollars only.</p>
+<p class="small">Equivalent to USD {capex/185400:.2f} per Wp. Amount in words: One hundred four thousand six hundred sixty-one US Dollars only.</p>
 {tbl([["Payment terms", "75 % advance with PO · 25 % on commissioning"],
       ["Delivery", "Equipment 8–10 weeks from PO and advance; installation &amp; commissioning ≈ 4 weeks after delivery"],
       ["Taxes", "VAT, withholding tax and statutory levies excluded – charged as applicable"],

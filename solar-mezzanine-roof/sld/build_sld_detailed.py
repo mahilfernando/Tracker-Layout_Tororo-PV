@@ -112,7 +112,7 @@ for inv in INV:
         PL([(ISOX + 22, yn), (jx + 6, yn), (jx + 6, ty + 3), (IX, ty + 3)], BLU, 1.3)
         L(SPDX + 13, yn + 16, SPDX + 13, yn + 20, GRN, 1); L(SPDX + 13, yn + 20, 438, yn + 20, GRN, 0.9)
     L(438, top + 60, 438, top + box_h, GRN, 1.2)          # DC SPD earth riser
-    T(IX - 16, top + box_h - 2, "1C × 6 mm² H1Z2Z2-K DC cable (red +, blue −)", 7.5, "end")
+    T(IX - 16, top + box_h - 2, "1C × 4 mm² H1Z2Z2-K DC cable (red +, blue −)", 7.5, "end")
     inv["iy"] = (iy0 + iy1) / 2
     inv["iy0"], inv["iy1"] = iy0, iy1
 
@@ -155,7 +155,7 @@ R(CX + 20, 900, 110, 10, GRN, 1.2, "#e8f6ea"); T(CX + 75, 925, "Earth bar (ACCP)
 # ------------------------------------------------------------------ C3 -> MLVS
 MX = 1150
 ac4((CX + 210, MX + 40), YO)
-T((CX + 210 + MX) / 2, YO + 70, "C3: AC cable 4C × 240 mm² Cu", 8, "middle", "bold"); T((CX + 210 + MX) / 2, YO + 81, "XLPE/SWA ≈ 200 m (via riser)", 8, "middle", "bold")
+T((CX + 210 + MX) / 2, YO + 70, "C3: AC cable 4C × 240 mm² Al", 8, "middle", "bold"); T((CX + 210 + MX) / 2, YO + 81, "XLPE/SWA ≈ 200 m (via riser)", 8, "middle", "bold")
 R(MX, 120, 230, 850, BLK, 1.3, dash="7 4")
 T(MX + 8, 138, "MAIN LV SWITCHBOARD (MLVS)", 9, "start", "bold")
 T(MX + 8, 151, "LV room · existing · 400 V 3N~", 8, "start")
@@ -195,7 +195,7 @@ PL([(IX + 10, INV[1]["iy1"]), (IX + 10, EY)], GRN, 1.1)
 PL([(CX + 75, 910), (CX + 75, EY)], GRN, 1.4)
 T(270, EY - 6, "1C × 16 mm² Cu (G/Y) – frame & structure bonding", 8, "middle", color=GRN)
 T(IX + 90, EY - 6, "1C × 25 mm² Cu (G/Y) – inverter earth", 8, "start", color=GRN)
-T(CX + 230, EY - 6, "1C × 120 mm² Cu (G/Y) ≈ 200 m – ACCP to MET", 8, "start", color=GRN)
+T(CX + 230, EY - 6, "E3: C3 SWA armour as PE – ACCP to MET", 8, "start", color=GRN)
 
 # ------------------------------------------------------------------ general notes / specifications
 NX, NW = 1400, 250
@@ -207,9 +207,9 @@ notes = [
  ("1. PV modules", "Astronergy ASTRO N7 CHSM66RN(DG)/F-BH, 620 Wp bifacial; Voc 49.04 V, Isc 16.11 A, Vmp 41.56 V, Imp 14.92 A"),
  ("2. Strings", "INV-01: 8 × 19 = 152 (94.24 kWp); INV-02: 3 × 19 + 5 × 18 = 147 (91.14 kWp). Max string Voc ≈ 955 V (15 °C) < 1100 V"),
  ("3. Inverters", "2 × Sigenergy Sigen PV 80M1, 80 kW, 400 V 3N~; max AC current 133.7 A; 2 strings per MPPT (max 40 A/MPPT)"),
- ("4. DC cables", "1C × 6 mm² Cu H1Z2Z2-K, 1.5 kV DC, IEC 62930 / EN 50618, UV resistant"),
- ("5. AC cables", "C1, C2: 4C × 50 mm² Cu XLPE; C3: 4C × 240 mm² Cu XLPE/SWA ≈ 200 m, 0.6/1 kV, IEC 60502-1; VD ≈ 2.0 % at 232 A"),
- ("6. Earthing cables", "16 / 25 / 120 mm² Cu G/Y, 450/750 V, IEC 60364-5-54"),
+ ("4. DC cables", "1C × 4 mm² Cu H1Z2Z2-K, 1.5 kV DC, IEC 62930 / EN 50618, UV resistant"),
+ ("5. AC cables", "C1, C2: 4C × 50 mm² Cu XLPE; C3: 4C × 240 mm² Al XLPE/SWA ≈ 200 m (spare stock), 0.6/1 kV, IEC 60502-1; VD ≈ 3.1 % at 232 A"),
+ ("6. Earthing cables", "16 / 25 mm² Cu G/Y; ACCP to MET via C3 steel-wire armour, glands earthed at both ends (IEC 60364-5-54 adiabatic check)"),
  ("7. DC SPD (per string)", "Type 2, Ucpv 1100 V DC, In 20 kA, Imax 40 kA, Up ≤ 4.0 kV, IEC 61643-31"),
  ("8. DC isolator (per string)", "2-pole, 1200 V DC, 32 A, DC-PV2, IEC 60947-3, IP66 enclosure"),
  ("9. AC SPD (ACCP)", "Type 2, 4P (3P+N), Uc 320 Vac, In 20 kA, Imax 40 kA, Up ≤ 1.5 kV, IEC 61643-11"),
