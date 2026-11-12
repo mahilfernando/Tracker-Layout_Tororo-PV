@@ -85,7 +85,7 @@ items = [("PV modules – Astronergy ASTRO N7 620 Wp bifacial N-type TOPCon", "2
          ("Ballasted aluminium mounting structure, 10° tilt", "1", "lot"),
          ("DC system – PV cable, connectors, string isolators, cable tray", "1", "lot"),
          ("AC system – AC combiner panel, MCCBs, cabling to main LV switchboard", "1", "lot"),
-         ("Smart data logger, energy meter & remote monitoring", "1", "set"),
+         ("Remote monitoring via inverter cloud portal", "1", "set"),
          ("Earthing & lightning protection integration", "1", "lot"),
          ("Installation, testing & commissioning", "1", "lot"),
          ("Transport, logistics & customs clearing to site", "1", "lot")]
@@ -99,15 +99,15 @@ for i, (d, q, u) in enumerate(items, start=1):
     ws.row_dimensions[r].height = 16
     r += 1
 ws.merge_cells(f"F{first}:F{r-1}")
-c = ws[f"F{first}"]; c.value = 104661; c.number_format = '"USD "#,##0'
+c = ws[f"F{first}"]; c.value = 139881; c.number_format = '"USD "#,##0'
 c.font = font(bold=True, size=16, color=ACC); c.alignment = Alignment(horizontal="center", vertical="center")
 for rr in range(first, r): ws[f"F{rr}"].border = BOX
 merge(r, "A", "E", "TOTAL TURNKEY EPC PRICE (excluding VAT and other applicable taxes)", font(bold=True, size=10),
       BAND, Alignment(horizontal="right", vertical="center", indent=1), 20)
-ws[f"F{r}"] = 104661; ws[f"F{r}"].number_format = '"USD "#,##0'; ws[f"F{r}"].font = font(bold=True, size=11, color=NAVY)
+ws[f"F{r}"] = 139881; ws[f"F{r}"].number_format = '"USD "#,##0'; ws[f"F{r}"].font = font(bold=True, size=11, color=NAVY)
 ws[f"F{r}"].fill = PatternFill("solid", fgColor=BAND); ws[f"F{r}"].border = BOX; ws[f"F{r}"].alignment = Alignment(horizontal="center", vertical="center")
 r += 1
-merge(r, "A", "F", "Equivalent to USD 0.56 per Wp · Amount in words: One hundred four thousand six hundred sixty-one US Dollars only.",
+merge(r, "A", "F", "Equivalent to USD 0.75 per Wp · Amount in words: One hundred thirty-nine thousand eight hundred eighty-one US Dollars only.",
       font(italic=True, size=8.5, color="5B6673"), None, None, 15); r += 1
 
 # ---------------- 5. commercial terms ----------------

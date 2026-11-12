@@ -5,7 +5,7 @@ import os, json, base64
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-fin = json.load(open(os.path.join(HERE, "proposal_fin_v7.json")))   # PVsyst P50 + UEDCL bill Oct 2026 tariffs
+fin = json.load(open(os.path.join(HERE, "proposal_fin_v8.json")))   # PVsyst P50 + UEDCL bill Oct 2026 tariffs + final workings
 mon = json.load(open(os.path.join(HERE, "monthly.json")))
 tou = json.load(open(os.path.join(HERE, "tou.json")))
 
@@ -127,7 +127,7 @@ page(3, "SYSTEM DESIGN", f'''
       ["5", "AC combiner panel", "MCCBs 2 × 160 A (inverter incomers), 400 A roof isolator, AC SPD Type II", "1", "set"],
       ["6", "Grid connection", "Connection to the existing Masterpact NW10 H1 solar incomer on the main LV switchboard", "1", "set"],
       ["7", "Cabling", "Solar cable 4 mm², AC 4C × 50 mm² and 4C × 240 mm² Al XLPE/SWA, cable tray", "1", "lot"],
-      ["8", "Monitoring & control", "Smart data logger, energy meter, remote monitoring", "1", "set"],
+      ["8", "Monitoring & control", "Remote monitoring via inverter cloud portal (no separate logger or meter)", "1", "set"],
       ["9", "Earthing", "Array bonding, connection to building earth and lightning protection", "1", "set"]],
      widths=[4, 18, 62, 7, 9])}
 {H("3. Solar Array &amp; Inverters")}
@@ -181,7 +181,7 @@ d = [blk(40, 20, 130, 44, "PV ARRAY 1", "152 × 620 W = 94.2 kWp", NAVY), blk(40
      blk(240, 20, 130, 44, "INVERTER 1", "80 kW three-phase", "#2f5fc4"), blk(240, 150, 130, 44, "INVERTER 2", "80 kW three-phase", "#2f5fc4"),
      blk(430, 78, 120, 58, "AC COMBINER", "MCCBs, SPD, isolator", "#555"), blk(600, 78, 120, 58, "MAIN LV SWITCHBOARD", "NW10 H1 solar incomer", "#555"),
      blk(600, 6, 120, 44, "UEDCL GRID", "three-phase + meter", "#555"), blk(600, 170, 120, 44, "HOTEL LOADS", "≈ 1 GWh / month", GRN),
-     blk(430, 170, 120, 44, "ENERGY MONITORING", "data logger + meter", "#7b4fa0")]
+     blk(430, 170, 120, 44, "ENERGY MONITORING", "inverter cloud portal", "#7b4fa0")]
 for yy in (42, 172):
     d.append(f'<line x1="170" y1="{yy}" x2="240" y2="{yy}" stroke="{ORG}" stroke-width="2.5"/><rect x="198" y="{yy-7}" width="14" height="14" fill="#b07a10"/>')
 d += [f'<polyline points="370,42 400,42 400,98 430,98" fill="none" stroke="{NAVY}" stroke-width="2"/>',
@@ -234,7 +234,7 @@ page(7, "FINANCIAL ANALYSIS", f'''
 # ---------------- page 8: quotation + financial summary ----------------
 items = [("PV modules – Astronergy ASTRO N7 620 Wp bifacial N-type TOPCon", "299", "nos"), ("String inverters – Sigenergy Sigen PV 80M1, 80 kW, 1100 V", "2", "nos"),
          ("Ballasted aluminium mounting structure, 10° tilt", "1", "lot"), ("DC system – PV cable, connectors, string isolators, cable tray", "1", "lot"),
-         ("AC system – AC combiner panel, MCCBs, cabling to main LV switchboard", "1", "lot"), ("Smart data logger, energy meter &amp; remote monitoring", "1", "set"),
+         ("AC system – AC combiner panel, MCCBs, cabling to main LV switchboard", "1", "lot"), ("Remote monitoring via inverter cloud portal", "1", "set"),
          ("Earthing &amp; lightning protection integration", "1", "lot"), ("Installation, testing &amp; commissioning", "1", "lot"),
          ("Transport, logistics &amp; customs clearing to site", "1", "lot")]
 qrows = "".join(f"<tr><td>{i}</td><td>{d_}</td><td>{q}</td><td>{u}</td>" + (f'<td rowspan="9" class="lump">{usd(capex)}</td>' if i == 1 else "") + "</tr>"
@@ -247,7 +247,7 @@ page(8, "QUOTATION", f'''
 <table class="t q"><colgroup><col style="width:5%"/><col style="width:58%"/><col style="width:8%"/><col style="width:8%"/><col style="width:21%"/></colgroup>
 <tr><th>#</th><th>Scope of supply &amp; works</th><th>Qty</th><th>Unit</th><th>Price (USD)</th></tr>{qrows}
 <tr class="tot"><td></td><td>TOTAL TURNKEY EPC PRICE (excluding VAT and other applicable taxes)</td><td></td><td></td><td>{usd(capex)}</td></tr></table>
-<p class="small">Equivalent to USD {capex/185400:.2f} per Wp. Amount in words: One hundred four thousand six hundred sixty-one US Dollars only.</p>
+<p class="small">Equivalent to USD {capex/185400:.2f} per Wp. Amount in words: One hundred thirty-nine thousand eight hundred eighty-one US Dollars only.</p>
 {tbl([["Payment terms", "75 % advance with PO · 25 % on commissioning"],
       ["Delivery", "Equipment 8–10 weeks from PO and advance; installation &amp; commissioning ≈ 4 weeks after delivery"],
       ["Taxes", "VAT, withholding tax and statutory levies excluded – charged as applicable"],
