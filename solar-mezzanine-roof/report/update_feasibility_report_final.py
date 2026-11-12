@@ -62,5 +62,6 @@ for row in table_with("Year").rows[1:]:
 for row in table_with("Option").rows:
     a = row.cells[0].text
     if a.startswith("Phase 1"): set_cell(row.cells[3], f"{capex:,.0f}")
-    if a.startswith("Indicative total"): set_cell(row.cells[3], f"{capex + 187500:,.0f}")
+    if a.startswith("Phase 2"): set_cell(row.cells[3], "To be determined"); set_cell(row.cells[4], "Budget after canopy design and survey")
+    if a.startswith("Indicative total"): set_cell(row.cells[3], "To be determined")
 d.save(sys.argv[2]); print("saved", sys.argv[2])
